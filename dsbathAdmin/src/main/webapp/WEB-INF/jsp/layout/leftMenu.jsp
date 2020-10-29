@@ -3,7 +3,7 @@
 <div class="col-md-3 left_col">
 	<div class="left_col scroll-view">
 		<div class="navbar nav_title" style="border: 0;">
-			<a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>DS BATH</span></a>
+			<a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>디에스 바스</span></a>
 		</div>
 		<div class="clearfix"></div>
 		
@@ -29,7 +29,21 @@
 					<li>
 						<a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
-							<li><a href="index.html">Dashboard</a></li>
+							<li><a href="/views/dashboard">Dashboard</a></li>
+						</ul>
+					</li>
+					
+					<li>
+						<a><i class="fa fa-sitemap"></i> 관리자 <span class="fa fa-chevron-down"></span></a>
+						<ul class="nav child_menu">
+							<li><a href="/views/admin/list">관리자 관리</a></li>
+						</ul>
+					</li>
+					
+					<li>
+						<a><i class="fa fa-users"></i> 사용자 <span class="fa fa-chevron-down"></span></a>
+						<ul class="nav child_menu">
+							<li><a href="/views/member/list">사용자 관리</a></li>
 						</ul>
 					</li>
                	</ul>

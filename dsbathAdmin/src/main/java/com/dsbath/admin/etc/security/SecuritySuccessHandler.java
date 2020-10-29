@@ -34,8 +34,7 @@ public class SecuritySuccessHandler implements AuthenticationSuccessHandler {
 
 		String username = req.getParameter("username");
 		String password = new BCryptPasswordEncoder().encode(req.getParameter("password"));
-		System.out.println(username);
-		System.out.println(password);
+
 		Admin admin = new Admin();
 		admin.setAdminId(username);
 		admin.setPassword(password);

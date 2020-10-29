@@ -25,10 +25,30 @@
 	    <link href="/lib/gentelella/build/custom.min.css" rel="stylesheet">
     <!------------------------------------- CSS END ------------------------------------->
     
-    
-	<!------------------------------------- JS START ------------------------------------->    
-	    <!-- jQuery -->
+    	<!-- jQuery -->
 		<script src="/webjars/jquery/3.3.1/dist/jquery.min.js" type="text/javascript"></script>
+		
+	</head>
+	
+	<body class="nav-md">
+		
+		<div class="container body">
+			<div class="main_container">
+				<tiles:insertAttribute name="leftMenu"/>
+				
+				<tiles:insertAttribute name="header"/>
+
+				<div class="right_col" role="main">
+					<tiles:insertAttribute name="body"/>
+				</div>
+				
+				<tiles:insertAttribute name="footer"/>
+			</div>
+		</div>
+	</body>
+	
+	
+	<!------------------------------------- JS START ------------------------------------->    
 	    <!-- Bootstrap -->
 	    <script src="/lib/gentelella/bootstrap/bootstrap.bundle.min.js"></script>
 	    <!-- FastClick -->
@@ -67,22 +87,4 @@
 	    <!-- Custom Theme Scripts -->
 	    <script src="/lib/gentelella/build/custom.min.js"></script>
     <!------------------------------------- JS END ------------------------------------->
-	</head>
-	
-	<body class="nav-md">
-		
-		<div class="container body">
-			<div class="main_container">
-				<tiles:insertAttribute name="leftMenu"/>
-				
-				<tiles:insertAttribute name="header"/>
-
-				<div class="right_col" role="main">
-					<tiles:insertAttribute name="body"/>
-				</div>
-				
-				<tiles:insertAttribute name="footer"/>
-			</div>
-		</div>
-	</body>
 </html>
