@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ADD target/dsbathAdmin-0.0.1-SNAPSHOT.war dsbathadmin.war
+ADD target/dsbathadmin-0.0.1-SNAPSHOT.war dsbathadmin.war
 
 EXPOSE 8091
 
