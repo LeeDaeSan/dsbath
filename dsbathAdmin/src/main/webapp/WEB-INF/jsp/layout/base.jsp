@@ -23,11 +23,107 @@
 	    <link href="/lib/gentelella/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 	    <!-- Custom Theme Style -->
 	    <link href="/lib/gentelella/build/custom.min.css" rel="stylesheet">
+	    
+	    <link href="/css/common.css" rel="stylesheet">
     <!------------------------------------- CSS END ------------------------------------->
     
     	<!-- jQuery -->
 		<script src="/webjars/jquery/3.3.1/dist/jquery.min.js" type="text/javascript"></script>
 		
+		<script>
+		$(function () {
+			var mainTitle = '';
+			var subTitle1 = '';
+			var subTitle2 = '';
+			
+			var url = location.href;
+			
+			// 대시보드
+			if (url.indexOf('/dashboard') != -1) {
+				mainTitle = 'Dashboard';
+				subTitle1 = 'Dashboard';
+				subTitle2 = '';
+				
+			// 관리자 관리
+			} else if (url.indexOf('/admin/list') != -1) {
+				mainTitle = '관리자 관리';
+				subTitle1 = '관리자';
+				subTitle2 = '관리자 관리';
+				
+			// 사용자 관리
+			} else if (url.indexOf('/member/list') != -1) {
+				mainTitle = '사용자 관리';
+				subTitle1 = '사용자';
+				subTitle2 = '사용자 관리';
+				
+			// 욕실 리모델링 디자인
+			} else if (url.indexOf('/design/list') != -1) {
+				mainTitle = '욕실 리모델링 디자인';
+				subTitle1 = '디자인';
+				subTitle2 = '욕실 리모델링 디자인';
+			
+			// 견적 및 시공 문의
+			} else if (url.indexOf('/construct/inquiry') != -1) {
+				mainTitle = '견적 및 시공 문의';
+				subTitle1 = '시공';
+				subTitle2 = '견적 및 시공 문의';
+				
+			// 시공 사례
+			} else if (url.indexOf('/construct/instance') != -1) {
+				mainTitle = '시공 사례';
+				subTitle1 = '시공';
+				subTitle2 = '시공 사례';
+			
+			// 시공 후기
+			} else if (url.indexOf('/construct/epilogue') != -1) {
+				mainTitle = '시공 후기';
+				subTitle1 = '시공';
+				subTitle2 = '시공 후기';
+				
+			// 브랜드스토리
+			} else if (url.indexOf('/etc/brandstory') != -1) {
+				mainTitle = '브랜드 스토리';
+				subTitle1 = '기타';
+				subTitle2 = '브랜드 스토리';
+				
+			// 공지사항
+			} else if (url.indexOf('/etc/notice') != -1) {
+				mainTitle = '공지사항';
+				subTitle1 = '기타';
+				subTitle2 = '공지사항';
+				
+			// 자주하는 질문
+			} else if (url.indexOf('/etc/faq') != -1) {
+				mainTitle = '자주하는 질문';
+				subTitle1 = '기타';
+				subTitle2 = '자주하는 질문';
+			
+			// 고객센터
+			} else if (url.indexOf('/etc/custom') != -1) {
+				mainTitle = '고객센터';
+				subTitle1 = '기타';
+				subTitle2 = '고객센터';
+			
+			// 오시는길
+			} else if (url.indexOf('/etc/loadview') != -1) {
+				mainTitle = '오시는길';
+				subTitle1 = '기타';
+				subTitle2 = '오시는길';
+				
+			// 커뮤니티
+			} else if (url.indexOf('/etc/community') != -1) {
+				mainTitle = '커뮤니티';
+				subTitle1 = '기타';
+				subTitle2 = '커뮤니티';
+				
+			}
+			
+			$('#mainTitle').empty().append(mainTitle);
+			$('#subTitle1').empty().append(subTitle1 ? '<i class="fa fa-caret-right"></i> ' + subTitle1 : '');
+			$('#subTitle2').empty().append(subTitle2 ? '<i class="fa fa-caret-right"></i> ' + subTitle2 : '');
+			
+		});
+		</script>
 	</head>
 	
 	<body class="nav-md">
@@ -39,6 +135,20 @@
 				<tiles:insertAttribute name="header"/>
 
 				<div class="right_col" role="main">
+				
+					<!-- Title START -->
+					<div class="row title-row">
+						<div class="title-left">
+							<h5 class="main-title" id="mainTitle"></h5>
+							<h5 class="sub-title">
+								<i class="fa fa-home"></i>
+								<span id="subTitle1"></span>
+								<span id="subTitle2"></span>
+							</h5>
+						</div>
+					</div>
+					<!-- Title END -->
+					
 					<tiles:insertAttribute name="body"/>
 				</div>
 				

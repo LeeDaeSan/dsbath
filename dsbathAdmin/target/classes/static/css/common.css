@@ -1,0 +1,28 @@
+.main-logo {width : 145px;}
+
+/* title */
+.title-row {
+	width			: 100%;
+	display			: inline-block;
+	margin-left		: 0;
+	margin-top		: 10px;
+	margin-bottom	: 14px;
+	padding-left	: 6px;
+}
+.title-left {
+	float			: left;
+}
+.title-left .main-title {
+	font-size		: 24px;
+	font-weight		: bold;
+}
+.title-left h5.sub-title {
+	font-size		: 12px;
+	font-weight		: bold;
+	color			: #a2a2a2;
+}
+.title-right {
+	float			: right;
+	width			: 223px;
+	padding-top		: 25px;
+}
