@@ -3,7 +3,7 @@
 <tiles-definitions>
 	<!-- empty tiles layout add -->
 	<definition name="notiles" template="/WEB-INF/jsp/layout/empty.jsp">
-		<put-attribute name="title" value="HOMES"/>
+		<put-attribute name="title" value="DS BATH"/>
 		<put-attribute name="empty" value=""/>
 	</definition>
 	
@@ -13,7 +13,7 @@
 	
 	<!--  base tiles layout add  -->
 	<definition name="base" template="/WEB-INF/jsp/layout/base.jsp">
-		<put-attribute name="title"	 	value="HOMES"/>
+		<put-attribute name="title"	 	value="DS BATH"/>
 		<put-attribute name="header" 	value="/WEB-INF/jsp/layout/header.jsp"/>
 		<put-attribute name="leftMenu" 	value="/WEB-INF/jsp/layout/leftMenu.jsp"/>
 		<put-attribute name="body"	 	value=""/>
