@@ -103,6 +103,61 @@
 }
 /* paging sort css END */
 
+/* alert modal css START */
+#alertModal .modal-dialog {
+	top				: 15%;
+}
+#alertModal .modal-content {
+	background		: rgb(255, 255, 255);
+	border-color	: rgba(214, 214, 214, 0.88);
+	box-shadow		: 0 6px 28px 0 rgba(0, 0, 0, .1);
+	color			: #000000;
+}
+/* success */
+#alertModal .modal-content.success .success-title {
+	color			: green;
+}
+/* warning */
+#alertModal .modal-content.warning .warning-title {
+	color			: rgba(243, 156, 18, 0.88);
+}
+/* danger */
+#alertModal .modal-content.danger .danger-title {
+	color			: rgba(224, 24, 3, 0.88);
+}
+/* info */
+#alertModal .modal-content.info .info-title {
+	color			: rgba(4, 100, 164, 0.88);
+}
+#alertModal .alert-footer, #confirmModal .confirm-footer {
+	padding-left	: 7px;
+	padding-right	: 7px;
+	padding-bottom	: 4px;
+}
+#alertModal .alert-footer .btn, #confirmModal .confirm-footer .btn {
+	float			: right;
+	font-size		: 12px;
+}
+#alert-icon {
+	font-size		: 15px;
+	bottom			: 5px;
+	position		: relative;
+	margin-right	: 5px;
+}
+.alert-close {
+	float			: right;
+	position		: absolute;
+	right			: 13px;
+	font-size		: 15px;
+	top				: 13px;
+	color			: #aaaaaa;
+	cursor			: pointer;
+}
+.alert-close:hover {
+	color			: #5e5e5e;
+}
+/* alert modal css END */
+
 .admin_detail {
 	cursor : pointer;
 }

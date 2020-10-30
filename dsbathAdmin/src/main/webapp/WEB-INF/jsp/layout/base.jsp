@@ -5,7 +5,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>DS BATH</title>
-		
+		<link rel="shortcut icon" href="/images/favicon.ico">
+
 	<!------------------------------------- CSS START ------------------------------------->	
 		<!-- Bootstrap -->
 	    <link href="/lib/gentelella/bootstrap/bootstrap.min.css" rel="stylesheet">

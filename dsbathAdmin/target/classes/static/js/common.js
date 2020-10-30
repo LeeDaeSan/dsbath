@@ -156,6 +156,76 @@ var common = {
 		});
 	},
 	
+	// alert
+	alert : function (type, msg) {
+		var title 		= '';
+		var className 	= '';
+		var icon		= '';
+		
+		// 성공
+		if (type == 'succ') {
+			title		= 'Success';
+			className	= 'success';
+			icon		= 'fa-check-circle';
+			
+		// 경고
+		} else if (type == 'warn') {
+			title		= 'Warning';
+			className	= 'warning';
+			icon		= 'fa-exclamation-circle';
+			
+		// 위험
+		} else if (type == 'dang') {
+			title		= 'Danger';
+			className	= 'danger';
+			icon		= 'fa-exclamation-triangle';
+			
+		// 일반
+		} else if (type == 'info') {
+			title		= 'Info';
+			className	= 'info';
+			icon		= 'fa-info-circle';
+		}
+		
+		var alertHtml  = '<div class="modal fade bs-example-modal-sm" id="alertModal" tabindex="-1" role="dialog" style="display:none;" aria-hidden="true">';
+			alertHtml += '	<div class="modal-dialog modal-sm">';
+			alertHtml += '		<div class="modal-content ' + className + '">';
+			alertHtml += '			<div class="modal-body">';
+			alertHtml += '				<h4 class="' + className + '-title">';
+			alertHtml += '					<i class="alert-icon fa ' + icon + '"></i>';
+			alertHtml +=					title; 
+			alertHtml += '				</h4>';
+			alertHtml += 				(msg ? msg : '');
+			alertHtml += '			</div>';
+			alertHtml += '			<div class="alert-footer">';
+			alertHtml += '				<button type="button" class="btn btn-sm btn-dark btn-close">확인</button>';
+			alertHtml += '			</div>';
+			alertHtml += '		</div>';
+			alertHtml += '	</div>';
+			alertHtml += '</div>';
+		
+		// append
+		$('body').append(alertHtml);
+		// alert popup show
+		$('#alertModal').addClass('show').show();
+		
+		// alert close event
+		$('#alertModal .btn-close').unbind('click').click(function (e) {
+			e.preventDefault();
+			$('#alertModal').remove();
+		});
+		
+		// esc, enter keyup event
+		$(document).keyup(function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			if (e.keyCode == 13 || e.keyCode == 27) {
+				$('#alertModal .btn-close').click();
+			}
+		});
+	},
+	
 	cookie : {
 		// 쿠키 저장
 		setCookie : function (name, value, day) {

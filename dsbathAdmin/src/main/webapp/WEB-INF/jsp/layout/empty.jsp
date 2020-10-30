@@ -7,7 +7,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-		
+		<link rel="shortcut icon" href="/images/favicon.ico">
+			
 	<!------------------------------------- CSS START ------------------------------------->	
 		<!-- Bootstrap -->
 	    <link href="/lib/gentelella/bootstrap/bootstrap.min.css" rel="stylesheet">
