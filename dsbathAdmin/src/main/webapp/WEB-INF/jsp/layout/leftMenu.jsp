@@ -3,7 +3,7 @@
 <div class="col-md-3 left_col">
 	<div class="left_col scroll-view">
 		<div class="navbar nav_title" style="border: 0;">
-			<a href="index.html" class="site_title"><img src="/images/admin-main-logo.png" class="main-logo"/></a>
+			<a href="/views/dashboard" class="site_title"><img src="/images/admin-main-logo.png" class="main-logo"/></a>
 		</div>
 		<div class="clearfix"></div>
 		

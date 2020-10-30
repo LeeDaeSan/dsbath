@@ -1,3 +1,7 @@
+.float-right {
+	float 			: right;
+}
+
 .main-logo {width : 145px;}
 
 /* title */
@@ -25,4 +29,18 @@
 	float			: right;
 	width			: 223px;
 	padding-top		: 25px;
+}
+
+.panel_toolbox {
+	min-width 		: 0px !important;
+}
+
+.form-control-cust {
+	padding			: 6px 9px;
+	height			: 32px;
+}
+.table td, .table th {
+	padding			: 10px 10px;
+	vertical-align	: middle;
+	font-size		: 14px;
 }

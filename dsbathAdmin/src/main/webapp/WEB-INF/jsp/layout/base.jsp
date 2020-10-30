@@ -196,5 +196,7 @@
 	    <script src="/lib/gentelella/bootstrap-daterangepicker/daterangepicker.js"></script>
 	    <!-- Custom Theme Scripts -->
 	    <script src="/lib/gentelella/build/custom.min.js"></script>
+	    <!-- common js -->
+	    <script src="/js/common.js" type="text/javascript"></script>
     <!------------------------------------- JS END ------------------------------------->
 </html>

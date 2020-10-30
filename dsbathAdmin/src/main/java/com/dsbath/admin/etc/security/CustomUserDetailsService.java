@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Admin admin = new Admin();
 		admin.setAdminId(username);
 		
-		admin = adminService.select(admin);
+		admin = adminService.selectOfLogin(admin);
 
 		if (StringUtil.isEmpty(admin)) {
 			return null;
