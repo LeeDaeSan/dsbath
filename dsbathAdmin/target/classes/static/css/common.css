@@ -106,3 +106,7 @@
 .admin_detail {
 	cursor : pointer;
 }
+
+.login_content {
+	padding : 0;
+}

@@ -4,9 +4,10 @@
 	<div>
 		<div class="login_wrapper">
 			<div class="animate form login_form">
+					<img src="/images/login-logo.png" style="width:350px;"/>
 				<section class="login_content">
 					<form method="POST">
-						<h1>LOGIN</h1>
+						<h1>LOG IN</h1>
 						<div>
 							<input type="text" class="form-control" name="username" placeholder="아이디" required />
 						</div>

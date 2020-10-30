@@ -25,6 +25,8 @@
 	    <link href="/lib/gentelella/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 	    <!-- Custom Theme Style -->
 	    <link href="/lib/gentelella/build/custom.min.css" rel="stylesheet">
+	    
+	    <link href="/css/common.css" rel="stylesheet">
     <!------------------------------------- CSS END ------------------------------------->
     
     
