@@ -73,7 +73,7 @@
 	padding-bottom	: 0px;
 }
 .content-body {
-	height			: 340px;
+	height			: 470px;
 	overflow-y		: auto;
 }
 
@@ -102,3 +102,7 @@
 	font-weight		: bold;
 }
 /* paging sort css END */
+
+.admin_detail {
+	cursor : pointer;
+}

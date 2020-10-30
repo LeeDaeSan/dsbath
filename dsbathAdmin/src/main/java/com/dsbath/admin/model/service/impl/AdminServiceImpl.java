@@ -110,13 +110,25 @@ public class AdminServiceImpl implements AdminService {
 
 			// 등록 or 수정시 비밀번호 암호화
 			if (type.equals(Constant.MERGE_TYPE_INSERT) || type.equals(Constant.MERGE_TYPE_UPDATE)) {
-				admin.setPassword(
-					new BCryptPasswordEncoder().encode(admin.getPassword()));
+				String password = admin.getPassword();
+				
+				// 비밀번호가 있을 때에만 암호화 (null, 공백 암호화 방지)
+				if (StringUtil.isNotEmpty(password)) {
+					admin.setPassword( new BCryptPasswordEncoder().encode(password) );
+				}
 			}
 			
 			// 등록
 			if (type.equals(Constant.MERGE_TYPE_INSERT)) {
 				result = adminMapper.insert(admin);
+				
+			// 수정
+			} else if (type.equals(Constant.MERGE_TYPE_UPDATE)) {
+				result = adminMapper.update(admin);
+				
+			// 삭제
+			} else if (type.equals(Constant.MERGE_TYPE_DELETE)) {
+				result = adminMapper.delete(admin);
 			}
 			
 			resultMap.put("resultCount", result);
@@ -124,6 +136,25 @@ public class AdminServiceImpl implements AdminService {
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
 			e.printStackTrace();
+		}
+		return resultMap;
+	}
+	
+	/**
+	 * 관리자 상세 조회
+	 * 
+	 */
+	@Override
+	public Map<String, Object> detail(Admin admin) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			
+			resultMap.put("detail", adminMapper.detail(admin));
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
 		}
 		return resultMap;
 	}

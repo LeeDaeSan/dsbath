@@ -49,6 +49,17 @@ public class AdminRestController {
 	}
 	
 	/**
+	 * 관리자 상세 조회 Rest Controller
+	 * 
+	 * @param admin
+	 * @return
+	 */
+	@PostMapping("/detail")
+	public Map<String, Object> detail (Admin admin) {
+		return adminService.detail(admin);
+	}
+	
+	/**
 	 * 관리자 목록 조회 Rest Controller
 	 * 
 	 * @param admin

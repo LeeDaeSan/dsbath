@@ -49,6 +49,30 @@ public interface AdminMapper {
 	public Integer insert(Admin admin);
 	
 	/**
+	 * 관리자 수정
+	 * 
+	 * @param admin
+	 * @return
+	 */
+	public Integer update(Admin admin);
+	
+	/**
+	 * 관리자 삭제
+	 * 
+	 * @param admin
+	 * @return
+	 */
+	public Integer delete(Admin admin);
+	
+	/**
+	 * 관리자 상세 조회
+	 * 
+	 * @param admin
+	 * @return
+	 */
+	public Admin detail(Admin admin);
+	
+	/**
 	 * 관리자 목록 조회
 	 * 
 	 * @param admin

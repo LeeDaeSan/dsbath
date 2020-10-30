@@ -47,6 +47,14 @@ public interface AdminService {
 	public Map<String, Object> merge(Admin admin, String type);
 	
 	/**
+	 * 관리자 상세 조회
+	 * 
+	 * @param admin
+	 * @return
+	 */
+	public Map<String, Object> detail(Admin admin);
+	
+	/**
 	 * 관리자 목록 조회
 	 * 
 	 * @param admin

@@ -13,9 +13,8 @@
 	<!-- 관리자 비밀번호 update -->
 	<select id="updateOfPassword" parameterType="admin">
 		UPDATE Admin
-		   
 		   SET
-		   	Password = #{password}
+			   	Password = #{password}
 		   	
 		 WHERE AdminId = #{adminId}
 	</select>
@@ -48,6 +47,40 @@
 		)
 	</insert>
 	
+	<!-- 관리자 수정 -->
+	<update id="update" parameterType="admin">
+		UPDATE Admin
+		   SET
+			   	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(password)'>
+			   		Password = #{password},
+			   	</if>
+			   	
+		   		AdminName 	= #{adminName},
+		   		Address		= #{address}
+		   		
+		 WHERE AdminIdx = #{adminIdx}
+	</update>
+	
+	<!-- 관리자 삭제 -->
+	<delete id="delete" parameterType="admin">
+		DELETE FROM Admin
+		 WHERE AdminIdx = #{adminIdx}
+	</delete>
+	
+	<!-- 관리자 상세 -->
+	<select id="detail" parameterType="admin" resultType="admin">
+		SELECT
+			AdminIdx,
+			AdminName,
+			AdminId,
+			Address,
+			Role,
+			CreateDate
+		
+		  FROM Admin
+		 WHERE AdminIdx = #{adminIdx}
+	</select>
+	
 	<!-- 관리자 목록 조회 -->
 	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="admin">
 		SELECT
@@ -60,6 +93,9 @@
 			UpdateDate
 			
 		  FROM Admin
+		 
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
 		 
 		<!-- order by -->
 		<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
@@ -99,5 +135,37 @@
 		SELECT
 			COUNT(AdminIdx)
 		  FROM Admin
+		  
+		  <!-- 공통 조건 -->
+		  <include refid="selectOfWhere"></include>
 	</select>
+	
+	
+	<!-- 목록 조회 공통 조건 -->
+	<sql id="selectOfWhere">
+		<where>
+			 	
+		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.adminName)'>
+		 		<!-- 관리자 이름 -->
+		 		AND AdminName LIKE CONCAT('%', TRIM(#{model.adminName}), '%')
+		 	</if>
+		 	
+		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.adminId)'>
+		 		<!-- 관리자 아이디 -->
+		 		AND AdminId LIKE CONCAT('%', TRIM(#{model.adminId}), '%')
+		 	</if>
+		 	
+		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.address)'>
+		 		<!-- 관리자 주소 -->
+		 		AND Address LIKE CONCAT('%', TRIM(#{model.address}), '%')
+		 	</if>
+		 	
+		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>
+		 		<!-- 등록일 -->
+		 		AND DATE_FORMAT(CreateDate, '%Y%m%d') BETWEEN #{startDateStr} AND #{endDateStr}
+		 	</if>
+		 	
+		</where>
+	</sql>
+	
 </mapper>

@@ -23,31 +23,34 @@
 				<table class="table">
 					<colgroup>
 						<col width="10%"/>
-						<col width="40%"/>
+						<col width="20%"/>
+						<col width="20%"/>
 						<col width="10%"/>
 						<col width="40%"/>
 					</colgroup>
 					<tbody>
 						<tr>
 							<th>이름</th>
-							<td>
-								<input type="text" class="form-control form-control-cust" id="adminName"/>
+							<td colspan="2">
+								<input type="text" class="form-control form-control-cust" id="searchAdminName"/>
 							</td>
 							<th>아이디</th>
 							<td>
-								<input type="text" class="form-control form-control-cust" id="adminId"/>
+								<input type="text" class="form-control form-control-cust" id="searchAdminId"/>
 							</td>
 						</tr>
 						<tr>
 							<th>등록일</th>
-							<td colspan="3">
-								<input type="text" class="form-control form-control-cust" id="startDate"/>
+							<td colspan="2">
+								<input class="form-control form-control-cust" id="periodDate" readOnly/>
 							</td>
+							<td></td>
+							<td></td>
 						</tr>
 						<tr>
 							<th>주소</th>
-							<td colspan="3">
-								<input type="text" class="form-control form-control-cust" id="address"/>
+							<td colspan="4">
+								<input type="text" class="form-control form-control-cust" id="searchAddress"/>
 							</td>
 						</tr>
 					</tbody>
@@ -63,6 +66,8 @@
 <div class="row">
 	<div class="col-md-12 col-sm-12">
 		<button type="button" class="btn btn-sm btn-dark float-right" data-toggle="modal" data-target="#addAdminPopup">관리자 등록</button>
+		<button type="button" class="btn btn-sm btn-dark float-right" id="searchResetBtn">검색 초기화</button>
+		<button type="button" class="btn btn-sm btn-dark float-right" id="searchBtn">검색</button>
 	</div>
 </div>
 <!-- Button form END -->
@@ -188,10 +193,68 @@
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-primary" id="insertAdminBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+				<button type="button" class="btn btn-sm btn-primary" id="insertAdminBtn">등록</button>
 			</div>
 		</div>
 	</div>
 </div>
 <!-- 등록 팝업 END -->
+
+<!-- 상세 팝업 START -->
+<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="detailAdminPopup">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">관리자 상세</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<colgroup>
+						<col width="15%"/>
+						<col width="70%"/>
+						<col width="15%"/>
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>이름</th>
+							<td colspan="2">
+								<input type="text" id="updateAdminName" class="form-control form-control-cust"/>
+							</td>
+						</tr>
+						<tr>
+							<th>아이디</th>
+							<td colspan="2">
+								<input type="text" id="updateAdminId" class="form-control form-control-cust" readOnly/>
+							</td>
+						</tr>
+						<tr>
+							<th>비밀번호</th>
+							<td>
+								<input type="password" id="updatePassword" class="form-control form-control-cust" readOnly/>
+							</td>
+							<td>
+								<button type="button" class="btn btn-sm btn-secondary" id="updatePasswordChangeBtn" changeType="off">변경</button>
+							</td>
+						</tr>
+						<tr>
+							<th>주소</th>
+							<td colspan="2">
+								<input type="text" id="updateAddress" class="form-control form-control-cust"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+				<button type="button" class="btn btn-sm btn-primary" id="updateAdminBtn">수정</button>
+				<button type="button" class="btn btn-sm btn-danger" id="deleteAdminBtn">삭제</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 상세 팝업 END -->
