@@ -3,6 +3,7 @@ package com.dsbath.admin.model.service;
 import java.util.Map;
 
 import com.dsbath.admin.model.Admin;
+import com.dsbath.admin.model.dto.PagingDTO;
 
 /**
  * 관리자 정보 Service
@@ -51,5 +52,5 @@ public interface AdminService {
 	 * @param admin
 	 * @return
 	 */
-	public Map<String, Object> select(Admin admin);
+	public Map<String, Object> select(PagingDTO<Admin> pagingDTO);
 }

@@ -1,8 +1,16 @@
+.float-left {
+	float			: left;
+}
 .float-right {
 	float 			: right;
 }
+.text-center {
+	text-align 		: center;
+}
 
-.main-logo {width : 145px;}
+.main-logo {
+	width 			: 145px;
+}
 
 /* title */
 .title-row {
@@ -44,3 +52,53 @@
 	vertical-align	: middle;
 	font-size		: 14px;
 }
+
+.limit-form {
+	width			: 65px;
+	padding			: 4px 6px;
+	height			: 26px;
+	font-size		: 13px;
+}
+.total-count-area {
+	font-size		: 12px;
+	padding-top		: 8px;
+	padding-left	: 3px;
+}
+.row-text {
+	padding-top		: 3px;
+	padding-right	: 6px;
+}
+.content-head {
+	padding-top 	: 6px;
+	padding-bottom	: 0px;
+}
+.content-body {
+	height			: 340px;
+	overflow-y		: auto;
+}
+
+/* paging css START */
+.page-link {
+	color			: #73879c;
+}
+.page-item.active .page-link {
+	background-color	: #405467 !important;
+	background			: #405467 !important;
+	border				: #405467 !important;
+}
+.page-item.disabled .page-link {
+	color			: #b7b7b7;
+}
+/* paging css END */
+
+/* paging sort css START */
+.fa-exchange {
+	transform 		: rotate(90deg);
+}
+.sort-image {
+	cursor			: pointer;
+}
+.sort-image:hover {
+	font-weight		: bold;
+}
+/* paging sort css END */

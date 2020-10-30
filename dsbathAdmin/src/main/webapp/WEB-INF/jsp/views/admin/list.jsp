@@ -3,13 +3,6 @@
 <!-- admin main js -->
 <script src="/js/admin/main.js" type="text/javascript"></script>
 
-<!-- Button form START -->
-<div class="row">
-	<div class="col-md-12 col-sm-12">
-		<button type="button" class="btn btn-sm btn-dark float-right" data-toggle="modal" data-target="#addAdminPopup">관리자 등록</button>
-	</div>
-</div>
-<!-- Button form END -->
 
 <!-- Search form START -->
 <div class="row">
@@ -46,12 +39,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>
-								<select class="form-control form-control-cust">
-									<option>등록일</option>
-									<option>수정일</option>
-								</select>
-							</th>
+							<th>등록일</th>
 							<td colspan="3">
 								<input type="text" class="form-control form-control-cust" id="startDate"/>
 							</td>
@@ -71,6 +59,15 @@
 <!-- Search form END -->
 
 
+<!-- Button form START -->
+<div class="row">
+	<div class="col-md-12 col-sm-12">
+		<button type="button" class="btn btn-sm btn-dark float-right" data-toggle="modal" data-target="#addAdminPopup">관리자 등록</button>
+	</div>
+</div>
+<!-- Button form END -->
+
+
 <!-- List form START -->
 <div class="row">
 	<div class="col-md-12 col-sm-12">
@@ -86,7 +83,26 @@
 				</ul>
 				<div class="clearfix"></div>
 			</div>
-			<div class="x_content">
+			
+			<div class="x_content content-head">
+				<div class="float-left">
+					<div class="total-count-area">
+						총 <span id="totalCount">0</span>건 중 <span id="nowLimit">0-0</span>
+					</div>
+				</div>
+				<div class="float-right">
+					<span class="float-left row-text">Rows:</span>&nbsp;
+					<select id="rowLimit" class="form-control limit-form float-left">
+						<option value="10">10</option>
+						<option value="20">20</option>
+						<option value="30">30</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="x_content content-body">
 				<div class="table-responsive">
 					<table class="table table-striped jambo_table bulk_action" id="adminTable">
 						<colgroup>
@@ -99,16 +115,30 @@
 						</colgroup>
 						<thead>
 							<tr class="heading">
-								<th class="column-title">No.</th>
-								<th class="column-title">이름</th>
-								<th class="column-title">아이디</th>
-								<th class="column-title">주소</th>
-								<th class="column-title">등록일</th>
+								<th class="column-title text-center">No.</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="adminName">
+									이름<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="adminId">
+									아이디<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="address">
+									주소<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="createDate">
+									등록일<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
 						</tbody>
 					</table>
+				</div>
+			</div>
+			
+			<div class="x_content">
+				<div class="text-right">
+					<ul class="pagination float-right" id="pagination"></ul>
 				</div>
 			</div>
 		</div>

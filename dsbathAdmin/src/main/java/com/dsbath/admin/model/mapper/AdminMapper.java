@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.dsbath.admin.model.Admin;
+import com.dsbath.admin.model.dto.PagingDTO;
 
 /**
  * 관리자 정보 Mapper
@@ -53,5 +54,13 @@ public interface AdminMapper {
 	 * @param admin
 	 * @return
 	 */
-	public List<Admin> select(Admin admin);
+	public List<Admin> select(PagingDTO<Admin> pagingDTO);
+	
+	/**
+	 * 관리자 Total Count 조회
+	 * 
+	 * @param admin
+	 * @return
+	 */
+	public Long selectOfTotalCount(PagingDTO<Admin> pagingDTO);
 }

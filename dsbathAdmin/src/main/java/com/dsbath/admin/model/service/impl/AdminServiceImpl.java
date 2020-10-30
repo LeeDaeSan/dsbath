@@ -10,6 +10,7 @@ import com.dsbath.admin.etc.constant.Constant;
 import com.dsbath.admin.etc.util.ResponseUtil;
 import com.dsbath.admin.etc.util.StringUtil;
 import com.dsbath.admin.model.Admin;
+import com.dsbath.admin.model.dto.PagingDTO;
 import com.dsbath.admin.model.mapper.AdminMapper;
 import com.dsbath.admin.model.service.AdminService;
 
@@ -132,12 +133,14 @@ public class AdminServiceImpl implements AdminService {
 	 * 
 	 */
 	@Override
-	public Map<String, Object> select(Admin admin) {
+	public Map<String, Object> select(PagingDTO<Admin> pagingDTO) {
 		Map<String, Object> resultMap = null;
 		
 		try {
 			resultMap = ResponseUtil.successMap();
-			resultMap.put("list", adminMapper.select(admin));
+			
+			resultMap.put("list"		, adminMapper.select(pagingDTO));
+			resultMap.put("totalCount"	, adminMapper.selectOfTotalCount(pagingDTO));
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();

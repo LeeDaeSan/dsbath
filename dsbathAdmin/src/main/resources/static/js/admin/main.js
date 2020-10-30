@@ -1,7 +1,55 @@
+var sortType;
+var sort;
+var page = 1;
 $(function () {
 
 	// 목록 조회
 	adminSelectFunc();
+	
+	// limit change event
+	$('#rowLimit').change(function () {
+		adminSelectFunc(page);
+	});
+	
+	// sort th click event
+	$('.sort_th').unbind('click').click(function (e) {
+		e.preventDefault();
+		
+			sortType = $(this).attr('sortType');
+		var thisSort = $(this).attr('sort');
+		
+		// 나머지 초기화
+		$('.sort_th').each(function () {
+			var thisSortType = $(this).attr('sortType');
+			if (sortType != thisSortType) {
+				$(this).attr('sort', '');
+				$(this).find('.sort_img')
+						.addClass('fa-exchange')
+						.removeClass('fa-sort-amount-desc')
+						.removeClass('fa-sort-amount-asc');
+			}
+		});
+		
+		// sort가 없거나 asc인 경우 : desc 변경
+		if (!thisSort || thisSort == 'asc') {
+			$(this).attr('sort', 'desc');
+			$(this).find('.sort_img')
+					.addClass('fa-sort-amount-desc')
+					.removeClass('fa-exchange')
+					.removeClass('fa-sort-amount-asc');
+			
+		// sort가 desc인 경우 : asc 변경
+		} else if (thisSort == 'desc') {
+			$(this).attr('sort', 'asc');
+			$(this).find('.sort_img')
+					.addClass('fa-sort-amount-asc')
+					.removeClass('fa-exchange')
+					.removeClass('fa-sort-amount-desc');
+		}
+		
+		sort = $(this).attr('sort');
+		adminSelectFunc(page);
+	});
 	
 	// 관리자 등록 Button event
 	$('#insertAdminBtn').unbind('click').click(function (e) {
@@ -111,6 +159,9 @@ function insertAdminFunc () {
 				// 팝업 닫기
 				$('#addAdminPopup .close').click();
 				
+				// 목록 재조회
+				adminSelectFunc();
+				
 			} else {
 				alert('등록 실패');
 			}
@@ -130,14 +181,19 @@ function insertAdminFunc () {
  * 
  * @returns
  */
-function adminSelectFunc () {
+function adminSelectFunc (p) {
+	page	= p ? p : 1;
+	limit	= $('#rowLimit').val();
 	
 	$.ajax({
 		url			: '/admin/rest/select',
 		method		: 'POST',
 		dataType	: 'JSON',
 		data		: {
-			
+			page		: (page - 1) * limit,
+			limit		: limit,
+			sort		: sort,
+			sortType	: sortType,
 		}
 	
 	}).done(function (result) {
@@ -147,22 +203,41 @@ function adminSelectFunc () {
 			var html		= '';
 			var list 		= result.list;
 			var listLength 	= list.length;
+			var totalCount	= result.totalCount;
+			
+			var eRow = page * limit;
+			var sRow = eRow - limit + 1;
+				eRow = eRow > totalCount ? totalCount : eRow;
+			
+			// total count
+			$('#totalCount').text(totalCount);
+			// 현재 페이지 건수
+			$('#nowLimit').text(sRow + '-' + eRow);
 			
 			for (var i = 0; i < listLength; i++) {
 				var thisObj = list[i];
 				
 				html += '<tr>';
-				html += '	<td></td>';
+				html += '	<td class="text-right">' + (sRow + i) + '</td>';
 				html += '	<td>' + thisObj.adminName + '</td>';
 				html += '	<td>' + thisObj.adminId + '</td>';
 				html += '	<td>' + thisObj.address + '</td>';
-				html += '	<td>' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>';
+				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>';
+				html += '</tr>';
+			}
+			
+			// 데이터가 없는 경우
+			if (listLength == 0) {
+				html  = '<tr>';
+				html += '	<td colspan="5">데이터가 없습니다.</td>';
 				html += '</tr>';
 			}
 			
 			// 초기화 후 목록 추가
-			$('#adminTable tbody').empty().append(html);
+			$('#adminTable').find('tbody').empty().append(html);
 			
+			// paging
+			common.paging(page, limit, 10, totalCount, adminSelectFunc);
 		} else {
 			alert('관리자 목록 조회 실패');
 		}

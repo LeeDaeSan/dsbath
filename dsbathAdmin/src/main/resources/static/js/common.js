@@ -85,71 +85,74 @@ var common = {
 		var startPage 	= Math.ceil(page / pageLimit) * pageLimit - pageLimit + 1;	// 페이징의 첫 번호
 		var endPage 	= Math.ceil(page / pageLimit) * pageLimit;					// 페이징의 마지막 번호
 		
-		// 페이징의 마지막 페이지 번호가 맨 마지막 페이지 번호보다 클 경우
-		if (lastPage < endPage) {
-			endPage = lastPage;
-		}
+			endPage		= lastPage < endPage ? lastPage : endPage;
 		
-		// 페이징 초기화
-		$('#pagination').empty();
+
+		var html = '';
 		
-			// first page
-		var html  = '<li class="paginate_button page-item ' + (firstPage == startPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="firstPage"><span>≪</span></a></li>';
-			// prev page
-			html += '<li class="paginate_button page-item ' + (page == firstPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="prevBtn"><span>＜</span></a></li>';
-			// page number
+		// First button
+			html += '<li class="page-item ' + (firstPage >= startPage ? 'disabled' : 'first_button') + '">';
+			html += '	<a href="javascript:void(0);" class="page-link">&laquo;</a>';
+			html += '</li>';
+			
+		// Prev button
+			html += '<li class="page-item ' + (firstPage >= page ? 'disabled' : 'prev_button') + '">';
+			html += '	<a href="javascript:void(0);" class="page-link">&lsaquo;</a>';
+			html += '</li>';
+			
+		// Number button
 		for (var i = startPage; i <= endPage; i++) {
-			html += '<li class="paginate_button page-item ' + (i == page ? 'active' : '') + '"><a href="javascript:void(0);" class="page-link page_btn" num="' + i + '">' + i + '</a></li>';
+			html += '<li thisPage="' + i + '" class="this_page_link page-item ' + (i == page ? 'active' : '') + '">';
+			html += '	<a href="javascript:void(0);" class="page-link">' + i + '</a>';
+			html += '</li>';
 		}
-			// next page
-			html += '<li class="paginate_button page-item ' + (page == lastPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="nextBtn"><span>＞</span></a></li>';
-			// last page
-			html += '<li class="paginate_button page-item ' + (endPage >= lastPage ? 'disabled' : '') + '"><a href="javascript:void(0);" class="page-link" id="lastBtn"><span>≫</span></a></li>';
+		
+		// Next button
+			html += '<li class="page-item ' + (lastPage <= page ? 'disabled' : 'next_button') + '">';
+			html += '	<a href="javascript:void(0);" class="page-link">&rsaquo;</a>';
+			html += '</li>';
+			
+		// Last button
+			html += '<li class="page-item ' + (lastPage <= endPage ? 'disabled' : 'last_button') + '">';
+			html += '	<a href="javascript:void(0);" class="page-link">&raquo;</a>';
+			html += '</li>';
 
 		// 페이징 append
-		$('#pagination').append(html);
+		$('#pagination').empty().append(html);
 		
-		// first page 클릭
-		$('#firstPage').unbind('click').click(function (e) {
+		// first page click event
+		$('.first_button').unbind('click').click(function (e) {
 			e.preventDefault();
-			// 목록 함수 재호출
-			if (!$(this).closest('li').hasClass('disabled')) {
-				callback(firstPage);
-			}
+			
+			callback(firstPage);
 		});
 		
-		// start page 클릭
-		$('#prevBtn').unbind('click').click(function (e) {
+		// prev page click event
+		$('.prev_button').unbind('click').click(function (e) {
 			e.preventDefault();
-			// 목록 함수 재호출
-			if (!$(this).closest('li').hasClass('disabled')) {
-				callback(page - 1);
-			}
+			
+			callback((page == 1 ? 1 : (page - 1)));
 		});
 		
-		// 페이징 번호 클릭
-		$('.page_btn').unbind('click').click(function (e) {
+		// number page click event
+		$('.this_page_link').unbind('click').click(function (e) {
 			e.preventDefault();
 			// 목록 함수 재호출
-			callback($(this).attr('num'));
+			callback($(this).attr('thisPage'));
 		});
 		
-		// end page 클릭
-		$('#nextBtn').unbind('click').click(function (e) {
+		// next page click event
+		$('.next_button').unbind('click').click(function (e) {
 			e.preventDefault();
-			// 목록 함수 재호출
-			if (!$(this).closest('li').hasClass('disabled')) {
-				callback(Number(page) + 1);
-			}
+			
+			callback(Number(page) + 1);
 		});
 		
-		// last page 클릭
-		$('#lastBtn').unbind('click').click(function (e) {
+		// last page click event
+		$('.last_button').unbind('click').click(function (e) {
 			e.preventDefault();
-			// 목록 함수 재호출
-			if (!$(this).closest('li').hasClass('disabled')) {
-				callback(lastPage);
-			}
+			
+			callback(lastPage);
 		});
 	},
 	

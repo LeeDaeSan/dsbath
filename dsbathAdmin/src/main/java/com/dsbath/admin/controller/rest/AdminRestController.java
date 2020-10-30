@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dsbath.admin.model.Admin;
+import com.dsbath.admin.model.dto.PagingDTO;
 import com.dsbath.admin.model.service.AdminService;
 
 /**
@@ -54,7 +55,8 @@ public class AdminRestController {
 	 * @return
 	 */
 	@PostMapping("/select")
-	public Map<String, Object> select (Admin admin) {
-		return adminService.select(admin);
+	public Map<String, Object> select (PagingDTO<Admin> pagingDTO, Admin admin) {
+		pagingDTO.setModel(admin);
+		return adminService.select(pagingDTO);
 	}
 }

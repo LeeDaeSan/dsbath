@@ -57,7 +57,7 @@
 					</li>
 					
 					<li>
-						<a><i class="fa fa-pencil-square-o"></i> 시공 <span class="fa fa-chevron-down"></span></a>
+						<a><i class="fa fa-wrench"></i> 시공 <span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
 							<li><a href="/views/construct/inquiry">견적 및 시공 문의</a></li>
 							<li><a href="/views/construct/instance">시공 사례</a></li>

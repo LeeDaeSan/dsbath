@@ -49,7 +49,7 @@
 	</insert>
 	
 	<!-- 관리자 목록 조회 -->
-	<select id="select" parameterType="admin" resultType="admin">
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="admin">
 		SELECT
 			AdminIdx,
 			AdminName,
@@ -59,6 +59,45 @@
 			CreateDate,
 			UpdateDate
 			
+		  FROM Admin
+		 
+		<!-- order by -->
+		<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+		 	ORDER BY 
+		 	
+			<choose>
+			 	<when test='"adminId".equals(sortType)'>
+			 		AdminId
+				</when>
+			 	<when test='"adminName".equals(sortType)'>
+			 		AdminName
+				</when>
+			 	<when test='"address".equals(sortType)'>
+			 		Address
+				</when>
+			 	<when test='"createDate".equals(sortType)'>
+			 		CreateDate
+				</when>
+			</choose>
+			 
+			<choose>
+				<when test='"asc".equals(sort)'>
+					ASC
+				</when>
+				<when test='"desc".equals(sort)'>
+					DESC
+				</when>
+			</choose>
+		</if>
+		
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
+	</select>
+	
+	<!-- 관리자 Total Count 조회 -->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT
+			COUNT(AdminIdx)
 		  FROM Admin
 	</select>
 </mapper>
