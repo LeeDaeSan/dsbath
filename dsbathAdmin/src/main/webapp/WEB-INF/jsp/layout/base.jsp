@@ -1,5 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ page import="com.dsbath.admin.etc.constant.UserConstant" %>
+<%@ page import="com.dsbath.admin.etc.security.SecurityUser" %>
+<%
+	SecurityUser user = UserConstant.getUser();
+	
+	Integer idx = 0;
+	String name = "";
+	String addr = "";
+	
+	try {
+		idx = user.getIdx();
+		name = user.getName();
+		
+	} catch (Exception e) {
+		
+	}
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -22,6 +39,8 @@
 	    <link href="/lib/gentelella/jqvmap/jqvmap.min.css" rel="stylesheet"/>
 	    <!-- bootstrap-daterangepicker -->
 	    <link href="/lib/gentelella/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+	    <!-- switchery -->
+	    <link href="/lib/gentelella/switchery/switchery.min.css" rel="stylesheet" />
 	    <!-- Custom Theme Style -->
 	    <link href="/lib/gentelella/build/custom.min.css" rel="stylesheet">
 	    
@@ -34,6 +53,9 @@
 	    <script src="/js/common.js" type="text/javascript"></script>
 	    
 		<script>
+		var sessionIdx 	= '<%= idx %>';
+		var sessionName = '<%= name %>';
+	
 		$(function () {
 			var mainTitle = '';
 			var subTitle1 = '';
@@ -197,6 +219,8 @@
 	    <!-- bootstrap-daterangepicker -->
 	    <script src="/lib/gentelella/moment/moment.min.js"></script>
 	    <script src="/lib/gentelella/bootstrap-daterangepicker/daterangepicker.js"></script>
+	    <!-- switchery -->
+	    <script src="/lib/gentelella/switchery/switchery.min.js"></script>
 	    <!-- Custom Theme Scripts -->
 	    <script src="/lib/gentelella/build/custom.min.js"></script>
     <!------------------------------------- JS END ------------------------------------->

@@ -132,7 +132,7 @@
 #alertModal .alert-footer, #confirmModal .confirm-footer {
 	padding-left	: 7px;
 	padding-right	: 7px;
-	padding-bottom	: 4px;
+	padding-bottom	: 7px;
 }
 #alertModal .alert-footer .btn, #confirmModal .confirm-footer .btn {
 	float			: right;

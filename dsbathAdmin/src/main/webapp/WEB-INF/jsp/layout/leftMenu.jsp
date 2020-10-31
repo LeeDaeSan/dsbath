@@ -14,7 +14,7 @@
 			</div>
 			<div class="profile_info">
 				<span>Welcome,</span>
-				<h2>John Doe</h2>
+				<h2 id="leftMenuAdminName"></h2>
 			</div>
 		</div>
           	<!-- /menu profile quick info -->
@@ -82,3 +82,7 @@
 		<!-- /sidebar menu -->
 	</div>
 </div>
+
+<script>
+$('#leftMenuAdminName').empty().append(sessionName);
+</script>

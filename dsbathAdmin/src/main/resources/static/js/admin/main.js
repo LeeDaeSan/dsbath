@@ -13,8 +13,9 @@ $(function () {
 		}
 	});
 	
-	$('#periodDate').on('apply.daterangepicker', function(ev, picker) {
-	      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+	$('#periodDate').on('apply.daterangepicker', function(e, picker) {
+	      $(this).val(
+	    		  picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
 	});
 	
 	// 검색 button event
