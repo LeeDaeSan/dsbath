@@ -28,4 +28,6 @@ public class Notice {
 	
 	private String popupStartDateStr;
 	private String popupEndDateStr;
+	
+	private Admin admin;
 }

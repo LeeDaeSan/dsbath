@@ -31,4 +31,12 @@ public interface NoticeMapper {
 	 * @return
 	 */
 	public List<Notice> select(PagingDTO<Notice> pagingDTO);
+	
+	/**
+	 * 공지사항 목록 Total count
+	 * 
+	 * @param pagingDTO
+	 * @return
+	 */
+	public Long selectOfTotalCount(PagingDTO<Notice> pagingDTO);
 }

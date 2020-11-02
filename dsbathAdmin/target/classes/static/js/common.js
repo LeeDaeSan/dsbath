@@ -155,7 +155,7 @@ var common = {
 			callback(lastPage);
 		});
 	},
-	
+
 	// alert
 	alert : function (type, msg) {
 		var title 		= '';

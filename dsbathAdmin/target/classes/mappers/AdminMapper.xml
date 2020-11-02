@@ -97,7 +97,7 @@
 		<!-- 공통 조건 -->
 		<include refid="selectOfWhere"></include>
 		 
-		<!-- order by -->
+		<!-- order -->
 		<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
 		 	ORDER BY 
 		 	

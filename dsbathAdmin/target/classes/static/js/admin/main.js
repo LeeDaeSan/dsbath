@@ -1,6 +1,7 @@
 var sortType;
 var sort;
 var page = 1;
+
 $(function () {
 
 	// date range picker 옵션 적용

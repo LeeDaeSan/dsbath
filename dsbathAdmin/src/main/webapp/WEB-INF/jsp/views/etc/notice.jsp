@@ -59,26 +59,29 @@
 					<table class="table table-striped jambo_table bulk_action" id="noticeTable">
 						<colgroup>
 							<col width="5%"/>
-							<col width="15%"/>
-							<col width="15%"/>
 							<col width="auto"/>
+							<col width="15%"/>
+							<col width="15%"/>
 							<col width="15%"/>
 							<col width="15%"/>
 						</colgroup>
 						<thead>
 							<tr class="heading">
 								<th class="column-title text-center">No.</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="title">
+									제목<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
 								<th class="column-title text-center sort_th" sort="asc" sortType="adminName">
-									이름<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="adminId">
-									아이디<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="address">
-									주소<i class="fa fa-exchange sort-image sort_img"></i>
+									작성자<i class="fa fa-exchange sort-image sort_img"></i>
 								</th>
 								<th class="column-title text-center sort_th" sort="asc" sortType="createDate">
 									등록일<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="updateDate">
+									수정일<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="hit">
+									조회수<i class="fa fa-exchange sort-image sort_img"></i>
 								</th>
 							</tr>
 						</thead>

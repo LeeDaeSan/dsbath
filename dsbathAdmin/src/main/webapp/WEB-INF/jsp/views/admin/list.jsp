@@ -3,7 +3,6 @@
 <!-- admin main js -->
 <script src="/js/admin/main.js" type="text/javascript"></script>
 
-
 <!-- Search form START -->
 <div class="row">
 	<div class="col-md-12 col-sm-12">

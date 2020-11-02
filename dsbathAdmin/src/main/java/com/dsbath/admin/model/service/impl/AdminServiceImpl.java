@@ -89,7 +89,6 @@ public class AdminServiceImpl implements AdminService {
 			resultMap.put("isSamed", isSamed);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		}
 		return resultMap;

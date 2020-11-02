@@ -76,7 +76,8 @@ public class NoticeServiceImpl implements NoticeService {
 		try {
 			resultMap = ResponseUtil.successMap();
 			
-			resultMap.put("list", noticeMapper.select(pagingDTO));
+			resultMap.put("list"		, noticeMapper.select(pagingDTO));
+			resultMap.put("totalCount"	, noticeMapper.selectOfTotalCount(pagingDTO));
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
