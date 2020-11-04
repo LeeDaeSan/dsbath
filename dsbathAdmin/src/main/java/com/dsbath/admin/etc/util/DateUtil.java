@@ -47,4 +47,13 @@ public class DateUtil {
 		
 		return str;
 	}
+	
+	public static String fileTime () {
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss.SSS");
+		
+		Date date = new Date();
+		
+		return format.format(date);
+	}
+	
 }

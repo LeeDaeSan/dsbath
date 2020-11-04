@@ -104,7 +104,7 @@
 
 <!-- 등록 팝업 START -->
 <div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="addNoticePopup">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="myModalLabel">공지사항 등록</h4>
@@ -130,7 +130,7 @@
 						<tr>
 							<th>내용</th>
 							<td colspan="3">
-								<textarea id="insertContent" class="form-control form-control-cust"></textarea>
+								<div id="insertContent"></div>
 							</td>
 						</tr>
 						<tr>

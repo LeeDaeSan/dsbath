@@ -244,5 +244,45 @@ var common = {
 	        document.cookie = name + "= " + "; expires=" + date.toUTCString() + "; path=/";
 	    }
 
+	},
+	
+	/**
+	 * 파일 저장, 삭제
+	 */
+	file : {
+		// 저장
+		save : function (file, el) {
+			
+			var formData = new FormData();
+			formData.append('file', file);
+			
+			$.ajax({
+				url 			: '/file/rest/upload',
+				type			: 'POST',
+				cache			: false,
+				contentType		: false,
+				enctype			: 'multipart/form-data',
+				processData		: false,
+				data			: formData,
+				
+			// 완료
+			}).done(function (result) {
+			
+				if (result.status) {
+					var fileName = result.fileName;
+					$('.note-editable').append('<p><img style="width:' + $('.note-editable').width() + 'px" src="http://localhost:8081/file/rest/download?type=tmp&fileName=' + fileName + '" id="' + fileName + '"/></p>');
+					
+				} else {
+					common.alert('dang', '파일 저장중 서버 에러가 발생하였습니다.');
+				}
+				
+			}).fail(function (result) {
+				common.alert('dang', '파일 저장중 서버 통신 에러가 발생하였습니다.');
+			});
+		},
+		
+		del : function (file) {
+			
+		}
 	}
 };

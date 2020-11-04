@@ -4,6 +4,28 @@ var page = 1;
 
 $(function () {
 	
+	$('#insertContent').summernote({
+		height 		: 300,
+		minHeight	: null,
+		maxHeight	: null,
+		focus		: true,
+		lang		: 'ko-KR',
+		placeholder	: '',
+		callbacks	: {
+			onImageUpload : function (files, el, e) {
+				var fileLength = files.length;
+				console.log(fileLength);
+				for (var i = 0; i < fileLength; i++) {
+					var file = files[i];
+					common.file.save(file);
+				}
+			},
+			onMediaDelete : function (target) {
+				console.log(target);
+			}
+		}
+	});
+	
 	// 검색 button click event
 	$('#searchBtn').unbind('click').click(function (e) {
 		e.preventDefault();
@@ -88,6 +110,9 @@ $(function () {
  * @returns
  */
 function noticeInsertFunc () {
+	
+	//console.log($('#insertContent').summernote('code'));
+	return false;
 	
 	var title 		= $('#insertTitle').val();
 	var content 	= $('#insertContent').val();

@@ -43,6 +43,8 @@
 	    <link href="/lib/gentelella/switchery/switchery.min.css" rel="stylesheet" />
 	    <!-- Custom Theme Style -->
 	    <link href="/lib/gentelella/build/custom.min.css" rel="stylesheet">
+	    <!-- summernote -->
+		<link rel="stylesheet" href="/lib/summernote/summernote-lite.min.css">
 	    
 	    <link href="/css/common.css" rel="stylesheet">
     <!------------------------------------- CSS END ------------------------------------->
@@ -221,6 +223,9 @@
 	    <script src="/lib/gentelella/bootstrap-daterangepicker/daterangepicker.js"></script>
 	    <!-- switchery -->
 	    <script src="/lib/gentelella/switchery/switchery.min.js"></script>
+	    <!-- summernote -->
+	    <script src="/lib/summernote/summernote-lite.min.js"></script>
+		<script src="/lib/summernote/lang/summernote-ko-KR.js"></script>
 	    <!-- Custom Theme Scripts -->
 	    <script src="/lib/gentelella/build/custom.min.js"></script>
     <!------------------------------------- JS END ------------------------------------->
