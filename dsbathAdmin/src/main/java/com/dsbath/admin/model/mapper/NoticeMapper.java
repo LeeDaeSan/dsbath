@@ -25,6 +25,14 @@ public interface NoticeMapper {
 	public Integer insert(Notice notice);
 	
 	/**
+	 * 공지사항 상세
+	 * 
+	 * @param notice
+	 * @return
+	 */
+	public Notice detail(Notice notice);
+	
+	/**
 	 * 공지사항 목록 조회
 	 * 
 	 * @param pagingDTO

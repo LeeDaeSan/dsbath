@@ -111,11 +111,8 @@ $(function () {
  */
 function noticeInsertFunc () {
 	
-	//console.log($('#insertContent').summernote('code'));
-	return false;
-	
 	var title 		= $('#insertTitle').val();
-	var content 	= $('#insertContent').val();
+	var content 	= $('#insertContent').summernote('code');
 	var isImport 	= ($('#isImportCheck').prop('checked') ? '1' : '0');
 	var isComment	= ($('#isCommentCheck').prop('checked') ? '1' : '0');
 	var isPopup		= ($('#isPopupCheck').prop('checked') ? '1' : '0');
@@ -168,7 +165,7 @@ function noticeInsertFunc () {
 				if (resultCount == 1) {
 					// 초기화
 					$('#insertTitle').val('');
-					$('#insertContent').val('');
+					$('#insertContent').summernote('reset')
 					$('#isImportCheck').prop('checked', false);
 					$('#isCommentCheck').prop('checked', false);
 					$('#isPopupCheck').prop('checked', false);
@@ -260,6 +257,17 @@ function noticeSelectFunc (p) {
 			// paging
 			common.paging(page, limit, 10, totalCount, noticeSelectFunc);
 			
+			// 상세 조회
+			$('.notice_detail').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				noticeDetailFunc($(this).attr('idx'));
+				
+				// 팝업 show
+				$('#detailNoticePopup').modal();
+				$('#detailNoticePopup').show();
+			});
+			
 		} else {
 			common.alert('dang', '공지사항 목록 조회중 서버 에러가 발생하였습니다.');
 		}
@@ -268,4 +276,38 @@ function noticeSelectFunc (p) {
 	}).fail(function (result) {
 		common.alert('dang', '공지사항 목록 조회 요청중 서버 통신 장애가 발생하였습니다.');
 	});
+}
+
+/**
+ * 공지사항 상세 Function
+ * 
+ * @returns
+ */
+function noticeDetailFunc (noticeIdx) {
+	
+	$.ajax({
+		url			: '/notice/rest/detail',
+		method		: 'POST',
+		dataType	: 'JSON',
+		data		: {
+			noticeIdx : noticeIdx,
+		}
+	
+	}).done(function (result) {
+	
+		if (result.status) {
+			var detail = result.detail;
+			
+			$('#detailTitle').text(detail.title);
+			$('#detailContent').append(detail.content);
+			
+		} else {
+			common.alert('dang', '공지사항 상세 조회중 서버 에러가 발생하였습니다.');
+		}
+		
+	// 통신 에러
+	}).fail(function (result) {
+		common.alert('dang', '공지사항 상세 조회 요청중 서버 통신 장애가 발생하였습니다.');
+	});
+	
 }

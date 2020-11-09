@@ -66,6 +66,25 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	/**
+	 * 공지사항 상세
+	 * 
+	 */
+	@Override
+	public Map<String, Object> detail(Notice notice) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("detail", noticeMapper.detail(notice));
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+	
+	/**
 	 * 공지사항 목록 조회
 	 * 
 	 */

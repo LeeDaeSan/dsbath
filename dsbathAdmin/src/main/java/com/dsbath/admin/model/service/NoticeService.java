@@ -23,6 +23,14 @@ public interface NoticeService {
 	public Map<String, Object> merge(Notice notice, String type);
 	
 	/**
+	 * 공지사항 상세
+	 * 
+	 * @param notice
+	 * @return
+	 */
+	public Map<String, Object> detail(Notice notice);
+	
+	/**
 	 * 공지사항 목록
 	 * 
 	 * @param padingDTO

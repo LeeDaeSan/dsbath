@@ -171,3 +171,72 @@
 	</div>
 </div>
 <!-- 등록 팝업 END -->
+
+
+<!-- 상세 팝업 START -->
+<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="detailNoticePopup">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">공지사항 상세</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<colgroup>
+						<col width="16%"/>
+						<col width="28%"/>
+						<col width="28%"/>
+						<col width="28%"/>
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>제목</th>
+							<td colspan="3" id="detailTitle">
+							</td>
+						</tr>
+						<tr>
+							<th>내용</th>
+							<td colspan="3" id="detailContent">
+							</td>
+						</tr>
+						<tr>
+							<th>설정</th>
+							<td>
+								<label for="isImportCheck">
+									중요 여부
+									<input type="checkbox" id="isImportCheck" class="js-switch" data-switchery="true"/>
+								</label>
+							</td>
+							<td>
+								<label for="isCommentCheck">
+									코멘트 여부
+									<input type="checkbox" id="isCommentCheck" class="js-switch" data-switchery="true"/>
+								</label>
+							</td>
+							<td>
+								<label for="isPopupCheck">
+									팝업 여부
+									<input type="checkbox" id="isPopupCheck" class="js-switch" data-switchery="true"/>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<th>팝업 기간</th>
+							<td colspan="3">
+								<input type="text" id="popupDate" class="form-control form-control-cust"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
+				<button type="button" class="btn btn-sm btn-primary" id="insertAdminBtn">등록</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 상세 팝업 END -->
