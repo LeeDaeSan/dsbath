@@ -95,7 +95,7 @@
 			<version>3.3.1</version>
 		</dependency>
 		
-		<!-- tiles 추가 -->
+		<!-- tiles -->
 	  	<dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-jsp</artifactId>
