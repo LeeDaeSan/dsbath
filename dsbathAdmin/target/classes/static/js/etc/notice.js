@@ -5,7 +5,7 @@ var page = 1;
 $(function () {
 	
 	// summernote init
-	$('#insertContent').summernote({
+	$('#insertContent, #updateContent').summernote({
 		height 		: 300,
 		minHeight	: null,
 		maxHeight	: null,
@@ -28,7 +28,7 @@ $(function () {
 	});
 	
 	// date range picker 옵션 적용
-	$('#popupDate, #periodDate').daterangepicker({
+	$('#popupDate, #periodDate, #updatePopupDate').daterangepicker({
 		autoUpdateInput	: false,
 		'applyClass'	: 'btn-sm btn-dark',
 		'cancelClass'	: 'btn-sm btn-light',
@@ -136,9 +136,9 @@ $(function () {
 		e.preventDefault();
 		
 		if ($(this).prop('checked')) {
-			$('.popup_tr').show();
+			$('#addNoticePopup .popup_tr').show();
 		} else {
-			$('.popup_tr').hide();
+			$('#addNoticePopup .popup_tr').hide();
 		}
 	});
 	
@@ -149,94 +149,6 @@ $(function () {
 		noticeInsertFunc();
 	});
 });
-
-/**
- * 공지사항 등록 Function
- * 
- * @returns
- */
-function noticeInsertFunc () {
-	
-	var title 		= $('#insertTitle').val();
-	var content 	= $('#insertContent').summernote('code');
-	var isImport 	= ($('#isImportCheck').prop('checked') ? '1' : '0');
-	var isComment	= ($('#isCommentCheck').prop('checked') ? '1' : '0');
-	var isPopup		= ($('#isPopupCheck').prop('checked') ? '1' : '0');
-	
-	var startDate	= '';
-	var endDate		= '';
-	if (isPopup == '1') {
-		startDate	= common.date.toString( $('#popupDate').data('daterangepicker').startDate._d, '' );
-		endDate		= common.date.toString( $('#popupDate').data('daterangepicker').endDate._d, '' )
-	}
-	
-	// 제목 validation
-	if (!title) {
-		common.alert('warn', '제목을 입력해 주세요.');
-		$('#insertTitle').focus();
-		return false;
-	}
-	// 내용 validation
-	if (!content) {
-		common.alert('warn', '내용을 입력해 주세요.');
-		$('#insertContent').focus();
-		return false;
-	}
-	
-	// confirm
-	if (confirm('공지사항을 등록하시겠습니까?')) {
-		
-		$.ajax({
-			url 		: '/notice/rest/merge',
-			method		: 'POST',
-			dataType	: 'JSON',
-			data		: {
-				type				: 'I',
-				title				: title,
-				content				: content,
-				isImport			: isImport,
-				isComment			: isComment,
-				isPopup				: isPopup,
-				popupStartDateStr 	: startDate,
-				popupEndDateStr		: endDate,
-			}
-		
-		}).done(function (result) {
-			
-			// 결과
-			if (result.status) {
-				var resultCount = result.resultCount;
-				
-				// 등록 성공
-				if (resultCount == 1) {
-					// 초기화
-					$('#insertTitle').val('');
-					$('#insertContent').summernote('reset')
-					$('#isImportCheck').prop('checked', false);
-					$('#isCommentCheck').prop('checked', false);
-					$('#isPopupCheck').prop('checked', false);
-					
-					common.alert('succ', '공지사항 등록을 완료하였습니다.');
-					
-					// 팝업 닫기
-					$('#addNoticePopup .close').click();
-					
-				// 등록 실패
-				} else {
-					
-				}
-				
-				// error
-			} else {
-				common.alert('dang', '공지사항 등록중 서버 에러가 발생하였습니다.');
-			}
-			
-			// request error
-		}).fail(function (result) {
-			common.alert('dang', '공지사항 등록 요청중 서버 통신 장애가 발생하였습니다.');
-		});
-	}
-}
 
 /**
  * 공지사항 목록 Function
@@ -302,7 +214,7 @@ function noticeSelectFunc (p) {
 			for (var i = 0; i < listLength; i++) {
 				var thisObj = list[i];
 			
-				html += '<tr class="notice_detail" idx="' + thisObj.noticeIdx + '">';
+				html += '<tr class="notice_detail detail-tr" idx="' + thisObj.noticeIdx + '">';
 				html += '	<td class="text-right">' + (sRow + i) + '</td>';
 				html += '	<td>' + thisObj.title + '</td>';
 				html += '	<td class="text-center">' + thisObj.admin.adminName + '</td>';
@@ -352,6 +264,9 @@ function noticeSelectFunc (p) {
  */
 function noticeDetailFunc (noticeIdx) {
 	
+	$('#detailNoticePopup .update_tbody, #savePopupBtn').hide();
+	$('#detailNoticePopup .detail_tbody, #updatePopupBtn, #deletePopupBtn').show();
+	
 	$.ajax({
 		url			: '/notice/rest/detail',
 		method		: 'POST',
@@ -365,10 +280,64 @@ function noticeDetailFunc (noticeIdx) {
 		if (result.status) {
 			var detail = result.detail;
 			
+			// 상세 정보
 			$('#detailTitle').text(detail.title);
 			$('#detailAdmin').text(detail.admin.adminName);
 			$('#detailCreateDate').text(common.date.toString(new Date(detail.createDate), '-'));
 			$('#detailContent').append(detail.content);
+			
+			// 수정 상세 정보
+			$('#updateTitle').val(detail.title);
+			$('#updateContent').summernote('code', detail.content);
+			$('#updatePopupDate').val();
+			
+			var popupStartDate 	= detail.popupStartDate;
+			var popupEndDate	= detail.popupEndDate;
+			if (popupStartDate && popupEndDate) {
+				$('#updatePopupDate').val(
+						common.date.toString(new Date(popupStartDate), '-') + ' - ' + common.date.toString(new Date(popupEndDate), '-'));
+			}
+			
+			if (detail.isImport == '1') {
+				$('#updateIsImportCheck').click();
+			} 
+			if (detail.isComment == '1') {
+				$('#updateIsCommentCheck').click();
+			} 
+			if (detail.isPopup == '1') {
+				$('#updateIsPopupCheck').click();
+			} 
+			
+			// 수정 화면에서 팝업여부 변경
+			$('#updateIsPopupCheck').change(function (e) {
+				if ($(this).prop('checked')) {
+					$('#detailNoticePopup .popup_tr').show();
+				} else {
+					$('#detailNoticePopup .popup_tr').hide();
+				}
+			});
+			
+			// 수정 화면 변경 button event
+			$('#updatePopupBtn').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				$('#detailNoticePopup .detail_tbody, #updatePopupBtn, #deletePopupBtn').hide();
+				$('#detailNoticePopup .update_tbody, #savePopupBtn').show();
+			});
+			
+			// 저장 button event
+			$('#savePopupBtn').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				noticeUpdateFunc(noticeIdx);
+			});
+			
+			// 삭제 button event
+			$('#deletePopupBtn').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				noticeDeleteFunc(noticeIdx);
+			});
 			
 		} else {
 			common.alert('dang', '공지사항 상세 조회중 서버 에러가 발생하였습니다.');
@@ -379,4 +348,234 @@ function noticeDetailFunc (noticeIdx) {
 		common.alert('dang', '공지사항 상세 조회 요청중 서버 통신 장애가 발생하였습니다.');
 	});
 	
+}
+
+/**
+ * 공지사항 등록 Function
+ * 
+ * @returns
+ */
+function noticeInsertFunc () {
+	
+	var title 		= $('#insertTitle').val();
+	var content 	= $('#insertContent').summernote('code');
+	var isImport 	= ($('#isImportCheck').prop('checked') ? '1' : '0');
+	var isComment	= ($('#isCommentCheck').prop('checked') ? '1' : '0');
+	var isPopup		= ($('#isPopupCheck').prop('checked') ? '1' : '0');
+	
+	var startDate	= '';
+	var endDate		= '';
+	if (isPopup == '1') {
+		startDate	= common.date.toString( $('#popupDate').data('daterangepicker').startDate._d, '' );
+		endDate		= common.date.toString( $('#popupDate').data('daterangepicker').endDate._d, '' );
+	}
+	
+	// 제목 validation
+	if (!title) {
+		common.alert('warn', '제목을 입력해 주세요.');
+		$('#insertTitle').focus();
+		return false;
+	}
+	// 내용 validation
+	if (!content) {
+		common.alert('warn', '내용을 입력해 주세요.');
+		$('#insertContent').focus();
+		return false;
+	}
+	
+	// confirm
+	if (confirm('공지사항을 등록하시겠습니까?')) {
+		
+		$.ajax({
+			url 		: '/notice/rest/merge',
+			method		: 'POST',
+			dataType	: 'JSON',
+			data		: {
+				type				: 'I',
+				title				: title,
+				content				: content,
+				isImport			: isImport,
+				isComment			: isComment,
+				isPopup				: isPopup,
+				popupStartDateStr 	: startDate,
+				popupEndDateStr		: endDate,
+			}
+		
+		}).done(function (result) {
+			
+			// 결과
+			if (result.status) {
+				var resultCount = result.resultCount;
+				
+				// 등록 성공
+				if (resultCount == 1) {
+					// 초기화
+					$('#insertTitle').val('');
+					$('#insertContent').summernote('reset')
+					$('#isImportCheck').prop('checked', false);
+					$('#isCommentCheck').prop('checked', false);
+					$('#isPopupCheck').prop('checked', false);
+					
+					common.alert('succ', '공지사항 등록을 완료하였습니다.');
+					
+					// 팝업 닫기
+					$('#addNoticePopup .close').click();
+					
+					// 목록 조회
+					noticeSelectFunc();
+					
+				// 등록 실패
+				} else {
+					common.alert('dang', '공지사항 등록중 서버 에러가 발생하였습니다.');
+				}
+				
+			// error
+			} else {
+				common.alert('dang', '공지사항 등록중 서버 에러가 발생하였습니다.');
+			}
+			
+		// request error
+		}).fail(function (result) {
+			common.alert('dang', '공지사항 등록 요청중 서버 통신 장애가 발생하였습니다.');
+		});
+	}
+}
+
+/**
+ * 공지사항 수정 Function
+ * 
+ * @returns
+ */
+function noticeUpdateFunc (noticeIdx) {
+	
+	var title 		= $('#updateTitle').val();
+	var content		= $('#updateContent').summernote('code');
+	var isImport	= ($('#updateIsImportCheck').prop('checked') ? '1' : '0');
+	var isComment	= ($('#updateIsCommentCheck').prop('checked') ? '1' : '0');
+	var isPopup		= ($('#updateIsPopupCheck').prop('checked') ? '1' : '0');
+	
+	var startDate 	= '';
+	var endDate		= '';
+	if (isPopup == '1') {
+		startDate	= common.date.toString( $('#updatePopupDate').data('daterangepicker').startDate._d, '' );
+		endDate		= common.date.toString( $('#updatePopupDate').data('daterangepicker').endDate._d, '' );
+	}
+	
+	// 제목 validation
+	if (!title) {
+		common.alert('warn', '제목을 입력해 주세요.');
+		$('#updateTitle').focus();
+		return false;
+	}
+	// 내용 validation
+	if (!content) {
+		common.alert('warn', '내용을 입력해 주세요.');
+		$('#updateContent').focus();
+		return false;
+	}
+	
+	if (confirm('수정사항을 저장하시겠습니까?')) {
+		
+		$.ajax({
+			url 		: '/notice/rest/merge',
+			method		: 'POST',
+			dataType	: 'JSON',
+			data		: {
+				type				: 'U',
+				noticeIdx			: noticeIdx,
+				title				: title,
+				content				: content,
+				isImport			: isImport,
+				isComment			: isComment,
+				isPopup				: isPopup,
+				popupStartDateStr 	: startDate,
+				popupEndDateStr		: endDate,
+			}
+		
+		// 완료
+		}).done(function (result) {
+			
+			if (result.status) {
+				var resultCount = result.resultCount;
+				
+				// 성공
+				if (resultCount == 1) {
+					
+					common.alert('succ', '공지사항 수정을 완료하였습니다.');
+					
+					// 팝업 닫기
+					$('#detailNoticePopup .close').click();
+				
+					// 목록 조회
+					noticeSelectFunc();
+					
+				// 실패
+				} else {
+					common.alert('dang', '공지사항 수정 실패하였습니다.');
+				}
+				
+			// 에러
+			} else {
+				common.alert('dang', '공지사항 수정중 서버 에러가 발생하였습니다.');
+			}
+			
+		// 통신 에러
+		}).fail(function () {
+			common.alert('dang', '공지사항 수정 요청중 서버 통신 장애가 발생하였습니다.');
+		});
+	}
+}
+
+/**
+ * 공지사항 삭제 Function
+ * 
+ * @param noticeIdx
+ * @returns
+ */
+function noticeDeleteFunc (noticeIdx) {
+	
+	// confirm
+	if (confirm('해당 공지사항을 삭제하시겠습니까?')) {
+		
+		$.ajax({
+			url 		: '/notice/rest/merge',
+			method		: 'POST',
+			dataType	: 'JSON',
+			data		: {
+				type				: 'D',
+				noticeIdx			: noticeIdx,
+			}
+		
+		// 완료
+		}).done(function (result) {
+			
+			// 성공
+			if (result.status) {
+				var resultCount = result.resultCount;
+				
+				// 성공
+				if (resultCount == 1) {
+					
+					// alert
+					common.alert('succ', '공지사항 삭제를 완료하였습니다.');
+					// 팝업 닫기
+					$('#detailNoticePopup .close').click();
+					// 목록 조회
+					noticeSelectFunc();
+					
+				// 실패
+				} else {
+					common.alert('dang', '공지사항 삭제 실패하였습니다.');
+				}
+				
+			// 서버 에러
+			} else {
+				common.alert('dang', '공지사항 삭제중 서버 에러가 발생하였습니다.');
+			}
+			
+		// 통신 에러
+		}).fail(function () {
+			common.alert('dang', '공지사항 삭제 요청중 서버 통신 장애가 발생하였습니다.');
+		});
+	}
 }

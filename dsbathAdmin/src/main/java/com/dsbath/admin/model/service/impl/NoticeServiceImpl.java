@@ -82,12 +82,13 @@ public class NoticeServiceImpl implements NoticeService {
 				
 				notice.setAdminIdx(loginIdx);
 				
+				// 팝업 시작일
 				String popupStartDateStr = notice.getPopupStartDateStr();
 				if (StringUtil.isNotEmpty(popupStartDateStr)) {
 					notice.setPopupStartDate(
 							DateUtil.stringToDate(popupStartDateStr, "yyyyMMdd"));
 				}
-				
+				// 팝업 종료일
 				String popupEndDateStr = notice.getPopupEndDateStr();
 				if (StringUtil.isNotEmpty(popupEndDateStr)) {
 					notice.setPopupEndDate(
@@ -95,6 +96,28 @@ public class NoticeServiceImpl implements NoticeService {
 				}
 				
 				resultCount = noticeMapper.insert(notice);
+				
+			// 수정
+			} else if (type.equals(Constant.MERGE_TYPE_UPDATE)) {
+				
+				// 팝업 시작일
+				String popupStartDateStr = notice.getPopupStartDateStr();
+				if (StringUtil.isNotEmpty(popupStartDateStr)) {
+					notice.setPopupStartDate(
+							DateUtil.stringToDate(popupStartDateStr, "yyyyMMdd"));
+				}
+				// 팝업 종료일
+				String popupEndDateStr = notice.getPopupEndDateStr();
+				if (StringUtil.isNotEmpty(popupEndDateStr)) {
+					notice.setPopupEndDate(
+							DateUtil.stringToDate(popupEndDateStr, "yyyyMMdd"));
+				}
+				
+				resultCount = noticeMapper.update(notice);
+				
+			// 삭제
+			} else if (type.equals(Constant.MERGE_TYPE_DELETE)) {
+				resultCount = noticeMapper.delete(notice);
 			}
 			
 			resultMap.put("resultCount", resultCount);

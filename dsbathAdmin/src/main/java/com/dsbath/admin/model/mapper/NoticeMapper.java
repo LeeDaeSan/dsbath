@@ -17,12 +17,20 @@ import com.dsbath.admin.model.dto.PagingDTO;
 public interface NoticeMapper {
 
 	/**
-	 * 공지사항 등록
+	 * 공지사항 목록 조회
 	 * 
-	 * @param notice
+	 * @param pagingDTO
 	 * @return
 	 */
-	public Integer insert(Notice notice);
+	public List<Notice> select(PagingDTO<Notice> pagingDTO);
+	
+	/**
+	 * 공지사항 목록 Total Count
+	 * 
+	 * @param pagingDTO
+	 * @return
+	 */
+	public Long selectOfTotalCount(PagingDTO<Notice> pagingDTO);
 	
 	/**
 	 * 공지사항 상세
@@ -33,18 +41,26 @@ public interface NoticeMapper {
 	public Notice detail(Notice notice);
 	
 	/**
-	 * 공지사항 목록 조회
+	 * 공지사항 등록
 	 * 
-	 * @param pagingDTO
+	 * @param notice
 	 * @return
 	 */
-	public List<Notice> select(PagingDTO<Notice> pagingDTO);
+	public Integer insert(Notice notice);
 	
 	/**
-	 * 공지사항 목록 Total count
+	 * 공지사항 수정
 	 * 
-	 * @param pagingDTO
+	 * @param notice
 	 * @return
 	 */
-	public Long selectOfTotalCount(PagingDTO<Notice> pagingDTO);
+	public Integer update(Notice notice);
+	
+	/**
+	 * 공지사항 삭제
+	 * 
+	 * @param notice
+	 * @return
+	 */
+	public Integer delete(Notice notice);
 }

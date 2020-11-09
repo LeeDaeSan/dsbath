@@ -218,7 +218,7 @@ function adminSelectFunc (p) {
 			for (var i = 0; i < listLength; i++) {
 				var thisObj = list[i];
 				
-				html += '<tr class="admin_detail" idx="' + thisObj.adminIdx + '">';
+				html += '<tr class="admin_detail detail-tr" idx="' + thisObj.adminIdx + '">';
 				html += '	<td class="text-right">' + (sRow + i) + '</td>';
 				html += '	<td>' + thisObj.adminName + '</td>';
 				html += '	<td>' + thisObj.adminId + '</td>';

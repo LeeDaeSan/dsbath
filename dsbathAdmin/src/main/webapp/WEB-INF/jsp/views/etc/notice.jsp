@@ -259,7 +259,7 @@
 						<col width="15%"/>
 						<col width="35%"/>
 					</colgroup>
-					<tbody>
+					<tbody class="detail_tbody">
 						<tr>
 							<th>제목</th>
 							<td colspan="3" id="detailTitle">
@@ -278,11 +278,48 @@
 							</td>
 						</tr>
 					</tbody>
+					<tbody class="update_tbody" style="display:none;">
+						<tr>
+							<th>제목</th>
+							<td colspan="3">
+								<input type="text" id="updateTitle" class="form-control form-control-cust"/>
+							</td>
+						</tr>
+						<tr>
+							<th>내용</th>
+							<td colspan="3">
+								<div id="updateContent"></div>
+							</td>
+						</tr>
+						<tr>
+							<th>설정</th>
+							<td>
+								<label for="updateIsImportCheck">중요 여부</label>
+								<input type="checkbox" id="updateIsImportCheck" class="js-switch" data-switchery="true"/>
+							</td>
+							<td>
+								<label for="updateIsCommentCheck">코멘트 여부</label>
+								<input type="checkbox" id="updateIsCommentCheck" class="js-switch" data-switchery="true"/>
+							</td>
+							<td>
+								<label for="updateIsPopupCheck">팝업 여부</label>
+								<input type="checkbox" id="updateIsPopupCheck" class="js-switch" data-switchery="true"/>
+							</td>
+						</tr>
+						<tr class="popup_tr" style="display:none;">
+							<th>팝업 기간</th>
+							<td colspan="3">
+								<input type="text" id="updatePopupDate" class="form-control form-control-cust" readonly/>
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
 				<button type="button" class="btn btn-sm btn-primary" id="updatePopupBtn">수정</button>
+				<button type="button" class="btn btn-sm btn-danger" id="deletePopupBtn">삭제</button>
+				<button type="button" class="btn btn-sm btn-primary" id="savePopupBtn" style="display:none;">저장</button>
 			</div>
 		</div>
 	</div>

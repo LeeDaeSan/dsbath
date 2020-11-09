@@ -168,3 +168,7 @@
 .login_content {
 	padding : 0;
 }
+
+.detail-tr {
+	cursor : pointer;
+}
