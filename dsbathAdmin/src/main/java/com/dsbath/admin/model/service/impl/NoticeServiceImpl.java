@@ -22,6 +22,47 @@ public class NoticeServiceImpl implements NoticeService {
 	private NoticeMapper noticeMapper;
 	
 	/**
+	 * 공지사항 목록 조회
+	 * 
+	 */
+	@Override
+	public Map<String, Object> select(PagingDTO<Notice> pagingDTO) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			
+			resultMap.put("list"		, noticeMapper.select(pagingDTO));
+			resultMap.put("totalCount"	, noticeMapper.selectOfTotalCount(pagingDTO));
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+			e.printStackTrace();
+		}
+		
+		return resultMap;
+	}
+	
+	/**
+	 * 공지사항 상세
+	 * 
+	 */
+	@Override
+	public Map<String, Object> detail(Notice notice) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			resultMap.put("detail", noticeMapper.detail(notice));
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+
+	/**
 	 * 공지사항 등록, 수정, 삭제 
 	 * 
 	 */
@@ -57,46 +98,6 @@ public class NoticeServiceImpl implements NoticeService {
 			}
 			
 			resultMap.put("resultCount", resultCount);
-			
-		} catch (Exception e) {
-			resultMap = ResponseUtil.failureMap();
-		}
-		
-		return resultMap;
-	}
-
-	/**
-	 * 공지사항 상세
-	 * 
-	 */
-	@Override
-	public Map<String, Object> detail(Notice notice) {
-		Map<String, Object> resultMap = null;
-		
-		try {
-			resultMap = ResponseUtil.successMap();
-			resultMap.put("detail", noticeMapper.detail(notice));
-			
-		} catch (Exception e) {
-			resultMap = ResponseUtil.failureMap();
-		}
-		
-		return resultMap;
-	}
-	
-	/**
-	 * 공지사항 목록 조회
-	 * 
-	 */
-	@Override
-	public Map<String, Object> select(PagingDTO<Notice> pagingDTO) {
-		Map<String, Object> resultMap = null;
-		
-		try {
-			resultMap = ResponseUtil.successMap();
-			
-			resultMap.put("list"		, noticeMapper.select(pagingDTO));
-			resultMap.put("totalCount"	, noticeMapper.selectOfTotalCount(pagingDTO));
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();

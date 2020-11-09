@@ -4,6 +4,7 @@ var page = 1;
 
 $(function () {
 	
+	// summernote init
 	$('#insertContent').summernote({
 		height 		: 300,
 		minHeight	: null,
@@ -14,7 +15,7 @@ $(function () {
 		callbacks	: {
 			onImageUpload : function (files, el, e) {
 				var fileLength = files.length;
-				console.log(fileLength);
+				
 				for (var i = 0; i < fileLength; i++) {
 					var file = files[i];
 					common.file.save(file);
@@ -24,6 +25,21 @@ $(function () {
 				console.log(target);
 			}
 		}
+	});
+	
+	// date range picker 옵션 적용
+	$('#popupDate, #periodDate').daterangepicker({
+		autoUpdateInput	: false,
+		'applyClass'	: 'btn-sm btn-dark',
+		'cancelClass'	: 'btn-sm btn-light',
+		drops			: 'up',
+		locale			: {
+			format : 'YYYY-MM-DD'
+		}
+	});
+	$('#popupDate, #periodDate').on('apply.daterangepicker', function (e, picker) {
+		$(this).val(
+			picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
 	});
 	
 	// 검색 button click event
@@ -36,19 +52,38 @@ $(function () {
 	// 목록 조회
 	$('#searchBtn').click();
 	
-	// date range picker 옵션 적용
-	$('#popupDate').daterangepicker({
-		autoUpdateInput	: false,
-		'applyClass'	: 'btn-sm btn-dark',
-		'cancelClass'	: 'btn-sm btn-light',
-		drops			: 'up',
-		locale			: {
-			format : 'YYYY-MM-DD'
+	// 검색 설정 : title, content keyup event
+	$('#searchTitle, #searchContent').keyup(function (e) {
+		if (e.keyCode == '13') {
+			$('#searchBtn').click();
 		}
 	});
-	$('#popupDate').on('apply.daterangepicker', function (e, picker) {
-		$(this).val(
-			picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+	
+	// 검색 설정 : checkbox keyup event
+	$('#searchIsImportCheck, #searchIsCommentCheck, #searchIsPopupCheck').change(function (e) {
+		$('#searchBtn').click();
+	});
+	
+	// 검색 초기화 event
+	$('#searchResetBtn').unbind('click').click(function (e) {
+		e.preventDefault();
+		
+		$('#searchTitle').val('');
+		$('#searchContent').val('');
+		$('#searchAdminName').val('');
+		$('#periodDate').val('');
+		
+		if ($('#searchIsImportCheck').prop('checked')) {
+			$('#searchIsImportCheck').click();	
+		}
+		if ($('#searchIsCommentCheck').prop('checked')) {
+			$('#searchIsCommentCheck').click();	
+		}
+		if ($('#searchIsPopupCheck').prop('checked')) {
+			$('#searchIsPopupCheck').click();	
+		}
+		
+		$('#searchBtn').click();
 	});
 	
 	// limit change event
@@ -96,8 +131,19 @@ $(function () {
 		noticeSelectFunc(page);
 	});
 	
+	// 등록 form 팝업여부 checkbox event
+	$('#isPopupCheck').change(function (e) {
+		e.preventDefault();
+		
+		if ($(this).prop('checked')) {
+			$('.popup_tr').show();
+		} else {
+			$('.popup_tr').hide();
+		}
+	});
+	
 	// 등록 button click event
-	$('#insertAdminBtn').unbind('click').click(function (e) {
+	$('#insertNoiceBtn').unbind('click').click(function (e) {
 		e.preventDefault();
 		
 		noticeInsertFunc();
@@ -119,7 +165,7 @@ function noticeInsertFunc () {
 	
 	var startDate	= '';
 	var endDate		= '';
-	if ($('#popupDate').val()) {
+	if (isPopup == '1') {
 		startDate	= common.date.toString( $('#popupDate').data('daterangepicker').startDate._d, '' );
 		endDate		= common.date.toString( $('#popupDate').data('daterangepicker').endDate._d, '' )
 	}
@@ -202,6 +248,17 @@ function noticeSelectFunc (p) {
 	page	= p ? p : 1;
 	limit	= $('#rowLimit').val();
 	
+	var startDate 	= '';
+	var endDate 	= '';
+	if ($('#periodDate').val()) {
+		startDate 	= common.date.toString( $('#periodDate').data('daterangepicker').startDate._d, '' );
+		endDate 	= common.date.toString( $('#periodDate').data('daterangepicker').endDate._d, '' ); 
+	}
+	
+	var isImport 	= ($('#searchIsImportCheck').prop('checked') ? '1' : '0');
+	var isComment	= ($('#searchIsCommentCheck').prop('checked') ? '1' : '0');
+	var isPopup		= ($('#searchIsPopupCheck').prop('checked') ? '1' : '0');
+	
 	$.ajax({
 		url			: '/notice/rest/list',
 		method		: 'POST',
@@ -211,6 +268,16 @@ function noticeSelectFunc (p) {
 			limit		: limit,
 			sort		: sort,
 			sortType	: sortType,
+			
+			// 검색 조건
+			title				: $('#searchTitle').val(),
+			content				: $('#searchContent').val(),
+			'admin.adminName' 	: $('#searchAdminName').val(),
+			startDateStr		: startDate,
+			endDateStr			: endDate,
+			isImport			: isImport,
+			isComment			: isComment,
+			isPopup				: isPopup,
 		}
 	
 	// 요청 완료
@@ -231,12 +298,12 @@ function noticeSelectFunc (p) {
 			$('#totalCount').text(totalCount);
 			// 현재 페이지 건수
 			$('#nowLimit').text(sRow + '-' + eRow);
-				
+			
 			for (var i = 0; i < listLength; i++) {
 				var thisObj = list[i];
 			
 				html += '<tr class="notice_detail" idx="' + thisObj.noticeIdx + '">';
-				html += '	<td>' + (sRow + i) + '</td>';
+				html += '	<td class="text-right">' + (sRow + i) + '</td>';
 				html += '	<td>' + thisObj.title + '</td>';
 				html += '	<td class="text-center">' + thisObj.admin.adminName + '</td>';
 				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>';
@@ -299,6 +366,8 @@ function noticeDetailFunc (noticeIdx) {
 			var detail = result.detail;
 			
 			$('#detailTitle').text(detail.title);
+			$('#detailAdmin').text(detail.admin.adminName);
+			$('#detailCreateDate').text(common.date.toString(new Date(detail.createDate), '-'));
 			$('#detailContent').append(detail.content);
 			
 		} else {

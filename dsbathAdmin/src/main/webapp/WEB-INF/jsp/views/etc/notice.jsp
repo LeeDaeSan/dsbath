@@ -7,7 +7,81 @@
 #insertContent {
 	height : 200px;
 }
+.detail-content-tr {
+	height : 300px;
+}
+.detail-content-tr th, .detail-content-tr td {
+	vertical-align : baseline;
+}
 </style>
+
+<!-- Search form START -->
+<div class="row">
+	<div class="col-md-12 col-sm-12">
+		<div class="x_panel">
+			<div class="x_title">
+				<h2><i class="fa fa-search"></i>&nbsp;Search</h2>
+				<ul class="nav navbar-right panel_toolbox">
+					<li>
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+					</li>
+				</ul>
+				<div class="clearfix"></div>
+			</div>
+			<div class="x_content">
+				<table class="table">
+					<colgroup>
+						<col width="10%"/>
+						<col width="30%"/>
+						<col width="10%"/>
+						<col width="50%"/>
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>제목</th>
+							<td colspan="3">
+								<input type="text" class="form-control form-control-cust" id="searchTitle"/>
+							</td>
+						</tr>
+						<tr>
+							<th>내용</th>
+							<td colspan="3">
+								<input type="text" class="form-control form-control-cust" id="searchContent"/>
+							</td>
+						</tr>
+						<tr>
+							<th>작성자</th>
+							<td>
+								<input type="text" class="form-control form-control-cust" id="searchAdminName"/>
+							</td>
+							<th>등록일</th>
+							<td>
+								<input class="form-control form-control-cust" id="periodDate" readOnly/>
+							</td>
+						</tr>
+						<tr>
+							<th>설정</th>
+							<td colspan="3">
+								<label for="searchIsImportCheck">중요 여부</label>
+								<input type="checkbox" id="searchIsImportCheck" class="js-switch" data-switchery="true"/>
+								&nbsp;&nbsp;
+								<label for="searchIsCommentCheck">코멘트 여부</label>
+								<input type="checkbox" id="searchIsCommentCheck" class="js-switch" data-switchery="true"/>
+								&nbsp;&nbsp;
+								<label for="searchIsPopupCheck">팝업 여부</label>
+								<input type="checkbox" id="searchIsPopupCheck" class="js-switch" data-switchery="true"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Search form END -->
+
 
 <!-- Button form START -->
 <div class="row">
@@ -136,25 +210,19 @@
 						<tr>
 							<th>설정</th>
 							<td>
-								<label for="isImportCheck">
-									중요 여부
-									<input type="checkbox" id="isImportCheck" class="js-switch" data-switchery="true"/>
-								</label>
+								<label for="isImportCheck">중요 여부</label>
+								<input type="checkbox" id="isImportCheck" class="js-switch" data-switchery="true"/>
 							</td>
 							<td>
-								<label for="isCommentCheck">
-									코멘트 여부
-									<input type="checkbox" id="isCommentCheck" class="js-switch" data-switchery="true"/>
-								</label>
+								<label for="isCommentCheck">코멘트 여부</label>
+								<input type="checkbox" id="isCommentCheck" class="js-switch" data-switchery="true"/>
 							</td>
 							<td>
-								<label for="isPopupCheck">
-									팝업 여부
-									<input type="checkbox" id="isPopupCheck" class="js-switch" data-switchery="true"/>
-								</label>
+								<label for="isPopupCheck">팝업 여부</label>
+								<input type="checkbox" id="isPopupCheck" class="js-switch" data-switchery="true"/>
 							</td>
 						</tr>
-						<tr>
+						<tr class="popup_tr" style="display:none;">
 							<th>팝업 기간</th>
 							<td colspan="3">
 								<input type="text" id="popupDate" class="form-control form-control-cust"/>
@@ -165,7 +233,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-sm btn-primary" id="insertAdminBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-primary" id="insertNoticeBtn">등록</button>
 			</div>
 		</div>
 	</div>
@@ -186,10 +254,10 @@
 			<div class="modal-body">
 				<table class="table">
 					<colgroup>
-						<col width="16%"/>
-						<col width="28%"/>
-						<col width="28%"/>
-						<col width="28%"/>
+						<col width="15%"/>
+						<col width="35%"/>
+						<col width="15%"/>
+						<col width="35%"/>
 					</colgroup>
 					<tbody>
 						<tr>
@@ -198,43 +266,23 @@
 							</td>
 						</tr>
 						<tr>
+							<th>작성자</th>
+							<td id="detailAdmin"></td>
+							<th>등록일</th>
+							<td id="detailCreateDate"></td>
+						</tr>
+						
+						<tr class="detail-content-tr">
 							<th>내용</th>
 							<td colspan="3" id="detailContent">
-							</td>
-						</tr>
-						<tr>
-							<th>설정</th>
-							<td>
-								<label for="isImportCheck">
-									중요 여부
-									<input type="checkbox" id="isImportCheck" class="js-switch" data-switchery="true"/>
-								</label>
-							</td>
-							<td>
-								<label for="isCommentCheck">
-									코멘트 여부
-									<input type="checkbox" id="isCommentCheck" class="js-switch" data-switchery="true"/>
-								</label>
-							</td>
-							<td>
-								<label for="isPopupCheck">
-									팝업 여부
-									<input type="checkbox" id="isPopupCheck" class="js-switch" data-switchery="true"/>
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<th>팝업 기간</th>
-							<td colspan="3">
-								<input type="text" id="popupDate" class="form-control form-control-cust"/>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-sm btn-primary" id="insertAdminBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-sm btn-primary" id="updatePopupBtn">수정</button>
 			</div>
 		</div>
 	</div>
