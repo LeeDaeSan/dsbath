@@ -20,6 +20,41 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
+				<table class="table">
+					<colgroup>
+						<col width="10%"/>
+						<col width="20%"/>
+						<col width="20%"/>
+						<col width="10%"/>
+						<col width="40%"/>
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>이름</th>
+							<td colspan="2">
+								<input type="text" class="form-control form-control-cust" id="searchMemberName"/>
+							</td>
+							<th>아이디</th>
+							<td>
+								<input type="text" class="form-control form-control-cust" id="searchMemberId"/>
+							</td>
+						</tr>
+						<tr>
+							<th>등록일</th>
+							<td colspan="2">
+								<input class="form-control form-control-cust" id="periodDate" readOnly/>
+							</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>주소</th>
+							<td colspan="4">
+								<input type="text" class="form-control form-control-cust" id="searchAddress"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -81,15 +116,14 @@
 							<col width="15%"/>
 							<col width="auto"/>
 							<col width="15%"/>
-							<col width="15%"/>
 						</colgroup>
 						<thead>
 							<tr class="heading">
 								<th class="column-title text-center">No.</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="adminName">
+								<th class="column-title text-center sort_th" sort="asc" sortType="memberName">
 									이름<i class="fa fa-exchange sort-image sort_img"></i>
 								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="adminId">
+								<th class="column-title text-center sort_th" sort="asc" sortType="memberId">
 									아이디<i class="fa fa-exchange sort-image sort_img"></i>
 								</th>
 								<th class="column-title text-center sort_th" sort="asc" sortType="address">

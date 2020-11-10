@@ -13,8 +13,48 @@
 			UpdateDate
 			
 		  FROM Member
+		  
+		<!-- order -->
+		<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+		 	ORDER BY
+			
+			<choose>
+				<when test='"memberName".equals(sortType)'>
+					MemberName
+				</when>
+				<when test='"memberId".equals(sortType)'>
+					MemberId
+				</when>
+				<when test='"address".equals(sortType)'>
+					address
+				</when>
+				<when test='"createDate".equals(sortType)'>
+					CreateDate
+				</when>
+			</choose>
+			
+			<choose>
+				<when test='"asc".equals(sort)'>
+					ASC
+				</when>
+				<when test='"desc".equals(sort)'>
+					DESC
+				</when>
+			</choose>
+	 	</if>
+	 	
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
 	</select>
 <!--============== 사용자 목록 END ==============-->
+
+
+<!--============== 사용자 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(MemberIdx)
+		  FROM Member
+	</select>
+<!--============== 사용자 목록 Total Count END ==============-->
 
 
 <!--============== 사용자 등록 START ==============-->

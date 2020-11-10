@@ -31,7 +31,8 @@ public class MemberServiceImpl implements MemberService {
 		try {
 			resultMap = ResponseUtil.successMap();
 			
-			resultMap.put("list", memberMapper.select(pagingDTO));
+			resultMap.put("list"		, memberMapper.select(pagingDTO));
+			resultMap.put("totalCount"	, memberMapper.selectOfTotalCount(pagingDTO));
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();

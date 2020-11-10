@@ -171,11 +171,14 @@ function noticeSelectFunc (p) {
 	var isComment	= ($('#searchIsCommentCheck').prop('checked') ? '1' : '0');
 	var isPopup		= ($('#searchIsPopupCheck').prop('checked') ? '1' : '0');
 	
+	//---> 통신 요청
 	$.ajax({
 		url			: '/notice/rest/list',
 		method		: 'POST',
 		dataType	: 'JSON',
 		data		: {
+			
+			// 페이징
 			page		: (page - 1) * limit,
 			limit		: limit,
 			sort		: sort,
@@ -192,16 +195,19 @@ function noticeSelectFunc (p) {
 			isPopup				: isPopup,
 		}
 	
-	// 요청 완료
+	//---> 통신 완료
 	}).done(function (result) {
 		
+		// 성공
 		if (result.status) {
 			
+			// list set
 			var html		= '';
 			var list 		= result.list;
 			var listLength 	= list.length;
 			var totalCount	= result.totalCount;
 
+			// row set
 			var eRow = page * limit;
 			var sRow = eRow - limit + 1;
 				eRow = eRow > totalCount ? totalCount : eRow;
@@ -247,11 +253,12 @@ function noticeSelectFunc (p) {
 				$('#detailNoticePopup').show();
 			});
 			
+		// 실패
 		} else {
 			common.alert('dang', '공지사항 목록 조회중 서버 에러가 발생하였습니다.');
 		}
 		
-	// 요청 에러
+	//---> 통신 에러
 	}).fail(function (result) {
 		common.alert('dang', '공지사항 목록 조회 요청중 서버 통신 장애가 발생하였습니다.');
 	});

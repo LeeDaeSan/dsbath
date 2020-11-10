@@ -32,7 +32,7 @@ public class MemberRestController {
 	 * @param member
 	 * @return
 	 */
-	@PostMapping("/select")
+	@PostMapping("/list")
 	public Map<String, Object> select (PagingDTO<Member> pagingDTO, Member member) {
 		pagingDTO.setModel(member);
 		return memberService.select(pagingDTO);

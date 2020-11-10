@@ -25,6 +25,14 @@ public interface MemberMapper {
 	public List<Member> select(PagingDTO<Member> pagingDTO);
 	
 	/**
+	 * 사용자 정보 목록 Total Count
+	 * 
+	 * @param pagingDTO
+	 * @return
+	 */
+	public Long selectOfTotalCount(PagingDTO<Member> pagingDTO);
+	
+	/**
 	 * 사용자 정보 등록
 	 * 
 	 * @param member

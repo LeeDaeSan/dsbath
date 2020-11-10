@@ -1,4 +1,78 @@
+var sortType;
+var sort;
+var page = 1;
+
 $(function () {
+	
+	// date range picker 옵션 적용
+	$('#periodDate').daterangepicker({
+		autoUpdateInput	: false,
+		'applyClass'	: 'btn-sm btn-dark',
+		'cancelClass'	: 'btn-sm btn-light',
+		locale			: {
+			format : 'YYYY-MM-DD',
+		}
+	});
+	$('#periodDate').on('apply.daterangepicker', function(e, picker) {
+	      $(this).val(
+    		  picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+	});
+	
+	// 검색 button click event
+	$('#searchBtn').unbind('click').click(function (e) {
+		e.preventDefault();
+		
+		selectMemberFunc();
+	});
+	
+	// 목록 조회
+	$('#searchBtn').click();
+	
+	// limit change event
+	$('#rowLimit').change(function () {
+		$('#searchBtn').click();
+	});
+	
+	// sort click event
+	$('.sort_th').unbind('click').click(function (e) {
+		e.preventDefault();
+		
+		sortType = $(this).attr('sortType');
+		var thisSort = $(this).attr('sort');
+		
+		// 나머지 초기화
+		$('.sort_th').each(function () {
+			var thisSortType = $(this).attr('sortType');
+			if (sortType != thisSortType) {
+				$(this).attr('sort', '');
+				$(this).find('.sort_img')
+						.addClass('fa-exchange')
+						.removeClass('fa-sort-amount-desc')
+						.removeClass('fa-sort-amount-asc');
+			}
+		});
+		
+		// sort가 없거나 asc인 경우 : desc 변경
+		if (!thisSort || thisSort == 'asc') {
+			$(this).attr('sort', 'desc');
+			$(this).find('.sort_img')
+					.addClass('fa-sort-amount-desc')
+					.removeClass('fa-exchange')
+					.removeClass('fa-sort-amount-asc');
+			
+		// sort가 desc인 경우 : asc 변경
+		} else if (thisSort == 'desc') {
+			$(this).attr('sort', 'asc');
+			$(this).find('.sort_img')
+					.addClass('fa-sort-amount-asc')
+					.removeClass('fa-exchange')
+					.removeClass('fa-sort-amount-desc');
+		}
+		
+		sort = $(this).attr('sort');
+		
+		$('#searchBtn').click();
+	});
 	
 	// 등록 button event
 	$('#insertMemberBtn').unbind('click').click(function (e) {
@@ -6,8 +80,92 @@ $(function () {
 		
 		insertMemberFunc();
 	});
+	
 });
 
+/**
+ * 사용자 목록 조회 Function
+ * 
+ * @param
+ * @returns
+ */
+function selectMemberFunc (p) {
+	// 페이지 변수 
+	page 	= p ? p : 1;
+	limit	= $('#rowLimit').val();
+	
+	//---> 통신 요청
+	$.ajax({
+		url			: '/member/rest/list',
+		method		: 'POST',
+		dataType	: 'JSON',
+		data		: {
+			
+			// 페이징
+			page		: (page - 1) * limit,
+			limit		: limit,
+			sort		: sort,
+			sortType	: sortType,
+		}
+	
+	//---> 통신 완료
+	}).done(function (result) {
+		
+		// 성공
+		if (result.status) {
+			
+			// list set
+			var html 		= '';
+			var list		= result.list;
+			var listLength 	= list.length;
+			var totalCount	= result.totalCount;
+			
+			// row set
+			var eRow = page * limit;
+			var sRow = eRow - limit + 1;
+				eRow = eRow > totalCount ? totalCount : eRow;
+				
+			// total count
+			$('#totalCount').text(totalCount);
+			// 현재 페이지 건수
+			$('#nowLimit').text(sRow + '-' + eRow);
+			
+			// add list html
+			for (var i = 0; i < listLength; i++) {
+				var thisObj = list[i];
+				
+				html += '<tr class="member_detail detail-tr" idx="' + thisObj.memberIdx + '">';
+				html += '	<td class="text-right">' + (sRow + i) + '</td>';
+				html += '	<td>' + thisObj.memberName + '</td>';
+				html += '	<td>' + thisObj.memberId + '</td>';
+				html += '	<td>' + thisObj.address + '</td>';
+				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>';
+				html += '</tr>';
+			}
+			
+			// add empty html
+			if (listLength == 0) {
+				html  = '<tr>';
+				html += '	<td class="text-center" colspan="5">내용이 없습니다.</td>';
+				html += '</tr>';
+			}
+			
+			// 목록 초기화 후 append
+			$('#memberTable').find('tbody').empty().append(html);
+			
+			// paging
+			common.paging(page, limit, 10, totalCount, selectMemberFunc);
+			
+		// 실패
+		} else {
+			common.alert('dang', '사용자 목록 조회중 에러가 발생하였습니다.');
+		}
+	
+	//---> 통신 에러
+	}).fail(function () {
+		common.alert('dang', '사용자 목록 조회 요청중 서버 통신 장애가 발생하였습니다.');
+	});
+}
 /**
  * 회원 정보 등록 Function
  * 
@@ -96,7 +254,7 @@ function insertMemberFunc () {
 			
 		//---> 통신 에러
 		}).fail(function (result) {
-			common.alert('dang', '사용자 정보 등록 요청중 서버 통신 에러가 발생하였습니다.');
+			common.alert('dang', '사용자 정보 등록 요청중 서버 통신 장애가 발생하였습니다.');
 		});
 	}
 }
