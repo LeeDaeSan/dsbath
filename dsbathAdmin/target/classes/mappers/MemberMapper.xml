@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.MemberMapper">
+
+	
+<!--============== 사용자 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="member">
+		SELECT
+			MemberName,
+			MemberId,
+			Address,
+			CreateDate,
+			UpdateDate
+			
+		  FROM Member
+	</select>
+<!--============== 사용자 목록 END ==============-->
+
+
+<!--============== 사용자 등록 START ==============-->
+	<insert id="insert" parameterType="member">
+		INSERT INTO Member
+		(
+			MemberName,
+			MemberId,
+			Password,
+			Address,
+			IsDelete
+		)
+		VALUES
+		(
+			#{memberName},
+			#{memberId},
+			#{password},
+			#{address},
+			'0'
+		)
+	</insert>
+<!--============== 사용자 등록 END ==============-->
+
+
+<!--============== 사용자 아이디 중복확인 START ==============-->
+	<select id="memberIdChecked" parameterType="member" resultType="member">
+		SELECT
+			MemberId
+		  FROM Member
+		 WHERE MemberId = #{memberId}
+	</select>
+<!--============== 사용자 아이디 중복확인 END ==============-->
+
+</mapper>

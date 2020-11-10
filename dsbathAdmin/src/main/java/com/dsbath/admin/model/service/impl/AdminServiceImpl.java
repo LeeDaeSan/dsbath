@@ -117,15 +117,15 @@ public class AdminServiceImpl implements AdminService {
 				}
 			}
 			
-			// 등록
+			// >> 등록 INSERT
 			if (type.equals(Constant.MERGE_TYPE_INSERT)) {
 				result = adminMapper.insert(admin);
 				
-			// 수정
+			// >> 수정 UPDATE
 			} else if (type.equals(Constant.MERGE_TYPE_UPDATE)) {
 				result = adminMapper.update(admin);
 				
-			// 삭제
+			// >> 삭제 DELETE
 			} else if (type.equals(Constant.MERGE_TYPE_DELETE)) {
 				result = adminMapper.delete(admin);
 			}
