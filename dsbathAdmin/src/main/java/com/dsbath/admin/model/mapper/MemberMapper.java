@@ -41,6 +41,22 @@ public interface MemberMapper {
 	public Integer insert(Member member);
 	
 	/**
+	 * 사용자 정보 수정
+	 * 
+	 * @param member
+	 * @return
+	 */
+	public Integer update(Member member);
+	
+	/**
+	 * 사용자 정보 삭제
+	 * 
+	 * @param member
+	 * @return
+	 */
+	public Integer delete(Member member);
+	
+	/**
 	 * 사용자 아이디 중복확인
 	 * 
 	 * @param member

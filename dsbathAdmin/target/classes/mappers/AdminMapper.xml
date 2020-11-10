@@ -144,27 +144,22 @@
 	<!-- 목록 조회 공통 조건 -->
 	<sql id="selectOfWhere">
 		<where>
-			 	
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.adminName)'>
 		 		<!-- 관리자 이름 -->
 		 		AND AdminName LIKE CONCAT('%', TRIM(#{model.adminName}), '%')
 		 	</if>
-		 	
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.adminId)'>
 		 		<!-- 관리자 아이디 -->
 		 		AND AdminId LIKE CONCAT('%', TRIM(#{model.adminId}), '%')
 		 	</if>
-		 	
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.address)'>
 		 		<!-- 관리자 주소 -->
 		 		AND Address LIKE CONCAT('%', TRIM(#{model.address}), '%')
 		 	</if>
-		 	
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>
 		 		<!-- 등록일 -->
 		 		AND DATE_FORMAT(CreateDate, '%Y%m%d') BETWEEN #{startDateStr} AND #{endDateStr}
 		 	</if>
-		 	
 		</where>
 	</sql>
 	

@@ -70,10 +70,11 @@ public class MemberServiceImpl implements MemberService {
 				
 			// >> 수정 UPDATE
 			} else if (type.equals(Constant.MERGE_TYPE_UPDATE)) {
+				resultCount = memberMapper.update(member);
 				
 			// >> 삭제 DELETE
 			} else if (type.equals(Constant.MERGE_TYPE_DELETE)) {
-				
+				resultCount = memberMapper.delete(member);
 			}
 			
 			resultMap.put("resultCount", resultCount);
