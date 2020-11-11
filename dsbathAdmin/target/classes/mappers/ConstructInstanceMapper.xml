@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.ConstructInstanceMapper">
+
+<!--============== 시공사례 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="constructInstance">
+		SELECT
+			ConstructInstanceIdx,
+			AdminIdx,
+			Title,
+			Content,
+			Hit,
+			Thumbnail,
+			CreateDate,
+			UpdateDate
+			
+		  FROM ConstructInstance
+	</select>
+<!--============== 시공사례 목록 END ==============-->
+
+
+<!--============== 시공사례 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT
+			COUNT(ConstructInstanceIdx)
+		  FROM ConstructInstance
+	</select>
+<!--============== 시공사례 목록 Total Count END ==============-->
+
+
+<!--============== 시공사례 등록 START ==============-->
+	<insert id="insert" parameterType="constructInstance">
+		INSERT INTO ConstructInstance
+		(
+			AdminIdx,
+			Title,
+			Content,
+			Hit
+		)
+		VALUES
+		(
+			#{adminIdx},
+			#{title},
+			#{content},
+			0
+		)
+	</insert>
+<!--============== 시공사례 등록 END ==============-->
+
+</mapper>

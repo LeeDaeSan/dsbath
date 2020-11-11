@@ -27,36 +27,42 @@
 		<include refid="selectOfWhere"></include>	 
 		
 		<!-- order -->
-		<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
-		 	ORDER BY
+		<choose>
+			<when test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY
+				
+				<choose>
+					<when test='"title".equals(sortType)'>
+						N.Title
+					</when>
+					<when test='"adminName".equals(sortType)'>
+						A.AdminName
+					</when>
+					<when test='"createDate".equals(sortType)'>
+						N.CreateDate
+					</when>
+					<when test='"updateDate".equals(sortType)'>
+						N.UpdateDate
+					</when>
+					<when test='"hit".equals(sortType)'>
+						N.Hit
+					</when>
+				</choose>
+				
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
 			
-			<choose>
-				<when test='"title".equals(sortType)'>
-					N.Title
-				</when>
-				<when test='"adminName".equals(sortType)'>
-					A.AdminName
-				</when>
-				<when test='"createDate".equals(sortType)'>
-					N.CreateDate
-				</when>
-				<when test='"updateDate".equals(sortType)'>
-					N.UpdateDate
-				</when>
-				<when test='"hit".equals(sortType)'>
-					N.Hit
-				</when>
-			</choose>
-			
-			<choose>
-				<when test='"asc".equals(sort)'>
-					ASC
-				</when>
-				<when test='"desc".equals(sort)'>
-					DESC
-				</when>
-			</choose>
-	 	</if>
+			<otherwise>
+				ORDER BY CreateDate DESC
+			</otherwise>
+		</choose>
 	 	
 		<!-- paging -->
 		LIMIT #{page}, #{limit}

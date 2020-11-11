@@ -56,4 +56,11 @@ public class DateUtil {
 		return format.format(date);
 	}
 	
+	public static String fileDateMonth () {
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+		Date date = new Date();
+		
+		return format.format(date);
+	}
+	
 }

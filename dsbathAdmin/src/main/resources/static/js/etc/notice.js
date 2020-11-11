@@ -15,14 +15,11 @@ $(function () {
 		callbacks	: {
 			onImageUpload : function (files, el, e) {
 				var fileLength = files.length;
-				
 				for (var i = 0; i < fileLength; i++) {
-					var file = files[i];
-					common.file.save(file);
+					common.file.save(files[i]);
 				}
 			},
 			onMediaDelete : function (target) {
-				console.log(target);
 			}
 		}
 	});

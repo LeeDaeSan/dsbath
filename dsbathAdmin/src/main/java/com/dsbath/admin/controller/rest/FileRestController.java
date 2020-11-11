@@ -1,4 +1,4 @@
-package com.dsbath.admin.controller.rest;
+	package com.dsbath.admin.controller.rest;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,6 +26,12 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
+/**
+ * File Rest Controller
+ * 
+ * @author idaesan
+ *
+ */
 @RestController
 @RequestMapping("/file/rest")
 public class FileRestController {
@@ -41,25 +47,36 @@ public class FileRestController {
 	@Value("${sftp.filepath}")
 	private String filePath;
 	
+
+	/**
+	 * File Upload
+	 * 
+	 * @param file
+	 * @param response
+	 * @return
+	 */
 	@PostMapping(value = "/upload")
 	public Map<String, Object> upload (@RequestParam("file") MultipartFile file, HttpServletResponse response) {
 		Map<String, Object> resultMap = null;
 		
 		JSch jsch = new JSch();
 		
-		Session session = null;
-		Channel channel = null;
-		ChannelSftp sftp = null;
-		
-		FileInputStream in = null;
+		Session session 	= null;
+		Channel channel 	= null;
+		ChannelSftp sftp 	= null;
+		FileInputStream in 	= null;
 		
 		try {
 			resultMap = ResponseUtil.successMap();
 			
 			in = (FileInputStream) file.getInputStream();
 			
+			String datePath		= DateUtil.fileDateMonth();
+			String path 		= filePath + "/" + datePath;
+			
 			String [] fileNames = file.getOriginalFilename().split("\\.");
-			String fileName = fileNames[0] + DateUtil.fileTime() + "." + fileNames[1]; 
+			String fileName 	= fileNames[0] + DateUtil.fileTime() + "." + fileNames[1]; 
+			
 			// 설정
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
@@ -81,7 +98,13 @@ public class FileRestController {
 			sftp = (ChannelSftp) channel;
 			
 			// 경로 이동
-			sftp.cd(filePath + "/tmp");
+			try {
+				sftp.stat(path);
+			} catch (Exception e) {
+				sftp.mkdir(path);
+			}
+			
+			sftp.cd(path);
 			sftp.put(in, fileName);
 			
 			// 채널 연동 해제
@@ -92,18 +115,15 @@ public class FileRestController {
 			in.close();
 			
 			resultMap.put("fileName", fileName);
+			resultMap.put("filePath", datePath);
 			
 		} catch (SftpException e) {
-			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} catch (JSchException e) {
-			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} catch (IOException e) {
-			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} catch (Exception e) {
-			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} finally {
 			
@@ -121,16 +141,27 @@ public class FileRestController {
 		return resultMap;
 	}
 	
+	/**
+	 * File Download
+	 * 
+	 * @param fileName
+	 * @param type
+	 * @param response
+	 * @throws Exception
+	 */
 	@GetMapping(value = "/download")
 	public void download (
 			@RequestParam(value = "fileName", required = false) String fileName,
-			@RequestParam(value = "type", required = false) String type,
+			@RequestParam(value = "path", required = false) String path,
 			HttpServletResponse response) throws Exception {
 		
 		JSch jsch = new JSch();
 		
 		InputStream in = null;
+		
 		try {
+			path = filePath + "/" + path;
+			
 			// 설정
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
@@ -152,7 +183,7 @@ public class FileRestController {
 			ChannelSftp sftp = (ChannelSftp) channel;
 			
 			// 경로 이동
-			sftp.cd(filePath + "/tmp");
+			sftp.cd(path);
 			// input 파일
 			in = sftp.get(fileName);
 			// 파일 -> response로 복사
@@ -173,11 +204,77 @@ public class FileRestController {
 		} catch (JSchException e) {
 		} catch (IOException e) {
 		} catch (Exception e) {
-			
 		} finally {
 			if (in != null) {
 				try { in.close(); } catch (Exception e2) { }
 			}
 		}
+	}
+	
+	/**
+	 * File Delete
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	@PostMapping(value = "/delete")
+	public Map<String, Object> delete (@RequestParam("fileName") String fileName) {
+		Map<String, Object> resultMap = null;
+		
+		JSch jsch = new JSch();
+		
+		Session session 	= null;
+		Channel channel 	= null;
+		ChannelSftp sftp 	= null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			
+			// 설정
+			Properties config = new Properties();
+			config.put("StrictHostKeyChecking", "no");
+			
+			// 세션 정보 설정
+			session = jsch.getSession(id, host, port);
+			session.setConfig(config);
+			session.setPassword(password);
+			
+			// 세션 연결
+			session.connect();
+			
+			// 채널 설정
+			channel = session.openChannel("sftp");
+			// 채널 연결
+			channel.connect();
+			
+			// sftp 캐스팅
+			sftp = (ChannelSftp) channel;
+			
+			// 경로 이동
+			sftp.cd(filePath + "/" + DateUtil.fileDateMonth());
+			sftp.rm(fileName);
+			
+			// 채널 연동 해제
+			channel.disconnect();
+			// 세션 연동 해제
+			session.disconnect();
+			
+		} catch (SftpException e) {
+			resultMap = ResponseUtil.failureMap();
+		} catch (JSchException e) {
+			resultMap = ResponseUtil.failureMap();
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		} finally {
+			
+			// 채널 close
+			if (channel != null) { channel.disconnect(); }
+			// 세션 close
+			if (session != null) { session.disconnect(); }
+			// sftp close
+			if (sftp != null) { sftp.disconnect(); }
+		}
+		
+		return resultMap;
 	}
 }

@@ -252,9 +252,10 @@ var common = {
 	file : {
 		// 저장
 		save : function (file, el) {
+			var fileObj = {};
 			
 			var formData = new FormData();
-			formData.append('file', file);
+				formData.append('file', file);
 			
 			$.ajax({
 				url 			: '/file/rest/upload',
@@ -263,6 +264,7 @@ var common = {
 				contentType		: false,
 				enctype			: 'multipart/form-data',
 				processData		: false,
+				async			: false,
 				data			: formData,
 				
 			// 완료
@@ -270,7 +272,12 @@ var common = {
 			
 				if (result.status) {
 					var fileName = result.fileName;
-					$('.note-editable').append('<p><img style="width:' + $('.note-editable').width() + 'px" src="http://localhost:8081/file/rest/download?type=tmp&fileName=' + fileName + '" id="' + fileName + '"/></p>');
+					var filePath = result.filePath;
+					
+					$('.note-editable').append('<p><img style="width:' + $('.note-editable').width() + 'px" src="/file/rest/download?path=' + filePath + '&fileName=' + fileName + '" id="' + fileName + '"/></p>');
+					
+					fileObj['fileName'] = fileName;
+					fileObj['filePath'] = filePath;
 					
 				} else {
 					common.alert('dang', '파일 저장중 서버 에러가 발생하였습니다.');
@@ -279,10 +286,56 @@ var common = {
 			}).fail(function (result) {
 				common.alert('dang', '파일 저장중 서버 통신 에러가 발생하였습니다.');
 			});
+			
+			return fileObj;
 		},
 		
-		del : function (file) {
+		// 파일 삭제
+		del : function (fileName) {
 			
+			//---> 통신 요청
+			$.ajax({
+				url			: '/file/rest/delete',
+				method		: 'POST',
+				dataType	: 'JSON',
+				data		: {
+					fileName	: fileName,
+				},
+				
+			//---> 통신 완료
+			}).done(function (result) {
+				
+				if (result.status) {
+					
+				} else {
+					
+				}
+				
+			//---> 통신 에러
+			}).fail(function () {
+				
+			});
+		},
+		
+		thumbnail : function (e, tag) {
+
+			var files 	= e.target.files;
+			var filesArr = Array.prototype.slice.call(files);
+			
+			filesArr.forEach(function (f) {
+				
+				if (!f.type.match('image.*')) {
+					common.alert('warn', '이미지 확장자만 첨부 가능합니다.');
+					return false;
+				}
+				
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					tag.attr('src', e.target.result);
+				}
+				
+				reader.readAsDataURL(f);
+			});
 		}
 	}
 };
