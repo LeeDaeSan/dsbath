@@ -1,6 +1,7 @@
 package com.dsbath.admin.model;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -23,4 +24,6 @@ public class ConstructInstance {
 	private Date updateDate;
 	
 	private Admin admin;
+	
+	private List<CommonFile> commonFileList;
 }

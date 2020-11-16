@@ -191,7 +191,7 @@
 			
 			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.content)'>
 				<!-- 내용 -->
-				AND N.Content LIKE CONCAT ('%', TRIM(#{model.title}), '%')
+				AND N.Content LIKE CONCAT ('%', TRIM(#{model.content}), '%')
 			</if>
 			
 			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>

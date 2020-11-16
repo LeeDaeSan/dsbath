@@ -3,6 +3,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.Properties;
 
@@ -56,7 +57,10 @@ public class FileRestController {
 	 * @return
 	 */
 	@PostMapping(value = "/upload")
-	public Map<String, Object> upload (@RequestParam("file") MultipartFile file, HttpServletResponse response) {
+	public Map<String, Object> upload (
+			@RequestParam("file") MultipartFile file, 
+			@RequestParam("pathType") String pathType,
+			HttpServletResponse response) {
 		Map<String, Object> resultMap = null;
 		
 		JSch jsch = new JSch();
@@ -72,10 +76,10 @@ public class FileRestController {
 			in = (FileInputStream) file.getInputStream();
 			
 			String datePath		= DateUtil.fileDateMonth();
-			String path 		= filePath + "/" + datePath;
+			String path 		= filePath + "/" + pathType + "/" + datePath;
 			
 			String [] fileNames = file.getOriginalFilename().split("\\.");
-			String fileName 	= fileNames[0] + DateUtil.fileTime() + "." + fileNames[1]; 
+			String fileName 	= DateUtil.fileTime() + "." + fileNames[1]; 
 			
 			// 설정
 			Properties config = new Properties();
@@ -115,15 +119,19 @@ public class FileRestController {
 			in.close();
 			
 			resultMap.put("fileName", fileName);
-			resultMap.put("filePath", datePath);
+			resultMap.put("filePath", path);
 			
 		} catch (SftpException e) {
+			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} catch (JSchException e) {
+			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} catch (IOException e) {
+			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultMap = ResponseUtil.failureMap();
 		} finally {
 			
@@ -158,10 +166,9 @@ public class FileRestController {
 		JSch jsch = new JSch();
 		
 		InputStream in = null;
+		OutputStream out = null;
 		
 		try {
-			path = filePath + "/" + path;
-			
 			// 설정
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
@@ -186,8 +193,17 @@ public class FileRestController {
 			sftp.cd(path);
 			// input 파일
 			in = sftp.get(fileName);
+			out = response.getOutputStream();
+			
+			byte[] buffer = new byte[1024 * 8];
+			int i;
+			while ((i = in.read(buffer)) != -1) {
+				out.write(buffer, 0, i);
+			}
+			
 			// 파일 -> response로 복사
-			IOUtils.copy(in, response.getOutputStream());
+			IOUtils.copy(in, out);
+			
 			
 			// 채널 연동 해제
 			channel.disconnect();
@@ -208,6 +224,9 @@ public class FileRestController {
 			if (in != null) {
 				try { in.close(); } catch (Exception e2) { }
 			}
+			if (out != null) {
+				try { out.close(); } catch (Exception e2) { }
+			}
 		}
 	}
 	
@@ -218,7 +237,9 @@ public class FileRestController {
 	 * @return
 	 */
 	@PostMapping(value = "/delete")
-	public Map<String, Object> delete (@RequestParam("fileName") String fileName) {
+	public Map<String, Object> delete (
+				@RequestParam("path") String path,
+				@RequestParam("name") String name) {
 		Map<String, Object> resultMap = null;
 		
 		JSch jsch = new JSch();
@@ -251,8 +272,8 @@ public class FileRestController {
 			sftp = (ChannelSftp) channel;
 			
 			// 경로 이동
-			sftp.cd(filePath + "/" + DateUtil.fileDateMonth());
-			sftp.rm(fileName);
+			sftp.cd(path);
+			sftp.rm(name);
 			
 			// 채널 연동 해제
 			channel.disconnect();

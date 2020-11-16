@@ -33,10 +33,34 @@ public interface ConstructInstanceMapper {
 	public Long selectOfTotalCount(PagingDTO<ConstructInstance> pagingDTO);
 	
 	/**
+	 * 시공사례 상세
+	 * 
+	 * @param constructInstance
+	 * @return
+	 */
+	public ConstructInstance detail(ConstructInstance constructInstance);
+	
+	/**
 	 * 시공사례 등록
 	 * 
 	 * @param constructInstance
 	 * @return
 	 */
 	public Integer insert(ConstructInstance constructInstance);
+	
+	/**
+	 * 시공사례 수정
+	 * 
+	 * @param constructInstance
+	 * @return
+	 */
+	public Integer update(ConstructInstance constructInstance);
+	
+	/**
+	 * 시공사례 삭제
+	 * 
+	 * @param constructInstance
+	 * @return
+	 */
+	public Integer delete(ConstructInstance constructInstance);
 }

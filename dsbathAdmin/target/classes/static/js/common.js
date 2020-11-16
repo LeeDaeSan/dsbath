@@ -155,7 +155,7 @@ var common = {
 			callback(lastPage);
 		});
 	},
-
+	
 	// alert
 	alert : function (type, msg) {
 		var title 		= '';
@@ -251,12 +251,13 @@ var common = {
 	 */
 	file : {
 		// 저장
-		save : function (file, el) {
+		save : function (file, pathType, tag, width) {
 			var fileObj = {};
 			
 			var formData = new FormData();
-				formData.append('file', file);
-			
+				formData.append('file'		, file);
+				formData.append('pathType'	, pathType);
+				
 			$.ajax({
 				url 			: '/file/rest/upload',
 				type			: 'POST',
@@ -273,8 +274,8 @@ var common = {
 				if (result.status) {
 					var fileName = result.fileName;
 					var filePath = result.filePath;
-					
-					$('.note-editable').append('<p><img style="width:' + $('.note-editable').width() + 'px" src="/file/rest/download?path=' + filePath + '&fileName=' + fileName + '" id="' + fileName + '"/></p>');
+					console.log(width);
+					tag.append('<p><img style="width:' + width + 'px" src="/file/rest/download?path=' + filePath + '&fileName=' + fileName + '" id="' + fileName + '"/></p>');
 					
 					fileObj['fileName'] = fileName;
 					fileObj['filePath'] = filePath;
@@ -291,30 +292,40 @@ var common = {
 		},
 		
 		// 파일 삭제
-		del : function (fileName) {
+		del : function (tag) {
 			
-			//---> 통신 요청
-			$.ajax({
-				url			: '/file/rest/delete',
-				method		: 'POST',
-				dataType	: 'JSON',
-				data		: {
-					fileName	: fileName,
-				},
+			var src 	= $(tag).attr('src');
+			var srcArr 	= src.split('?');
+			if (src.indexOf('/file/rest/download?') != -1) {
+				var param = srcArr[1];
+				var path	= param.substring( (param.indexOf('path=') + 'path='.length), param.indexOf('&') );
+				var name	= param.substring( (param.indexOf('fileName=') + 'fileName='.length) );
 				
-			//---> 통신 완료
-			}).done(function (result) {
-				
-				if (result.status) {
+				//---> 통신 요청
+				$.ajax({
+					url			: '/file/rest/delete',
+					method		: 'POST',
+					dataType	: 'JSON',
+					data		: {
+						path		: path,
+						name		: name,
+					},
 					
-				} else {
+				//---> 통신 완료
+				}).done(function (result) {
 					
-				}
-				
-			//---> 통신 에러
-			}).fail(function () {
-				
-			});
+					if (result.status) {
+						
+					} else {
+						
+					}
+					
+					//---> 통신 에러
+				}).fail(function () {
+					
+				});
+			}
+			
 		},
 		
 		thumbnail : function (e, tag) {

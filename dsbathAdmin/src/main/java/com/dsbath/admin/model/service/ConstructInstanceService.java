@@ -3,6 +3,7 @@ package com.dsbath.admin.model.service;
 import java.util.Map;
 
 import com.dsbath.admin.model.ConstructInstance;
+import com.dsbath.admin.model.dto.CommonFileDTO;
 import com.dsbath.admin.model.dto.PagingDTO;
 
 /**
@@ -22,11 +23,19 @@ public interface ConstructInstanceService {
 	public Map<String, Object> select(PagingDTO<ConstructInstance> pagingDTO);
 	
 	/**
+	 * 시공사례 상세
+	 * 
+	 * @param constructInstance
+	 * @return
+	 */
+	public Map<String, Object> detail(ConstructInstance constructInstance);
+	
+	/**
 	 * 시공사례 등록, 수정, 삭제
 	 * 
 	 * @param constructInstance
 	 * @param type
 	 * @return
 	 */
-	public Map<String, Object> merge(ConstructInstance constructInstance, String type);
+	public Map<String, Object> merge(ConstructInstance constructInstance, CommonFileDTO commonFileDTO, String type);
 }

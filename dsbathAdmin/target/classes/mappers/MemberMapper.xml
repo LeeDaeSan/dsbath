@@ -6,7 +6,7 @@
 <!--============== 사용자 목록 START ==============-->
 	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="member">
 		SELECT
-			MemberName,
+			MemberName,	
 			MemberId,
 			Address,
 			CreateDate,

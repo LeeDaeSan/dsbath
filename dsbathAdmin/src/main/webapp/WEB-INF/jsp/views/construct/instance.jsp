@@ -1,7 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
-#insertThumbnail {
+#insertThumbnail, #updateThumbnail {
 	width : 50px;
+}
+.thumbnail-close {
+	position	: absolute;
+    margin		: 0px;
+    margin-top	: -5px;
+    margin-left	: 2px;
+    color		: #f30000 !important;
+    font-size	: 15px;
+}
+.thumbnail-close:hover {
+	opacity		: 0.6;
 }
 </style>
 <!-- construct instance js -->
@@ -27,34 +38,25 @@
 				<table class="table">
 					<colgroup>
 						<col width="10%"/>
-						<col width="20%"/>
-						<col width="20%"/>
+						<col width="40%"/>
 						<col width="10%"/>
 						<col width="40%"/>
 					</colgroup>
 					<tbody>
 						<tr>
-							<th>이름</th>
-							<td colspan="2">
-								<input type="text" class="form-control form-control-cust" id="searchMemberName"/>
-							</td>
-							<th>아이디</th>
-							<td>
-								<input type="text" class="form-control form-control-cust" id="searchMemberId"/>
-							</td>
-						</tr>
-						<tr>
 							<th>등록일</th>
-							<td colspan="2">
+							<td>
 								<input class="form-control form-control-cust" id="periodDate" readOnly/>
 							</td>
-							<td></td>
-							<td></td>
+							<th>이름</th>
+							<td>
+								<input type="text" class="form-control form-control-cust" id="searchAdminName"/>
+							</td>
 						</tr>
 						<tr>
-							<th>주소</th>
-							<td colspan="4">
-								<input type="text" class="form-control form-control-cust" id="searchAddress"/>
+							<th>제목</th>
+							<td colspan="3">
+								<input type="text" class="form-control form-control-cust" id="searchTitle"/>
 							</td>
 						</tr>
 					</tbody>
@@ -116,25 +118,29 @@
 					<table class="table table-striped jambo_table bulk_action" id="instanceTable">
 						<colgroup>
 							<col width="5%"/>
-							<col width="15%"/>
-							<col width="15%"/>
 							<col width="auto"/>
 							<col width="15%"/>
+							<col width="15%"/>
+							<col width="15%"/>
+							<col width="10%"/>
 						</colgroup>
 						<thead>
 							<tr class="heading">
 								<th class="column-title text-center">No.</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="memberName">
-									이름<i class="fa fa-exchange sort-image sort_img"></i>
+								<th class="column-title text-center sort_th" sort="asc" sortType="title">
+									제목<i class="fa fa-exchange sort-image sort_img"></i>
 								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="memberId">
-									아이디<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="address">
-									주소<i class="fa fa-exchange sort-image sort_img"></i>
+								<th class="column-title text-center sort_th" sort="asc" sortType="adminName">
+									작성자<i class="fa fa-exchange sort-image sort_img"></i>
 								</th>
 								<th class="column-title text-center sort_th" sort="asc" sortType="createDate">
 									등록일<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="updateDate">
+									수정일<i class="fa fa-exchange sort-image sort_img"></i>
+								</th>
+								<th class="column-title text-center sort_th" sort="asc" sortType="hit">
+									조회수<i class="fa fa-exchange sort-image sort_img"></i>
 								</th>
 							</tr>
 						</thead>
@@ -183,8 +189,8 @@
 						<tr>
 							<th>썸네일</th>
 							<td>
-								<input type="file" id="insertThumbnailFile"/>
-								<img id="insertThumbnail"/>
+								<input type="file" id="insertThumbnailFile" class="thumbnail_file" fileType="insert"/>
+								<div id="insertThumbnail"></div>
 							</td>
 						</tr>
 						<tr>
@@ -204,3 +210,75 @@
 	</div>
 </div>
 <!-- 등록 팝업 END -->
+
+
+<!-- 상세 팝업 START -->
+<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="detailInstancePopup">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">시공사례 상세</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<colgroup>
+						<col width="15%"/>
+						<col width="35%"/>
+						<col width="15%"/>
+						<col width="35%"/>
+					</colgroup>
+					<tbody class="detail_tbody">
+						<tr>
+							<th>제목</th>
+							<td colspan="3" id="detailTitle">
+							</td>
+						</tr>
+						<tr>
+							<th>작성자</th>
+							<td id="detailAdmin"></td>
+							<th>등록일</th>
+							<td id="detailCreateDate"></td>
+						</tr>
+						
+						<tr class="detail-content-tr">
+							<th>내용</th>
+							<td colspan="3" id="detailContent">
+							</td>
+						</tr>
+					</tbody>
+					<tbody class="update_tbody" style="display:none;">
+						<tr>
+							<th>제목</th>
+							<td colspan="3">
+								<input type="text" id="updateTitle" class="form-control form-control-cust"/>
+							</td>
+						</tr>
+						<tr>
+							<th>썸네일</th>
+							<td colspan="3">
+								<input type="file" id="updateThumbnailFile" class="thumbnail_file" fileType="update"/>
+								<div id="updateThumbnail"></div>
+							</td>
+						</tr>
+						<tr>
+							<th>내용</th>
+							<td colspan="3">
+								<div id="updateContent"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-sm btn-primary" id="updatePopupBtn">수정</button>
+				<button type="button" class="btn btn-sm btn-danger" id="deletePopupBtn">삭제</button>
+				<button type="button" class="btn btn-sm btn-primary" id="savePopupBtn" style="display:none;">저장</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 상세 팝업 END -->

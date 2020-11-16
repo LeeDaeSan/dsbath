@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.CommonFileMapper">
+
+<!--============== 공통 파일 등록 START ==============-->
+	<insert id="insert" parameterType="commonFile">
+		INSERT INTO CommonFile
+		(
+			Url,
+			FileName,
+			IsMain,
+			FileType
+		)
+		VALUES
+		(
+			#{url},
+			#{fileName},
+			#{isMain},
+			#{fileType}
+		)
+		
+		<selectKey resultType="Integer" keyProperty="commonFileIdx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+<!--============== 공통 파일 등록 END ==============-->
+
+
+<!--============== 공통 파일 삭제 START ==============-->
+	<delete id="delete" parameterType="int">
+		DELETE FROM CommonFile
+		 WHERE CommonFileIdx IN 
+		 	( 
+			 	SELECT CIFM.CommonFileIdx 
+			 	  FROM ConstructInstanceFileMapping AS CIFM 
+			 	 WHERE CIFM.ConstructInstanceIdx = #{constructInstanceIdx}
+		 	)
+	</delete>
+<!--============== 공통 파일 삭제 END ==============-->
+
+</mapper>
