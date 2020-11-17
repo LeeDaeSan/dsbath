@@ -25,18 +25,18 @@
 	</head>
 	
 	<body>
-		<div class="container">
-			<div class="row">
+		<div class="container height_full">
+			<div class="row height_full">
 			
-				<div class="col-lg-2">
+				<div class="col-lg-2 no-padding height_full">
 					<tiles:insertAttribute name="left"/>
 				</div>
 				
-				<div class="col-lg-10">
+				<div class="col-lg-10 no-padding">
 					<tiles:insertAttribute name="header"/>
 				</div>
 		
-				<div class="col-lg-8">
+				<div class="col-lg-8 no-padding">
 					<tiles:insertAttribute name="body"/>
 				</div>
 				

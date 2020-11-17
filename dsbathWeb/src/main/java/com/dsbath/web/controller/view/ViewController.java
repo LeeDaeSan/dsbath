@@ -19,6 +19,11 @@ public class ViewController {
 		return Constant.NOTILES + "/" + path1;
 	}
 	
+	@GetMapping("/")
+	public String index () {
+		return Constant.VIEWS + "/main";
+	}
+	
 	@GetMapping("/" + Constant.VIEWS + "/{path1}")
 	public String view (@PathVariable String path1) {
 		return Constant.VIEWS + "/" + path1;

@@ -2,8 +2,37 @@
 	남색 : #18283d
 	노랑 : #f2cc3e
  */
-
+html, body {
+	height			: 100%;
+	overflow		: hidden;
+}
 .left-menu {
-	background 	: #f2cc3e;
-	height		: 500px;
+	background 		: #f2cc3e;
+}
+.head-area {
+	background		: #ffeca3;
+	height			: 80px;
+}
+.left-logo {
+    width			: 145px;
+    padding-top		: 30px;
+    display			: block;
+    margin			: 0 auto;
+}
+.main-left-menu {
+	padding-top 	: 25px;
+}
+.main-left-menu ul {
+	list-style 		: none;
+}
+.main-left-menu ul li {
+	margin 			: 13px;
+	font-size		: 12px;
+}
+.no-padding {
+	padding 		: 0 !important;
+}
+
+.height_full {
+	height 			: 100%;
 }

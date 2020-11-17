@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.MainMapper">
+
+<!--============== 시공사례 목록 START ==============-->
+	<select id="selectOfConstructInstance" resultType="constructInstance">
+		SELECT
+			ConstructInstanceIdx,
+			Title,
+			Content,
+			Thumbnail,
+			Hit,
+			CreateDate,
+			UpdateDate
+		 FROM ConstructInstance
+		 
+		ORDER BY CreateDate DESC
+		
+		LIMIT 10
+	</select>
+<!--============== 시공사례 목록 END ==============-->
+
+</mapper>
