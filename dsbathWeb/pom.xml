@@ -9,10 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.dsbath.web</groupId>
-	<artifactId>dsbathWeb</artifactId>
+	<artifactId>dsbathweb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>dsbathWeb</name>
+	<name>dsbathweb</name>
 	<description>DSBATH Web Project</description>
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
