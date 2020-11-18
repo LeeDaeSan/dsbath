@@ -4,6 +4,9 @@ var page = 1;
 
 $(function () {
 	
+	// 검색 이벤트 시작
+	common.search.start(selectNoticeFunc);
+	
 	// summernote init
 	$('#insertContent, #updateContent').summernote({
 		height 		: 300,
@@ -21,38 +24,6 @@ $(function () {
 			},
 			onMediaDelete : function (target) {
 			}
-		}
-	});
-	
-	// date range picker 옵션 적용
-	$('#popupDate, #periodDate, #updatePopupDate').daterangepicker({
-		autoUpdateInput	: false,
-		'applyClass'	: 'btn-sm btn-dark',
-		'cancelClass'	: 'btn-sm btn-light',
-		drops			: 'up',
-		locale			: {
-			format : 'YYYY-MM-DD'
-		}
-	});
-	$('#popupDate, #periodDate').on('apply.daterangepicker', function (e, picker) {
-		$(this).val(
-			picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-	});
-	
-	// 검색 button click event
-	$('#searchBtn').unbind('click').click(function (e) {
-		e.preventDefault();
-		
-		noticeSelectFunc();
-	});
-	
-	// 목록 조회
-	$('#searchBtn').click();
-	
-	// 검색 설정 : title, content keyup event
-	$('#searchTitle, #searchContent').keyup(function (e) {
-		if (e.keyCode == '13') {
-			$('#searchBtn').click();
 		}
 	});
 	
@@ -83,62 +54,6 @@ $(function () {
 		$('#searchBtn').click();
 	});
 	
-	// limit change event
-	$('#rowLimit').change(function () {
-		noticeSelectFunc(page);
-	});
-	
-	// sort th click event
-	$('.sort_th').unbind('click').click(function (e) {
-		e.preventDefault();
-		
-			sortType = $(this).attr('sortType');
-		var thisSort = $(this).attr('sort');
-		
-		// 나머지 초기화
-		$('.sort_th').each(function () {
-			var thisSortType = $(this).attr('sortType');
-			if (sortType != thisSortType) {
-				$(this).attr('sort', '');
-				$(this).find('.sort_img')
-						.addClass('fa-exchange')
-						.removeClass('fa-sort-amount-desc')
-						.removeClass('fa-sort-amount-asc');
-			}
-		});
-		
-		// sort가 없거나 asc인 경우 : desc 변경
-		if (!thisSort || thisSort == 'asc') {
-			$(this).attr('sort', 'desc');
-			$(this).find('.sort_img')
-					.addClass('fa-sort-amount-desc')
-					.removeClass('fa-exchange')
-					.removeClass('fa-sort-amount-asc');
-			
-		// sort가 desc인 경우 : asc 변경
-		} else if (thisSort == 'desc') {
-			$(this).attr('sort', 'asc');
-			$(this).find('.sort_img')
-					.addClass('fa-sort-amount-asc')
-					.removeClass('fa-exchange')
-					.removeClass('fa-sort-amount-desc');
-		}
-		
-		sort = $(this).attr('sort');
-		noticeSelectFunc(page);
-	});
-	
-	// 등록 form 팝업여부 checkbox event
-	$('#isPopupCheck').change(function (e) {
-		e.preventDefault();
-		
-		if ($(this).prop('checked')) {
-			$('#addNoticePopup .popup_tr').show();
-		} else {
-			$('#addNoticePopup .popup_tr').hide();
-		}
-	});
-	
 	// 등록 button click event
 	$('#insertNoiceBtn').unbind('click').click(function (e) {
 		e.preventDefault();
@@ -152,7 +67,7 @@ $(function () {
  * 
  * @returns
  */
-function noticeSelectFunc (p) {
+function selectNoticeFunc (p) {
 	// 페이징 변수
 	page	= p ? p : 1;
 	limit	= $('#rowLimit').val();
@@ -237,7 +152,7 @@ function noticeSelectFunc (p) {
 			$('#noticeTable').find('tbody').empty().append(html);
 			
 			// paging
-			common.paging(page, limit, 10, totalCount, noticeSelectFunc);
+			common.paging(page, limit, 10, totalCount, selectNoticeFunc);
 			
 			// 상세 조회
 			$('.notice_detail').unbind('click').click(function (e) {
@@ -426,7 +341,7 @@ function noticeInsertFunc () {
 					$('#addNoticePopup .close').click();
 					
 					// 목록 조회
-					noticeSelectFunc();
+					selectNoticeFunc();
 					
 				// 등록 실패
 				} else {
@@ -511,7 +426,7 @@ function noticeUpdateFunc (noticeIdx) {
 					$('#detailNoticePopup .close').click();
 				
 					// 목록 조회
-					noticeSelectFunc();
+					selectNoticeFunc();
 					
 				// 실패
 				} else {
@@ -565,7 +480,7 @@ function noticeDeleteFunc (noticeIdx) {
 					// 팝업 닫기
 					$('#detailNoticePopup .close').click();
 					// 목록 조회
-					noticeSelectFunc();
+					selectNoticeFunc();
 					
 				// 실패
 				} else {

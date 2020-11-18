@@ -3,20 +3,16 @@ package com.dsbath.admin.model.service.impl;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dsbath.admin.etc.constant.Constant;
 import com.dsbath.admin.etc.constant.UserConstant;
 import com.dsbath.admin.etc.util.ResponseUtil;
-import com.dsbath.admin.model.CommonFile;
 import com.dsbath.admin.model.ConstructInstance;
-import com.dsbath.admin.model.ConstructInstanceFileMapping;
 import com.dsbath.admin.model.dto.CommonFileDTO;
 import com.dsbath.admin.model.dto.PagingDTO;
 import com.dsbath.admin.model.mapper.CommonFileMapper;
-import com.dsbath.admin.model.mapper.ConstructInstanceFileMappingMapper;
 import com.dsbath.admin.model.mapper.ConstructInstanceMapper;
 import com.dsbath.admin.model.service.ConstructInstanceService;
 
@@ -28,9 +24,6 @@ public class ConstructInstanceServiceImpl implements ConstructInstanceService {
 	
 	@Autowired
 	private CommonFileMapper commonFileMapper;
-	
-	@Autowired
-	private ConstructInstanceFileMappingMapper constructInstanceFileMappingMapper;
 	
 	/**
 	 * 시공사례 정보 목록 조회

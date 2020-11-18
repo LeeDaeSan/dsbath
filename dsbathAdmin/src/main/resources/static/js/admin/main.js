@@ -3,30 +3,12 @@ var sort;
 var page = 1;
 
 $(function () {
-
-	// date range picker 옵션 적용
-	$('#periodDate').daterangepicker({
-		autoUpdateInput	: false,
-		'applyClass'	: 'btn-sm btn-dark',
-		'cancelClass'	: 'btn-sm btn-light',
-		locale			: {
-			format : 'YYYY-MM-DD',
-		}
-	});
-	$('#periodDate').on('apply.daterangepicker', function(e, picker) {
-	      $(this).val(
-    		  picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-	});
 	
-	// 검색 button event
-	$('#searchBtn').click(function (e) {
-		e.preventDefault();
-		
-		adminSelectFunc();
-	});
+	// 검색 이벤트 시작
+	common.search.start(selectAdminFunc);
 	
-	// 목록 조회
-	$('#searchBtn').click();
+	// 우편번호 찾기
+	postCode.start('insert');
 	
 	// keyup event
 	$('#searchAdminName, #searchAdminId, #searchAddress').keyup(function (e) {
@@ -45,51 +27,6 @@ $(function () {
 		$('#periodDate').val('');
 		
 		$('#searchBtn').click();
-	});
-	
-	// limit change event
-	$('#rowLimit').change(function () {
-		adminSelectFunc(page);
-	});
-	
-	// sort th click event
-	$('.sort_th').unbind('click').click(function (e) {
-		e.preventDefault();
-		
-			sortType = $(this).attr('sortType');
-		var thisSort = $(this).attr('sort');
-		
-		// 나머지 초기화
-		$('.sort_th').each(function () {
-			var thisSortType = $(this).attr('sortType');
-			if (sortType != thisSortType) {
-				$(this).attr('sort', '');
-				$(this).find('.sort_img')
-						.addClass('fa-exchange')
-						.removeClass('fa-sort-amount-desc')
-						.removeClass('fa-sort-amount-asc');
-			}
-		});
-		
-		// sort가 없거나 asc인 경우 : desc 변경
-		if (!thisSort || thisSort == 'asc') {
-			$(this).attr('sort', 'desc');
-			$(this).find('.sort_img')
-					.addClass('fa-sort-amount-desc')
-					.removeClass('fa-exchange')
-					.removeClass('fa-sort-amount-asc');
-			
-		// sort가 desc인 경우 : asc 변경
-		} else if (thisSort == 'desc') {
-			$(this).attr('sort', 'asc');
-			$(this).find('.sort_img')
-					.addClass('fa-sort-amount-asc')
-					.removeClass('fa-exchange')
-					.removeClass('fa-sort-amount-desc');
-		}
-		
-		sort = $(this).attr('sort');
-		adminSelectFunc(page);
 	});
 	
 	// 관리자 등록 Button event
@@ -169,7 +106,7 @@ function adminIdCheckedFunc () {
  * 
  * @returns
  */
-function adminSelectFunc (p) {
+function selectAdminFunc (p) {
 	
 	// 페이징 변수
 	page	= p ? p : 1;
@@ -237,7 +174,7 @@ function adminSelectFunc (p) {
 			$('#adminTable').find('tbody').empty().append(html);
 			
 			// paging
-			common.paging(page, limit, 10, totalCount, adminSelectFunc);
+			common.paging(page, limit, 10, totalCount, selectAdminFunc);
 			
 			// 상세 팝업
 			$('.admin_detail').unbind('click').click(function (e) {
@@ -390,7 +327,7 @@ function insertAdminFunc () {
 				$('#addAdminPopup .close').click();
 				
 				// 목록 재조회
-				adminSelectFunc();
+				selectAdminFunc();
 			
 			// 등록 실패
 			} else {
@@ -445,7 +382,7 @@ function updateAdminFunc (adminIdx) {
 				$('#detailAdminPopup .close').click();
 				
 				// 목록 재조회
-				adminSelectFunc();
+				selectAdminFunc();
 				
 			} else {
 				alert('수정 실패');
@@ -495,7 +432,7 @@ function deleteAdminFunc (adminIdx) {
 				$('#detailAdminPopup .close').click();
 				
 				// 목록 재조회
-				adminSelectFunc();
+				selectAdminFunc();
 				
 			} else {
 				alert('삭제 실패');

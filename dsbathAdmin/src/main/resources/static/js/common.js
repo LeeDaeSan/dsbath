@@ -77,6 +77,112 @@ var common = {
 		}
 	},
 	
+	// 검색 관련 기능
+	search : {
+		
+		// 검색 관련 데이터 변수
+		obj : {
+			page		: 1,
+			sortType 	: '',
+			sort		: '',
+			callback	: null,
+		},
+		
+		// 이벤트 시작
+		start : function (callback) {
+			
+			var page 		= common.search.obj.page;
+			var sort		= common.search.obj.sort;
+			var sortType 	= common.search.obj.sortType;
+			var callback	= callback;
+			
+		//------------------------- 검색 : 기간검색 daterangepicker 적용 START -------------------------
+			$('#popupDate, #periodDate, #updatePopupDate').daterangepicker({
+				autoUpdateInput	: false,
+				'applyClass'	: 'btn-sm btn-dark',
+				'cancelClass'	: 'btn-sm btn-light',
+				locale			: {
+					format : 'YYYY-MM-DD'
+				}
+			});
+			$('#popupDate, #periodDate').on('apply.daterangepicker', function (e, picker) {
+				$(this).val(
+					picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+			});
+		//------------------------- 검색 : 기간검색 daterangepicker 적용 END -------------------------
+			
+			
+		//------------------------- 검색 : 검색버튼 click event START -------------------------
+			$('#searchBtn').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				callback();
+			});
+			$('#searchBtn').click();
+		//------------------------- 검색 : 검색버튼 click event END -------------------------
+		
+			
+		//------------------------- 검색 : keyup event START -------------------------
+			$('#searchTitle, #searchContent').keyup(function (e) {
+				if (e.keyCode == '13') {
+					$('#searchBtn').click();
+				}
+			});
+		//------------------------- 검색 : keyup event END -------------------------
+			
+			
+		//------------------------- 검색 : row 변경 event START -------------------------
+			$('#rowLimit').change(function () {
+				callback(page);
+			});
+		//------------------------- 검색 : row 변경 event END -------------------------	
+		
+			
+		//------------------------- 검색 : sort 정렬 click event START -------------------------
+			$('.sort_th').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				common.search.obj.sortType = $(this).attr('sortType');
+				
+				var thisSort = $(this).attr('sort');
+				
+				// 나머지 초기화
+				$('.sort_th').each(function () {
+					var thisSortType = $(this).attr('sortType');
+					if (sortType != thisSortType) {
+						$(this).attr('sort', '');
+						$(this).find('.sort_img')
+								.addClass('fa-exchange')
+								.removeClass('fa-sort-amount-desc')
+								.removeClass('fa-sort-amount-asc');
+					}
+				});
+				
+				// sort가 없거나 asc인 경우 : desc 변경
+				if (!thisSort || thisSort == 'asc') {
+					$(this).attr('sort', 'desc');
+					$(this).find('.sort_img')
+							.addClass('fa-sort-amount-desc')
+							.removeClass('fa-exchange')
+							.removeClass('fa-sort-amount-asc');
+					
+				// sort가 desc인 경우 : asc 변경
+				} else if (thisSort == 'desc') {
+					$(this).attr('sort', 'asc');
+					$(this).find('.sort_img')
+							.addClass('fa-sort-amount-asc')
+							.removeClass('fa-exchange')
+							.removeClass('fa-sort-amount-desc');
+				}
+				
+				common.search.obj.sort = $(this).attr('sort');
+				
+				callback(page);
+			});
+		//------------------------- 검색 : sort 정렬 click event END -------------------------
+		}
+	},
+	
 	// 페이징
 	paging : function (page, limit, pageLimit, totalCount, callback) {
 		
@@ -104,6 +210,13 @@ var common = {
 		for (var i = startPage; i <= endPage; i++) {
 			html += '<li thisPage="' + i + '" class="this_page_link page-item ' + (i == page ? 'active' : '') + '">';
 			html += '	<a href="javascript:void(0);" class="page-link">' + i + '</a>';
+			html += '</li>';
+		}
+		
+		// empty
+		if (totalCount == 0) {
+			html += '<li thisPage="1" class="this_page_link page-item active">';
+			html += '	<a href="javascript:void(0);" class="page-link">1</a>';
 			html += '</li>';
 		}
 		

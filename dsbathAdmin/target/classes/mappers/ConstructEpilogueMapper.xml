@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.ConstructEpilogueMapper">
+
+<!--============== 시공후기 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultMap="constructEpilogueList">
+		SELECT
+			CE.ConstructEpilogueIdx,
+			CE.Title,
+			CE.Content,
+			CE.Thumbnail,
+			CE.Hit,
+			CE.CreateDate,
+			CE.UpdateDate,
+			
+			M.MemberIdx,
+			M.MemberName		
+		
+		<!-- 공통 쿼리 -->
+		<include refid="selectOfWhere"></include>	
+		
+		<!-- order by -->
+		<choose>
+			<when test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY
+				
+				<choose>
+					<when test='"title".equals(sortType)'>
+						CE.Title
+					</when>
+					<when test='"memberName".equals(sortType)'>
+						M.MemberName
+					</when>
+					<when test='"createDate".equals(sortType)'>
+						CE.CreateDate
+					</when>
+					<when test='"updateDate".equals(sortType)'>
+						CE.UpdateDate
+					</when>
+					<when test='"hit".equals(sortType)'>
+						CE.Hit
+					</when>
+				</choose>
+				
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY CE.CreateDate DESC
+			</otherwise>
+		</choose>
+		
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
+	</select>
+<!--============== 시공후기 목록 END ==============-->
+
+
+<!--============== 시공후기 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT
+			COUNT(CE.ConstructEpilogueIdx)
+			
+		<!-- 공통 쿼리 -->
+		<include refid="selectOfWhere"></include>
+	</select>
+<!--============== 시공후기 목록 Total Count END ==============-->
+
+
+<!--============== 시공후기 목록 Result Map START ==============-->
+	<resultMap type="constructEpilogue" id="constructEpilogueList" autoMapping="true">
+		<id property="constructEpilogueIdx" column="ConstructEpilogueIdx"/>
+		
+		<collection ofType="member" property="member" autoMapping="true">
+			<id property="memberIdx" column="MemberIdx"/>
+		</collection>
+	</resultMap>
+<!--============== 시공후기 목록 Result Map END ==============-->
+
+
+<!--============== 시공후기 목록 공통 조건 START ==============-->
+	<sql id="selectOfWhere">
+		FROM ConstructEpilogue AS CE
+		  
+		LEFT JOIN Member AS M ON M.MemberIdx = CE.MemberIdx
+		
+		<where>
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.member.memberName)'>
+				<!-- 사용자 이름 -->
+				AND M.MemberName LIKE CONCAT ('%', TRIM(#{model.member.memberName}), '%')
+			</if>
+			
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.title)'>
+				<!-- 제목 -->
+				AND CE.Title LIKE CONCAT ('%', TRIM(#{model.title}), '%')
+			</if>
+			
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>
+		 		<!-- 등록일 -->
+		 		AND DATE_FORMAT(CE.CreateDate, '%Y%m%d') BETWEEN #{startDateStr} AND #{endDateStr}
+		 	</if>
+		</where>
+	</sql>
+<!--============== 시공후기 목록 공통 조건 END ==============-->
+
+</mapper>

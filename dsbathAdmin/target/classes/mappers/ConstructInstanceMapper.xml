@@ -187,12 +187,6 @@
 		<collection ofType="admin" property="admin" autoMapping="true">
 			<id property="adminIdx" column="AdminIdx"/>
 		</collection>
-		<!-- 공통파일 -->
-		<!-- 
-		<collection ofType="commonFile" property="commonFileList" autoMapping="true">
-			<id property="commonFileIdx" column="CommonFileIdx"/>
-		</collection> 
-		-->
 	</resultMap>
 <!--============== 시공사례 목록 Result Map END ==============-->
 
@@ -204,27 +198,6 @@
 		LEFT JOIN Admin AS A
 		  ON A.AdminIdx = CI.AdminIdx
 		  
-		<!-- FileMapping, CommonFile join -->
-		<!-- 
-		LEFT JOIN 
-		(
-			SELECT
-				SUB_CIFM.FileMappingIdx,
-				SUB_CIFM.ConstructInstanceIdx,
-				
-				SUB_CF.CommonFileIdx,
-				SUB_CF.Url,
-				SUB_CF.FileName,
-				SUB_CF.IsMain	
-				
-			  FROM ConstructInstanceFileMapping AS SUB_CIFM
-			  
-			 INNER JOIN CommonFile AS SUB_CF 
-		  	    ON SUB_CF.CommonFileIdx = SUB_CIFM.CommonFileIdx 
-		  	   AND SUB_CF.IsMain 		= '1'
-		  	   
-		) AS CF ON CF.ConstructInstanceIdx = CI.ConstructInstanceIdx
-		 -->
 		<where>
 			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.admin.adminName)'>
 				<!-- 관리자 이름 -->

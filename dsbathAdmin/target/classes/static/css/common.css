@@ -55,7 +55,9 @@
 	vertical-align	: middle;
 	font-size		: 14px;
 }
-
+.vertical-top {
+	vertical-align	: top !important;
+}
 .limit-form {
 	width			: 65px;
 	padding			: 4px 6px;

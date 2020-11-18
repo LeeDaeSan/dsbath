@@ -1,10 +1,9 @@
-var sortType;
-var sort;
-var page = 1;
-
 var deleteImgArr = [];
 
 $(function () {
+	
+	// 검색 이벤트 시작
+	common.search.start(selectInstanceFunc);
 	
 	// content summernote init
 	$('#insertContent, #updateContent').summernote({
@@ -25,74 +24,6 @@ $(function () {
 				deleteImgArr.push({ tag : tag });
 			}
 		}
-	});
-	
-	// date range picker 옵션 적용
-	$('#periodDate').daterangepicker({
-		autoUpdateInput	: false,
-		'applyClass'	: 'btn-sm btn-dark',
-		'cancelClass'	: 'btn-sm btn-light',
-		//drops			: 'right',
-		locale			: {
-			format : 'YYYY-MM-DD'
-		}
-	});
-	$('#periodDate').on('apply.daterangepicker', function (e, picker) {
-		$(this).val(
-			picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-	});
-	
-	// 목록 검색 button event
-	$('#searchBtn').unbind('click').click(function (e) {
-		e.preventDefault();
-		
-		selectInstanceFunc();
-	});
-	$('#searchBtn').click();
-	
-	// limit 변경 event
-	$('#rowLimit').change(function () {
-		selectInstanceFunc(page);
-	});
-	
-	// sort th click event
-	$('.sort_th').unbind('click').click(function (e) {
-		e.preventDefault();
-		
-			sortType = $(this).attr('sortType');
-		var thisSort = $(this).attr('sort');
-		
-		// 나머지 초기화
-		$('.sort_th').each(function () {
-			var thisSortType = $(this).attr('sortType');
-			if (sortType != thisSortType) {
-				$(this).attr('sort', '');
-				$(this).find('.sort_img')
-						.addClass('fa-exchange')
-						.removeClass('fa-sort-amount-desc')
-						.removeClass('fa-sort-amount-asc');
-			}
-		});
-		
-		// sort가 없거나 asc인 경우 : desc 변경
-		if (!thisSort || thisSort == 'asc') {
-			$(this).attr('sort', 'desc');
-			$(this).find('.sort_img')
-					.addClass('fa-sort-amount-desc')
-					.removeClass('fa-exchange')
-					.removeClass('fa-sort-amount-asc');
-			
-		// sort가 desc인 경우 : asc 변경
-		} else if (thisSort == 'desc') {
-			$(this).attr('sort', 'asc');
-			$(this).find('.sort_img')
-					.addClass('fa-sort-amount-asc')
-					.removeClass('fa-exchange')
-					.removeClass('fa-sort-amount-desc');
-		}
-		
-		sort = $(this).attr('sort');
-		selectInstanceFunc(page);
 	});
 	
 	// 썸네일 파일첨부 미리보기
@@ -162,8 +93,8 @@ function selectInstanceFunc (p) {
 		data		: {
 			page		: (page - 1) * limit,
 			limit		: limit,
-			sort		: sort,
-			sortType	: sortType,
+			sort		: common.search.obj.sort,
+			sortType	: common.search.obj.sortType,
 			
 			'admin.adminName' 	: $('#searchAdminName').val(),
 		}

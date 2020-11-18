@@ -34,7 +34,9 @@
 			AdminName,
 			AdminId,
 			Password,
+			ZipCode,
 			Address,
+			AddressDetail,
 			Role
 		)
 		VALUES
@@ -42,7 +44,9 @@
 			#{adminName},
 			#{adminId},
 			#{password},
+			#{zipCode},
 			#{address},
+			#{addressDetail},
 			#{role}
 		)
 	</insert>
@@ -55,8 +59,10 @@
 			   		Password = #{password},
 			   	</if>
 			   	
-		   		AdminName 	= #{adminName},
-		   		Address		= #{address}
+		   		AdminName 		= #{adminName},
+		   		ZipCode			= #{zipCode},
+		   		Address			= #{address},
+		   		AddressDetail 	= #{addressDetail}
 		   		
 		 WHERE AdminIdx = #{adminIdx}
 	</update>
@@ -73,7 +79,9 @@
 			AdminIdx,
 			AdminName,
 			AdminId,
+			ZipCode,
 			Address,
+			AddressDetail,
 			Role,
 			CreateDate
 		
@@ -87,7 +95,9 @@
 			AdminIdx,
 			AdminName,
 			AdminId,
+			ZipCode,
 			Address,
+			AddressDetail,
 			Role,
 			CreateDate,
 			UpdateDate

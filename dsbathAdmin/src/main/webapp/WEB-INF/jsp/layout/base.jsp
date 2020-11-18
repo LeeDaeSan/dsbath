@@ -49,10 +49,14 @@
 	    <link href="/css/common.css" rel="stylesheet">
     <!------------------------------------- CSS END ------------------------------------->
     
+	    <!-- Daum post code (우편번호) script -->
+	    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     	<!-- jQuery -->
 		<script src="/webjars/jquery/3.3.1/dist/jquery.min.js" type="text/javascript"></script>
 		<!-- common js -->
 	    <script src="/js/common.js" type="text/javascript"></script>
+	    <!-- post code js -->
+	    <script src="/js/postCode.js" type="text/javascript"></script>
 	    
 		<script>
 		var sessionIdx 	= '<%= idx %>';
@@ -184,8 +188,7 @@
 		</div>
 	</body>
 	
-	
-	<!------------------------------------- JS START ------------------------------------->    
+	    <!------------------------------------- JS START ------------------------------------->    
 	    <!-- Bootstrap -->
 	    <script src="/lib/gentelella/bootstrap/bootstrap.bundle.min.js"></script>
 	    <!-- FastClick -->
