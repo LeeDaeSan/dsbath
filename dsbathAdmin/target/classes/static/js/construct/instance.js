@@ -40,7 +40,7 @@ $(function () {
 		for (var i = 0; i < fileLength; i++) {
 			var fileObj = common.file.save(files[i], 'instance', thisThumbnail, '50');
 			
-			thisThumbnail.find('img').after('<a class="delete_thumbnail thumbnail-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');;
+			thisThumbnail.find('img').after('<a class="delete_thumbnail thumbnail-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
 			formTag.append('<input type="hidden" class="' + thisType + '_file" value="path=' + fileObj.filePath + '&fileName=' + fileObj.fileName + '"/>');
 		}
 		

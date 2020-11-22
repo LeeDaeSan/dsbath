@@ -163,29 +163,48 @@
 			</div>
 			<div class="modal-body">
 				<table class="table">
+					<colgroup>
+						<col width="15%"/>
+						<col width="30%"/>
+						<col width="auto"/>
+					</colgroup>
 					<tbody>
 						<tr>
 							<th>이름</th>
-							<td>
+							<td colspan="2">
 								<input type="text" id="insertMemberName" class="form-control form-control-cust"/>
 							</td>
 						</tr>
 						<tr>
 							<th>아이디</th>
-							<td>
+							<td colspan="2">
 								<input type="text" id="insertMemberId" class="form-control form-control-cust"/>
 							</td>
 						</tr>
 						<tr>
 							<th>비밀번호</th>
-							<td>
+							<td colspan="2">
 								<input type="password" id="insertPassword" class="form-control form-control-cust"/>
 							</td>
 						</tr>
 						<tr>
-							<th>주소</th>
+							<th rowspan="2" class="vertical-top">주소</th>
 							<td>
-								<input type="text" id="insertAddress" class="form-control form-control-cust"/>
+								<input type="text" id="insertZipCode" class="form-control form-control-cust" readOnly/>
+							</td>
+							<td>
+								<button id="insertZipCodeBtn" class="btn btn-sm btn-dark">우편번호 찾기</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="text" id="insertAddress" class="form-control form-control-cust" readOnly/>
+							</td>
+						</tr>
+						<tr>
+							<th rowspan="2" class="vertical-top">상세주소</th>
+							<td colspan="2">
+								<input type="text" id="insertAddressDetail" class="form-control form-control-cust"/>
 							</td>
 						</tr>
 					</tbody>

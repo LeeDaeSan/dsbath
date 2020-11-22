@@ -122,13 +122,13 @@ var common = {
 		//------------------------- 검색 : 검색버튼 click event END -------------------------
 		
 			
-		//------------------------- 검색 : keyup event START -------------------------
-			$('#searchTitle, #searchContent').keyup(function (e) {
+		//------------------------- 검색 : enter keyup event START -------------------------
+			$('.keyup_enter').keyup(function (e) {
 				if (e.keyCode == '13') {
 					$('#searchBtn').click();
 				}
 			});
-		//------------------------- 검색 : keyup event END -------------------------
+		//------------------------- 검색 : enter keyup event END -------------------------
 			
 			
 		//------------------------- 검색 : row 변경 event START -------------------------

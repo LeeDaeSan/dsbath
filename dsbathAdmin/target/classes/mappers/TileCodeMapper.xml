@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.TileCodeMapper">
+
+<!--============== 타일 코드 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="tileCode">
+		SELECT
+			TileCodeIdx,
+			Image,
+			TileName,
+			TileCode,
+			CreateDate,
+			UpdateDate
+			
+		  FROM TileCode
+	</select>
+<!--============== 타일 코드 목록 END ==============-->
+
+
+<!--============== 타일 코드 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(TileCodeIdx)
+		  FROM TileCode
+	</select>
+<!--============== 타일 코드 목록 Total Count END ==============-->
+
+
+<!--============== 타일 코드 등록 START ==============-->
+	<insert id="insert" parameterType="tileCode">
+		INSERT INTO TileCode
+		(
+			Image,
+			TileName
+		)
+		VALUES
+		(
+			#{image},
+			#{tileName}
+		)
+	</insert>
+<!--============== 타일 코드 등록 END ==============-->
+
+
+<!--============== 타일 코드 수정 START ==============-->
+	<update id="update" parameterType="tileCode">
+		UPDATE TileCode
+		   SET
+		   
+		   	Image 		= #{image},
+		   	tileName	= #{tileName},
+		   	tileCode	= #{tileCode}
+		   	
+		 WHERE TileCodeIdx = #{tileCodeIdx} 
+	</update>
+<!--============== 타일 코드 수정 END ==============-->
+
+
+<!--============== 타일 코드 삭제 START ==============-->
+	<delete id="delete" parameterType="tileCode">
+		DELETE FROM TileCode
+		 WHERE TileCodeIdx = #{tileCodeIdx}
+	</delete>	
+<!--============== 타일 코드 삭제 END ==============-->
+</mapper>

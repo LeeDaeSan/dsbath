@@ -16,7 +16,7 @@ var postCode = {
 			oncomplete : function (data) {
 				
 				// 우편번호
-				$('#' + type + 'Zipcode').val(data.zonecode);
+				$('#' + type + 'ZipCode').val(data.zonecode);
 				// 지번 주소
 				$('#' + type + 'Address').val(data.jibunAddress);
 			}

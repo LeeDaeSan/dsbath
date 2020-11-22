@@ -25,10 +25,10 @@
 	</head>
 	
 	<body>
-		<div class="container height_full">
+		<div class="row height_full container-custom">
 			<div class="row height_full">
 			
-				<div class="col-lg-2 no-padding height_full">
+				<div class="col-lg-2 no-padding height_full left-container">
 					<tiles:insertAttribute name="left"/>
 				</div>
 				

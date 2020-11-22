@@ -16,7 +16,9 @@ public class Member {
 	private String memberName;
 	private String memberId;
 	private String password;
+	private String zipCode;
 	private String address;
+	private String addressDetail;
 	private String isDelete;
 	private Date createDate;
 	private Date updateDate;

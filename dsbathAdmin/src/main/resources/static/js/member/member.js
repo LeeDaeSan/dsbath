@@ -4,6 +4,9 @@ var page = 1;
 
 $(function () {
 	
+	// 우편번호 찾기 : 등록
+	postCode.start('insert');
+	
 	// date range picker 옵션 적용
 	$('#periodDate').daterangepicker({
 		autoUpdateInput	: false,
@@ -205,6 +208,12 @@ function insertMemberFunc () {
 		return false;
 	}
 	
+	// 주소 validation
+	if (!$('#insertZipCode').val() || !$('#insertAddress').val()) {
+		common.alert('warn', '우편번호를 입력해 주세요.');
+		return false;
+	}
+	
 	// confirm
 	if (confirm('사용자 정보를 등록하시겠습니까?')) {
 		
@@ -214,11 +223,13 @@ function insertMemberFunc () {
 			method		: 'POST',
 			dataType	: 'JSON',
 			data		: {
-				type		: 'I',
-				memberName	: memberName,
-				memberId	: memberId,
-				password	: password,
-				address		: $('#insertAddress').val(),
+				type			: 'I',
+				memberName		: memberName,
+				memberId		: memberId,
+				password		: password,
+				zipCode			: $('#insertZipCode').val(),
+				address			: $('#insertAddress').val(),
+				addressDetail	: $('#insertAddressDetail').val(),
 			}
 		
 		//---> 통신 완료

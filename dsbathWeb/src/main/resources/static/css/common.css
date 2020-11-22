@@ -6,15 +6,22 @@ html, body {
 	height			: 100%;
 	overflow		: hidden;
 }
+.container-custom {
+	max-width		: 1600px;
+	margin			: 0 auto;
+}
+.left-container {
+	width			: 200px;
+}
 .left-menu {
 	background 		: #f2cc3e;
 }
 .head-area {
 	background		: #ffeca3;
-	height			: 80px;
+	height			: 90px;
 }
 .left-logo {
-    width			: 145px;
+    width			: 135px;
     padding-top		: 30px;
     display			: block;
     margin			: 0 auto;
@@ -24,10 +31,18 @@ html, body {
 }
 .main-left-menu ul {
 	list-style 		: none;
+	text-align		: center;
+	padding			: 0;
 }
 .main-left-menu ul li {
-	margin 			: 13px;
+	margin-bottom	: 20px;
 	font-size		: 12px;
+}
+.main-left-bottom {
+	
+}
+.main-image-01 {
+	width			: 100%;
 }
 .no-padding {
 	padding 		: 0 !important;
@@ -35,4 +50,46 @@ html, body {
 
 .height_full {
 	height 			: 100%;
+}
+
+.right-login-form {
+	padding-top		: 30px;
+	text-align		: center;
+	height			: 180px;
+}
+.right-login-form input[type="text"] {
+	margin-bottom	: 8px;
+}
+.right-login-btn {
+    width			: 100%;
+    background		: #f2cc3e;
+    color			: #ffffff;
+}
+.right-login-check {
+	font-size 		: 12px;
+	margin-top		: 8px;
+}
+.right-login-check .left-check {
+	float			: left;
+}
+.right-login-check .right-check {
+	float			: right;
+}
+.right-construct-instance {
+	border			: 1px solid #e4e0dc;
+	border-radius	: 6px;	
+	height			: 535px;
+}
+.right-construct-instance .instance-title {
+	font-size		: 21px;
+	margin-left		: 12px;
+    margin-top		: 10px;
+    margin-right	: 12px;
+    padding-bottom	: 7px;
+    border-bottom	: 1px solid #e4e0dc;
+}
+#mainConstructInstance .instance-text {
+	margin-left		: 10px;
+    margin-top		: 5px;
+    margin-bottom	: 5px;
 }

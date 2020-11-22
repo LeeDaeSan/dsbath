@@ -8,7 +8,9 @@
 		SELECT
 			MemberName,	
 			MemberId,
+			ZipCode,
 			Address,
+			AddressDetail,
 			CreateDate,
 			UpdateDate
 			
@@ -71,7 +73,9 @@
 			MemberName,
 			MemberId,
 			Password,
+			ZipCode,
 			Address,
+			AddressDetail,
 			IsDelete
 		)
 		VALUES
@@ -79,7 +83,9 @@
 			#{memberName},
 			#{memberId},
 			#{password},
+			#{zipCode},
 			#{address},
+			#{addressDetail},
 			'0'
 		)
 	</insert>
@@ -94,8 +100,10 @@
 			   		Password = #{password},
 			   	</if>
 			   	
-			   	MemberName	= #{memberName},
-			   	Address		= #{address}
+			   	MemberName		= #{memberName},
+			   	ZipCode			= #{zipCode},
+			   	Address			= #{address},
+			   	AddressDetail 	= #{addressDetail}
 			   	
 		 WHERE MemberIdx = #{memberIdx}
 	</update>
@@ -139,7 +147,10 @@
 		 	</if>
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.address)'>
 		 		<!-- 사용자자 주소 -->
-		 		AND Address LIKE CONCAT('%', TRIM(#{model.address}), '%')
+		 		AND (
+		 				Address LIKE CONCAT('%', TRIM(#{model.address}), '%') OR 
+		 				AddressDetail LIKE CONCAT('%', TRIM(#{model.address}), '%')
+		 			)
 		 	</if>
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>
 		 		<!-- 등록일 -->

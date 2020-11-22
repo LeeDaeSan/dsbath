@@ -53,6 +53,7 @@
 						<a><i class="fa fa-tags"></i> 디자인 <span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
 							<li><a href="/views/design/list">욕실 리모델링 디자인</a></li>
+							<li><a href="/views/design/code/list">디자인 코드 관리</a></li>
 						</ul>
 					</li>
 					

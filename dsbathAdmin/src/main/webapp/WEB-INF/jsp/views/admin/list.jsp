@@ -31,11 +31,11 @@
 						<tr>
 							<th>이름</th>
 							<td colspan="2">
-								<input type="text" class="form-control form-control-cust" id="searchAdminName"/>
+								<input type="text" class="form-control form-control-cust keyup_enter" id="searchAdminName"/>
 							</td>
 							<th>아이디</th>
 							<td>
-								<input type="text" class="form-control form-control-cust" id="searchAdminId"/>
+								<input type="text" class="form-control form-control-cust keyup_enter" id="searchAdminId"/>
 							</td>
 						</tr>
 						<tr>
@@ -49,7 +49,7 @@
 						<tr>
 							<th>주소</th>
 							<td colspan="4">
-								<input type="text" class="form-control form-control-cust" id="searchAddress"/>
+								<input type="text" class="form-control form-control-cust keyup_enter" id="searchAddress"/>
 							</td>
 						</tr>
 					</tbody>
@@ -64,7 +64,7 @@
 <!-- Button form START -->
 <div class="row">
 	<div class="col-md-12 col-sm-12">
-		<button type="button" class="btn btn-sm btn-dark float-right" data-toggle="modal" data-target="#addAdminPopup">관리자 등록</button>
+		<button type="button" class="btn btn-sm btn-dark float-right" data-toggle="modal" data-target="#insertAdminPopup">관리자 등록</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchResetBtn">검색 초기화</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchBtn">검색</button>
 	</div>
@@ -152,7 +152,7 @@
 
 
 <!-- 등록 팝업 START -->
-<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="addAdminPopup">
+<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="insertAdminPopup">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -188,9 +188,9 @@
 							</td>
 						</tr>
 						<tr>
-							<th rowspan="3" class="vertical-top">주소</th>
+							<th rowspan="2" class="vertical-top">주소</th>
 							<td>
-								<input type="text" id="insertZipcode" class="form-control form-control-cust" readOnly/>
+								<input type="text" id="insertZipCode" class="form-control form-control-cust" readOnly/>
 							</td>
 							<td>
 								<button id="insertZipCodeBtn" class="btn btn-sm btn-dark">우편번호 찾기</button>
@@ -202,6 +202,7 @@
 							</td>
 						</tr>
 						<tr>
+							<th rowspan="2" class="vertical-top">상세주소</th>
 							<td colspan="2">
 								<input type="text" id="insertAddressDetail" class="form-control form-control-cust"/>
 							</td>
@@ -211,7 +212,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-sm btn-primary" id="insertAdminBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-primary merge_admin_btn" mergeType="I" id="insertAdminBtn">등록</button>
 			</div>
 		</div>
 	</div>
@@ -232,8 +233,8 @@
 				<table class="table">
 					<colgroup>
 						<col width="15%"/>
-						<col width="70%"/>
-						<col width="15%"/>
+						<col width="30%"/>
+						<col width="auto"/>
 					</colgroup>
 					<tbody>
 						<tr>
@@ -258,9 +259,23 @@
 							</td>
 						</tr>
 						<tr>
-							<th>주소</th>
+							<th rowspan="2" class="vertical-top">주소</th>
+							<td>
+								<input type="text" id="updateZipCode" class="form-control form-control-cust" readOnly/>
+							</td>
+							<td>
+								<button id="updateZipCodeBtn" class="btn btn-sm btn-dark">우편번호 찾기</button>
+							</td>
+						</tr>
+						<tr>
 							<td colspan="2">
-								<input type="text" id="updateAddress" class="form-control form-control-cust"/>
+								<input type="text" id="updateAddress" class="form-control form-control-cust" readOnly/>
+							</td>
+						</tr>
+						<tr>
+							<th rowspan="2" class="vertical-top">상세주소</th>
+							<td colspan="2">
+								<input type="text" id="updateAddressDetail" class="form-control form-control-cust"/>
 							</td>
 						</tr>
 					</tbody>
@@ -268,8 +283,8 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-sm btn-primary" id="updateAdminBtn">수정</button>
-				<button type="button" class="btn btn-sm btn-danger" id="deleteAdminBtn">삭제</button>
+				<button type="button" id="updateAdminBtn" mergeType="U" idx="" class="btn btn-sm btn-primary merge_admin_btn">수정</button>
+				<button type="button" id="deleteAdminBtn" mergeType="D" idx="" class="btn btn-sm btn-danger merge_admin_btn">삭제</button>
 			</div>
 		</div>
 	</div>

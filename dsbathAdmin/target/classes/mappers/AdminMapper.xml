@@ -108,33 +108,39 @@
 		<include refid="selectOfWhere"></include>
 		 
 		<!-- order -->
-		<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
-		 	ORDER BY 
+		<choose>
+			<when test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY 
 		 	
-			<choose>
-			 	<when test='"adminId".equals(sortType)'>
-			 		AdminId
-				</when>
-			 	<when test='"adminName".equals(sortType)'>
-			 		AdminName
-				</when>
-			 	<when test='"address".equals(sortType)'>
-			 		Address
-				</when>
-			 	<when test='"createDate".equals(sortType)'>
-			 		CreateDate
-				</when>
-			</choose>
-			 
-			<choose>
-				<when test='"asc".equals(sort)'>
-					ASC
-				</when>
-				<when test='"desc".equals(sort)'>
-					DESC
-				</when>
-			</choose>
-		</if>
+				<choose>
+				 	<when test='"adminId".equals(sortType)'>
+				 		AdminId
+					</when>
+				 	<when test='"adminName".equals(sortType)'>
+				 		AdminName
+					</when>
+				 	<when test='"address".equals(sortType)'>
+				 		Address
+					</when>
+				 	<when test='"createDate".equals(sortType)'>
+				 		CreateDate
+					</when>
+				</choose>
+				 
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY CreateDate DESC
+			</otherwise>
+		</choose>
 		
 		<!-- paging -->
 		LIMIT #{page}, #{limit}
@@ -164,7 +170,10 @@
 		 	</if>
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.address)'>
 		 		<!-- 관리자 주소 -->
-		 		AND Address LIKE CONCAT('%', TRIM(#{model.address}), '%')
+		 		AND (
+		 				Address LIKE CONCAT('%', TRIM(#{model.address}), '%') OR 
+		 				AddressDetail LIKE CONCAT('%', TRIM(#{model.address}), '%')
+		 			)
 		 	</if>
 		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>
 		 		<!-- 등록일 -->

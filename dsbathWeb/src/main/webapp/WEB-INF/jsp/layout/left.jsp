@@ -17,4 +17,11 @@
 			<li>커뮤니티</li>
 		</ul>
 	</div>
+	<div class="main-left-bottom">
+		<!-- 
+		<img src="/images/naver-smartstore.png"/>
+		<img src="/images/naver-blog.png"/>
+		<img src="/images/instargram.png"/> 
+		-->
+	</div>
 </div>

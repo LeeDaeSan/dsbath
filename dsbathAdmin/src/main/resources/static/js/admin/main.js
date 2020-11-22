@@ -1,21 +1,12 @@
-var sortType;
-var sort;
-var page = 1;
-
 $(function () {
 	
 	// 검색 이벤트 시작
 	common.search.start(selectAdminFunc);
 	
-	// 우편번호 찾기
+	// 우편번호 찾기 : 등록
 	postCode.start('insert');
-	
-	// keyup event
-	$('#searchAdminName, #searchAdminId, #searchAddress').keyup(function (e) {
-		if (e.keyCode == '13') {
-			$('#searchBtn').click();
-		}
-	});
+	// 우편번호 찾기 : 상세
+	postCode.start('update');
 	
 	// 검색 초기화 event
 	$('#searchResetBtn').unbind('click').click(function (e) {
@@ -30,40 +21,10 @@ $(function () {
 	});
 	
 	// 관리자 등록 Button event
-	$('#insertAdminBtn').unbind('click').click(function (e) {
+	$('.merge_admin_btn').unbind('click').click(function (e) {
 		e.preventDefault();
 		
-		// 이름 validation
-		if (!$('#insertAdminName').val()) {
-			common.alert('warn', '이름을 입력해 주세요.');
-			$('#insertAdminName').focus();
-			return false;
-		}
-		
-		// 아이디 validation
-		if (!$('#insertAdminId').val()) {
-			common.alert('warn', '아이디를 입력해 주세요.');
-			$('#insertAdminId').focus();
-			return false;
-		}
-		
-		// 아이디 중복확인
-		if (!adminIdCheckedFunc()) {
-			common.alert('warn', '현재 사용중인 아이디입니다.\n다시 입력해 주세요.');
-			$('#insertAdminId').focus();
-			return false;
-		}
-
-		// 비밀번호 validation
-		if (!$('#insertPassword').val()) {
-			common.alert('warn', '비밀번호를 입력해 주세요.');
-			$('#insertPassword').focus();
-			return false;
-		}
-		
-		if (confirm('관리자 정보를 등록하시겠습니까?')) {
-			insertAdminFunc();
-		}
+		mergeAdminFunc($(this).attr('mergeType'), $(this).attr('idx'));
 	});
 });
 
@@ -113,9 +74,12 @@ function selectAdminFunc (p) {
 	limit	= $('#rowLimit').val();
 	
 	// 기간 데이터 파싱
-	var periodDate 	= -common.number.onlyNumber($('#periodDate').val()) + '';
-	var startDate 	= periodDate.substring(0, 8);
-	var endDate 	= periodDate.substring(8, 16);
+	var startDate 	= '';
+	var endDate 	= '';
+	if ($('#periodDate').val()) {
+		startDate 	= common.date.toString( $('#periodDate').data('daterangepicker').startDate._d, '' );
+		endDate 	= common.date.toString( $('#periodDate').data('daterangepicker').endDate._d, '' ); 
+	}
 	
 	$.ajax({
 		url			: '/admin/rest/select',
@@ -124,8 +88,8 @@ function selectAdminFunc (p) {
 		data		: {
 			page			: (page - 1) * limit,
 			limit			: limit,
-			sort			: sort,
-			sortType		: sortType,
+			sort			: common.search.obj.sort,
+			sortType		: common.search.obj.sortType,
 			startDateStr	: startDate,
 			endDateStr		: endDate,
 			adminName		: $('#searchAdminName').val(),
@@ -153,12 +117,16 @@ function selectAdminFunc (p) {
 			
 			for (var i = 0; i < listLength; i++) {
 				var thisObj = list[i];
+				var address 		= thisObj.address ? thisObj.address : '';
+				var addressDetail 	= thisObj.addressDetail ? thisObj.addressDetail : '';
+				
+				var addr = (address ? address + ' ' : '') + addressDetail;
 				
 				html += '<tr class="admin_detail detail-tr" idx="' + thisObj.adminIdx + '">';
 				html += '	<td class="text-right">' + (sRow + i) + '</td>';
 				html += '	<td>' + thisObj.adminName + '</td>';
 				html += '	<td>' + thisObj.adminId + '</td>';
-				html += '	<td>' + thisObj.address + '</td>';
+				html += '	<td>' + addr + '</td>';
 				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>';
 				html += '</tr>';
 			}
@@ -181,6 +149,8 @@ function selectAdminFunc (p) {
 				e.preventDefault();
 				
 				var adminIdx = $(this).attr('idx');
+				
+				$('.merge_admin_btn').attr('idx', adminIdx);
 				
 				// 상세 정보 조회
 				adminDetailFunc(adminIdx);
@@ -209,39 +179,6 @@ function selectAdminFunc (p) {
 						$(this).text('변경');
 					}
 				});
-				
-				// 수정 button
-				$('#updateAdminBtn').unbind('click').click(function (e) {
-					e.preventDefault();
-					
-					// 이름 validation
-					if (!$('#updateAdminName').val()) {
-						alert('이름을 입력해 주세요.');
-						$('#updateAdminName').focus();
-						return false;
-					}
-					
-					// 비밀번호 validation
-					if ($('#updatePasswordChangeBtn').attr('changeType') == 'on' && !$('#updatePassword').val()) {
-						alert('비밀번호를 입력해 주세요.');
-						$('#updatePassword').focus();
-						return false;
-					}
-					
-					if (confirm('수정사항을 저장하시겠습니까?')) {
-						updateAdminFunc(adminIdx);
-					}
-				});
-				
-				// 삭제 button
-				$('#deleteAdminBtn').unbind('click').click(function (e) {
-					e.preventDefault();
-					
-					if (confirm('해당 관리자를 정말 삭제하시겠습니까?')) {
-						deleteAdminFunc(adminIdx);
-					}
-				});
-				
 			});
 			
 		} else {
@@ -275,175 +212,170 @@ function adminDetailFunc (adminIdx) {
 			
 			$('#updateAdminName').val(detail.adminName);
 			$('#updateAdminId').val(detail.adminId);
+			$('#updateZipCode').val(detail.zipCode);
 			$('#updateAddress').val(detail.address);
+			$('#updateAddressDetail').val(detail.addressDetail);
 			
 		} else {
-			alert('서버 에러');
+			common.alert('dang', '관리자 상세 정보 조회 요청중 에러가 발생하였습니다.');
 		}
 		
 	}).fail(function (result) {
-		alert('서버 에러');
+		common.alert('dang', '관리자 상세 정보 조회 요청중 서버 통신 에러가 발생하였습니다.');
 	});
 }
 
 /**
- * 관리자 등록 Function
+ * 관리자 등록, 수정, 삭제 Function
  * 
  * @returns
  */
-function insertAdminFunc () {
+function mergeAdminFunc (type, idx) {
 	
-	//---> 요청
-	$.ajax({
-		url			: '/admin/rest/merge',
-		method		: 'POST',
-		dataType	: 'JSON',
-		data		: {
-			type		: 'I',
-			adminName	: $('#insertAdminName').val(),
-			adminId		: $('#insertAdminId').val(),
-			password	: $('#insertPassword').val(),
-			address		: $('#insertAddress').val(),
-		}
+	var mergeText = '등록';
+	var tagType = 'insert';
 	
-	//---> 통신 완료
-	}).done(function (result) {
+	// 등록 설정
+	if (type == 'I') {
+		tagType = 'insert';
+		mergeText = '등록';
 		
-		// 통신 성공
-		if (result.status) {
-			
-			// 등록 성공
-			if (result.resultCount == 1) {
-				
-				common.alert('succ', '사용자 정보 등록을 완료하였습니다.');
-				
-				// 등록 정보 초기화
-				$('#insertAdminName').val('');
-				$('#insertAdminId').val('');
-				$('#insertPassword').val('');
-				$('#insertAddress').val('');
-				
-				// 팝업 닫기
-				$('#addAdminPopup .close').click();
-				
-				// 목록 재조회
-				selectAdminFunc();
-			
-			// 등록 실패
-			} else {
-				common.alert('dang', '관리자 정보 등록을 실패하였습니다.');
-			}
-			
-		// 통신 에러
-		} else {
-			common.alert('dang', '관리자 정보 등록 요청중 에러가 발생하였습니다.');
-		}
+	// 수정 설정 
+	} else if (type == 'U') {
+		tagType = 'update';
+		mergeText = '수정';
+		
+	// 삭제 설정
+	} else if (type == 'D') {
+		mergeText = '삭제';
+		
+	} else {
+		return false;
+	}
 	
-	//---> 통신 에러
-	}).fail(function (result) {
-		common.alert('dang', '관리자 정보 등록 요청중 서버 통신 에러가 발생하였습니다.');
-	});
-}
-
-/**
- * 관리자 정보 수정 Function
- * 
- * @returns
- */
-function updateAdminFunc (adminIdx) {
-	
-	$.ajax({
-		url			: '/admin/rest/merge',
-		method		: 'POST',
-		dataType	: 'JSON',
-		data		: {
-			type		: 'U',
-			adminIdx	: adminIdx,
-			adminName	: $('#updateAdminName').val(),
-			password	: $('#updatePassword').val(),
-			address		: $('#updateAddress').val(),
-		}
-	
-	}).done(function (result) {
-		// 성공
-		if (result.status) {
-			
-			if (result.resultCount == 1) {
-				
-				alert('수정을 완료하였습니다.');
-				
-				// 상세 정보 초기화
-				$('#updateAdminName').val('');
-				$('#updateAdminId').val('');
-				$('#updatePassword').val('');
-				$('#updateAddress').val('');
-				
-				// 팝업 닫기
-				$('#detailAdminPopup .close').click();
-				
-				// 목록 재조회
-				selectAdminFunc();
-				
-			} else {
-				alert('수정 실패');
-			}
-			
-		// 실패
-		} else {
-			alert('서버 에러');
+	// validation : 등록, 수정만 해당
+	if (type == 'I' || type == 'U') {
+		
+		// 이름 validation
+		if (!$('#' + tagType + 'AdminName').val()) {
+			common.alert('warn', '이름을 입력해 주세요.');
+			$('#' + tagType + 'AdminName').focus();
+			return false;
 		}
 		
-	}).fail(function (result) {
-		alert('서버 에러');
-	});
-}
-
-/**
- * 관리자 정보 삭제 Function
- * 
- * @returns
- */
-function deleteAdminFunc (adminIdx) {
-	
-	$.ajax({
-		url			: '/admin/rest/merge',
-		method		: 'POST',
-		dataType	: 'JSON',
-		data		: {
-			type		: 'D',
-			adminIdx	: adminIdx,
-		}
-	
-	}).done(function (result) {
-		// 성공
-		if (result.status) {
-			
-			if (result.resultCount == 1) {
-				
-				alert('해당 관리자 삭제를 완료하였습니다.');
-				
-				// 상세 정보 초기화
-				$('#updateAdminName').val('');
-				$('#updateAdminId').val('');
-				$('#updatePassword').val('');
-				$('#updateAddress').val('');
-				
-				// 팝업 닫기
-				$('#detailAdminPopup .close').click();
-				
-				// 목록 재조회
-				selectAdminFunc();
-				
-			} else {
-				alert('삭제 실패');
+		// 등록
+		if (type == 'I') {
+			// 아이디 validation
+			if (!$('#' + tagType + 'AdminId').val()) {
+				common.alert('warn', '아이디를 입력해 주세요.');
+				$('#' + tagType + 'AdminId').focus();
+				return false;
 			}
 			
-		// 실패
-		} else {
-			alert('서버 에러');
+			// 아이디 중복확인
+			if (!adminIdCheckedFunc()) {
+				common.alert('warn', '현재 사용중인 아이디입니다.\n다시 입력해 주세요.');
+				$('#' + tagType + 'AdminId').focus();
+				return false;
+			}
+			
+			// 비밀번호 validation
+			if (!$('#' + tagType + 'Password').val()) {
+				common.alert('warn', '비밀번호를 입력해 주세요.');
+				$('#' + tagType + 'Password').focus();
+				return false;
+			}
+		
+		// 수정
+		} else if (type == 'U') {
+			// 비밀번호 validation
+			if ($('#updatePasswordChangeBtn').attr('changeType') == 'on' && !$('#updatePassword').val()) {
+				alert('비밀번호를 입력해 주세요.');
+				$('#updatePassword').focus();
+				return false;
+			}
 		}
 		
-	}).fail(function (result) {
-		alert('서버 에러');
-	});
+		// 주소 validation
+		if (!$('#' + tagType + 'ZipCode').val() || !$('#' + tagType + 'Address').val()) {
+			common.alert('warn', '우편번호를 입력해 주세요.');
+			return false;
+		}
+	}
+	
+	// confirm
+	if (confirm('해당 관리자 정보를 ' + mergeText + '하시겠습니까?')) {
+		
+		// parameter
+		var param = {
+			type : type,
+		};
+		
+		if (type == 'U' || type == 'D') {
+			param['adminIdx'] = idx;
+		}
+		
+		if (type == 'I' || type == 'U') {
+			param['adminName'] 		= $('#' + tagType + 'AdminName').val();
+			param['adminId']		= $('#' + tagType + 'AdminId').val();
+			param['password']		= $('#' + tagType + 'Password').val();
+			param['zipCode']		= $('#' + tagType + 'ZipCode').val();
+			param['address']		= $('#' + tagType + 'Address').val();
+			param['addressDetail']	= $('#' + tagType + 'AddressDetail').val();
+		}
+		
+		//---> 통신 요청
+		$.ajax({
+			url			: '/admin/rest/merge',
+			method		: 'POST',
+			dataType	: 'JSON',
+			async		: false,
+			data		: param,
+			
+		//---> 통신 완료
+		}).done(function (result) {
+			
+			// 통신 성공
+			if (result.status) {
+				
+				// 성공
+				if (result.resultCount == 1) {
+					
+					// alert
+					common.alert('succ', '관리자 정보 ' + mergeText + '을 완료하였습니다.');
+					
+					// 정보 초기화
+					$('#' + tagType + 'AdminName').val('');
+					$('#' + tagType + 'AdminId').val('');
+					$('#' + tagType + 'Password').val('');
+					$('#' + tagType + 'ZipCode').val('');
+					$('#' + tagType + 'Address').val('');
+					$('#' + tagType + 'AddressDetail').val('');
+					
+					if (type == 'U') {
+						$('#updatePasswordChangeBtn').click();
+					}
+					
+					// 팝업 닫기
+					$('#insertAdminPopup .close').click();
+					$('#detailAdminPopup .close').click();
+					
+					// 목록 재조회
+					selectAdminFunc();
+				
+				// 실패
+				} else {
+					common.alert('dang', '관리자 정보 ' + mergeText + '을 실패하였습니다.');
+				}
+				
+			// 통신 에러
+			} else {
+				common.alert('dang', '관리자 정보 ' + mergeText + ' 요청중 에러가 발생하였습니다.');
+			}
+		
+		//---> 통신 에러
+		}).fail(function (result) {
+			common.alert('dang', '관리자 정보 ' + mergeText + ' 요청중 서버 통신 에러가 발생하였습니다.');
+		});
+	}
 }

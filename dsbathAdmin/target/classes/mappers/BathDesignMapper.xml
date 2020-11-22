@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.BathDesignMapper">
+
+<!--============== 욕실디자인 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultMap="bathDesignList">
+		SELECT
+			BD.BathDesignIdx,
+			BD.AdminIdx,
+			BD.Title,
+			BD.Content
+			BD.Hit,
+			BD.DesignType,
+			BD.CreateDate,
+			BD.UpdateDate
+			
+		  FROM BathDesign AS BD
+		
+	</select>
+<!--============== 욕실디자인 목록 END ==============-->
+
+
+<!--============== 욕실디자인 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(BD.BathDesignIdx)
+		  FROM BathDesign AS BD
+	</select>
+<!--============== 욕실디자인 목록 Total Count END ==============-->
+
+
+<!--============== 욕실디자인 목록 Result Map START ==============-->
+	<resultMap type="bathDesign" id="bathDesignList" autoMapping="true">
+		<id property="bathDesignIdx" column="BathDesignIdx"/>
+		
+	</resultMap>
+<!--============== 욕실디자인 목록 Result Map END ==============-->
+
+
+<!--============== 욕실디자인 등록 START ==============-->
+	<insert id="insert" parameterType="bathDesign">
+		INSERT INTO BathDesign
+		(
+			AdminIdx,
+			Title,
+			Content,
+			Hit,
+		)
+		VALUES
+		(
+			#{adminIdx},
+			#{title},
+			#{content},
+			0
+		)
+	</insert>
+<!--============== 욕실디자인 등록 END ==============-->
+
+
+<!--============== 욕실디자인 수정 START ==============-->
+	<update id="update" parameterType="bathDesign">
+		UPDATE BathDesign
+		   SET
+		   		Title 		= #{title},
+		   		Content		= #{content}
+		   		
+		 WHERE BathDesignIdx = #{bathDesignIdx}
+	</update>
+<!--============== 욕실디자인 수정 END ==============-->
+
+
+<!--============== 욕실디자인 삭제 START ==============-->
+	<delete id="delete" parameterType="bathDesign">
+		DELETE FROM BathDesign
+		 WHERE BathDesignIdx = #{bathDesignIdx}
+	</delete>
+<!--============== 욕실디자인 삭제 END ==============-->
+</mapper>

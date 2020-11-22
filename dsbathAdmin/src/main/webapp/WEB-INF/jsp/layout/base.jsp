@@ -93,6 +93,12 @@
 				subTitle1 = '디자인';
 				subTitle2 = '욕실 리모델링 디자인';
 			
+			// 욕실 디자인 코드 관리
+			} else if (url.indexOf('/design/code/list') != -1) {
+				mainTitle = '디자인 코드 관리';
+				subTitle1 = '디자인';
+				subTitle2 = '디자인 코드 관리';
+				
 			// 견적 및 시공 문의
 			} else if (url.indexOf('/construct/inquiry') != -1) {
 				mainTitle = '견적 및 시공 문의';
