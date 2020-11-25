@@ -1,5 +1,6 @@
 package com.dsbath.admin.model.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,4 +75,23 @@ public class TileCodeServiceImpl implements TileCodeService {
 		return resultMap;
 	}
 	
+	/**
+	 * 타일 코드 목록 (욕실디자인 코드검색)
+	 * 
+	 */
+	@Override
+	public Map<String, Object> selectOfBathDesign(TileCode tileCode) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			
+			resultMap.put("list", tileCodeMapper.selectOfBathDesign(tileCode));
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
 }

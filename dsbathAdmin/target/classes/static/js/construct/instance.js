@@ -213,7 +213,7 @@ function detailInstanceFunc (instanceIdx) {
 			$('#updateContent').summernote('code', detail.content);
 			if (thumbnail) {
 				$('#updateThumbnail').empty().append('<img style="width:35px;height:35px;" src="' + url + '"/>&nbsp;');
-				$('#updateThumbnail').find('img').after('<a class="delete_thumbnail thumbnail-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');;
+				$('#updateThumbnail').find('img').after('<a class="delete_thumbnail thumbnail-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
 				$('#updateThumbnailFile').hide();
 				
 				// 미리보기 썸네일 삭제

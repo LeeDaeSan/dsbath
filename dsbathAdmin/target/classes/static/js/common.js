@@ -184,7 +184,7 @@ var common = {
 	},
 	
 	// 페이징
-	paging : function (page, limit, pageLimit, totalCount, callback) {
+	paging : function (page, limit, pageLimit, totalCount, callback, pagingTag) {
 		
 		var firstPage 	= 1;														// 맨 처음 페이지 번호
 		var lastPage 	= Math.ceil(totalCount / limit); 							// 맨 마지막 페이지 번호
@@ -231,7 +231,8 @@ var common = {
 			html += '</li>';
 
 		// 페이징 append
-		$('#pagination').empty().append(html);
+		var pagination = pagingTag ? pagingTag : $('#pagination'); 
+		pagination.empty().append(html);
 		
 		// first page click event
 		$('.first_button').unbind('click').click(function (e) {

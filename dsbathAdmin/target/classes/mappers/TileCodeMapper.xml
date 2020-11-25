@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dsbath.admin.model.mapper.TileCodeMapper">
 
+
 <!--============== 타일 코드 목록 START ==============-->
 	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="tileCode">
 		SELECT
@@ -94,6 +95,23 @@
 		 WHERE TileCodeIdx = #{tileCodeIdx} 
 	</update>
 <!--============== 타일 코드 수정 END ==============-->
+
+
+<!--============== 타일 코드 목록 (욕실디자인 코드검색) START ==============-->
+	<select id="selectOfBathDesign" parameterType="tileCode" resultType="tileCode">
+		SELECT
+			TileCodeIdx,
+			Image,
+			TileName,
+			TileCode,
+			CreateDate,
+			UpdateDate
+			
+		  FROM TileCode
+		  
+		 ORDER BY TileName ASC
+	</select>
+<!--============== 타일 코드 목록 (욕실디자인 코드검색) END ==============-->
 
 
 <!--============== 타일 코드 삭제 START ==============-->

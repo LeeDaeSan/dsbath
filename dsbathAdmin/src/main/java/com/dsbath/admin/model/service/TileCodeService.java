@@ -1,5 +1,6 @@
 package com.dsbath.admin.model.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.dsbath.admin.model.TileCode;
@@ -28,4 +29,12 @@ public interface TileCodeService {
 	 * @return
 	 */
 	public Map<String, Object> merge(TileCode tileCode, String type);
+	
+	/**
+	 * 타일 코드 목록 (욕실디자인 코드검색)
+	 * 
+	 * @param tileCode
+	 * @return
+	 */
+	public Map<String, Object> selectOfBathDesign(TileCode tileCode);
 }

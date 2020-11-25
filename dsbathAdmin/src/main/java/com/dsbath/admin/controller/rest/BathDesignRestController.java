@@ -39,7 +39,19 @@ public class BathDesignRestController {
 	}
 	
 	/**
+	 * 욕실디자인 상세
+	 * 
+	 * @param bathDesign
+	 * @return
+	 */
+	@PostMapping("/detail")
+	public Map<String, Object> detail(BathDesign bathDesign) {
+		return bathDesignService.detail(bathDesign);
+	}
+	
+	/**
 	 * 욕실디자인 등록, 수정, 삭제
+	 * 
 	 * @param bathDesign
 	 * @param type
 	 * @return

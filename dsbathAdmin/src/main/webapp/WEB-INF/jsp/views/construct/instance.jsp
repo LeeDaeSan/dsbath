@@ -1,20 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<style>
-#insertThumbnail, #updateThumbnail {
-	width : 50px;
-}
-.thumbnail-close {
-	position	: absolute;
-    margin		: 0px;
-    margin-top	: -5px;
-    margin-left	: 2px;
-    color		: #f30000 !important;
-    font-size	: 15px;
-}
-.thumbnail-close:hover {
-	opacity		: 0.6;
-}
-</style>
 <!-- construct instance js -->
 <script src="/js/construct/instance.js" type="text/javascript"></script>
 

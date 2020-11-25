@@ -365,7 +365,7 @@ function mergeAdminFunc (type, idx) {
 				
 				// 실패
 				} else {
-					common.alert('dang', '관리자 정보 ' + mergeText + '을 실패하였습니다.');
+					common.alert('dang', '관리자 정보 ' + mergeText + '을(를) 실패하였습니다.');
 				}
 				
 			// 통신 에러

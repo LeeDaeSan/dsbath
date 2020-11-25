@@ -56,4 +56,12 @@ public interface TileCodeMapper {
 	 * @return
 	 */
 	public Integer delete(TileCode tileCode);
+	
+	/**
+	 * 타일 코드 목록 (욕실디자인 코드검색)
+	 * 
+	 * @param tileCode
+	 * @return
+	 */
+	public List<TileCode> selectOfBathDesign(TileCode tileCode);
 }

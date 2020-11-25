@@ -18,10 +18,15 @@
 		</ul>
 	</div>
 	<div class="main-left-bottom">
-		<!-- 
-		<img src="/images/naver-smartstore.png"/>
-		<img src="/images/naver-blog.png"/>
-		<img src="/images/instargram.png"/> 
-		-->
+		<a href="http://smartstore.naver.com/qurwldiycjsrnr" target="_blank">
+			<img src="/images/naver-smartstore.png"/>
+		</a>
+		<a href="http://blog.naver.com/designselfcozy" target="_blank">
+			<img src="/images/naver-blog.png"/>
+		</a>
+		<a href="https://www.instagram.com/ds_company_self" target="_blank">
+			<img src="/images/instargram.png"/> 
+		</a>
 	</div>
 </div>
+

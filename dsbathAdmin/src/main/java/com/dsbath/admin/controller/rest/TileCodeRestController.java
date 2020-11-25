@@ -49,4 +49,15 @@ public class TileCodeRestController {
 	public Map<String, Object> merge (TileCode tileCode, @RequestParam(value = "type") String type) {
 		return tileCodeService.merge(tileCode, type);
 	}
+	
+	/**
+	 * 타일 코드 목록 (욕실디자인 코드검색)
+	 * 
+	 * @param tileCode
+	 * @return
+	 */
+	@PostMapping("/selectOfBathDesign")
+	public Map<String, Object> selectOfBathDesign (TileCode tileCode) {
+		return tileCodeService.selectOfBathDesign(tileCode);
+	}
 }

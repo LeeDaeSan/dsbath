@@ -174,3 +174,65 @@
 .detail-tr {
 	cursor : pointer;
 }
+
+#insertThumbnail, #updateThumbnail {
+	width : 50px;
+}
+.thumbnail-close {
+	position	: absolute;
+    margin		: 0px;
+    margin-top	: -5px;
+    margin-left	: 2px;
+    color		: #f30000 !important;
+    font-size	: 15px;
+}
+.thumbnail-close:hover {
+	opacity		: 0.6;
+}
+
+.modal-body-overflow {
+	overflow 	: auto;
+	height		: 300px;
+}
+
+.image-xs {
+	border-radius 	: 10px;
+	width			: 35px;
+	height			: 35px;
+}
+.image-sm {
+	border-radius 	: 10px;
+	width			: 50px;
+	height			: 50px;
+}
+.image-lg {
+	border-radius 	: 10px;
+	width			: 100px;
+	height			: 100px;
+}
+
+.tile-code-delete {
+	opacity			: 0.6;
+}
+.tile-code-close {
+	position		: relative;
+    color			: #f30000 !important;
+    right			: 15px;
+    bottom			: 40px
+}
+.tile-code-close .fa-close {
+	font-size 		: 25px;
+}
+.code_detail_selected img {
+	position		: relative;
+	opacity			: 0.5;
+}
+.code_detail_selected .img-check {
+	position		: relative;
+	bottom			: 100px;
+	height			: 0;
+}
+.code_detail_selected .img-check .fa-check {
+	font-size		: 60px;
+	color			: #424242;
+}

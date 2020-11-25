@@ -6,16 +6,60 @@
 	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultMap="bathDesignList">
 		SELECT
 			BD.BathDesignIdx,
-			BD.AdminIdx,
 			BD.Title,
-			BD.Content
+			BD.Content,
+			BD.Thumbnail,
 			BD.Hit,
 			BD.DesignType,
 			BD.CreateDate,
-			BD.UpdateDate
+			BD.UpdateDate,
 			
-		  FROM BathDesign AS BD
+			A.AdminIdx,
+			A.AdminName
+			
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>	
 		
+		<!-- order -->
+		<choose>
+			<when test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY
+				
+				<choose>
+					<when test='"title".equals(sortType)'>
+						BD.Title
+					</when>
+					<when test='"adminName".equals(sortType)'>
+						A.AdminName
+					</when>
+					<when test='"createDate".equals(sortType)'>
+						BD.CreateDate
+					</when>
+					<when test='"updateDate".equals(sortType)'>
+						BD.UpdateDate
+					</when>
+					<when test='"hit".equals(sortType)'>
+						BD.Hit
+					</when>
+				</choose>
+				
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY CreateDate DESC
+			</otherwise>
+		</choose>
+		
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
 	</select>
 <!--============== 욕실디자인 목록 END ==============-->
 
@@ -23,17 +67,45 @@
 <!--============== 욕실디자인 목록 Total Count START ==============-->
 	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
 		SELECT COUNT(BD.BathDesignIdx)
-		  FROM BathDesign AS BD
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>	
 	</select>
 <!--============== 욕실디자인 목록 Total Count END ==============-->
 
 
-<!--============== 욕실디자인 목록 Result Map START ==============-->
-	<resultMap type="bathDesign" id="bathDesignList" autoMapping="true">
-		<id property="bathDesignIdx" column="BathDesignIdx"/>
-		
-	</resultMap>
-<!--============== 욕실디자인 목록 Result Map END ==============-->
+<!--============== 욕실디자인 상세 START ==============-->
+	<select id="detail" parameterType="bathDesign" resultMap="bathDesignDetail">
+		SELECT
+			BD.BathDesignIdx,
+			BD.Title,
+			BD.Content,
+			BD.Thumbnail,
+			BD.Hit,
+			BD.DesignType,
+			BD.CreateDate,
+			BD.UpdateDate,
+			
+			A.AdminIdx,
+			A.AdminName,
+			
+			TC.TileCodeIdx,
+			TC.TileName,
+			TC.Image
+			
+		  FROM BathDesign AS BD
+		  
+		  LEFT JOIN Admin AS A 
+		    ON A.AdminIdx = BD.AdminIdx
+		  
+		  LEFT JOIN TileCodeMapping AS TCM 
+		    ON TCM.BathDesignIdx = BD.BathDesignIdx
+		  
+		  LEFT JOIN TileCode AS TC 
+		    ON TC.TileCodeIdx = TCM.TileCodeIdx
+		  
+		 WHERE BD.BathDesignIdx = #{bathDesignIdx}
+	</select>
+<!--============== 욕실디자인 상세 END ==============-->
 
 
 <!--============== 욕실디자인 등록 START ==============-->
@@ -43,15 +115,21 @@
 			AdminIdx,
 			Title,
 			Content,
-			Hit,
+			Thumbnail,
+			Hit
 		)
 		VALUES
 		(
 			#{adminIdx},
 			#{title},
 			#{content},
+			#{thumbnail},
 			0
 		)
+		
+		<selectKey resultType="Integer" keyProperty="bathDesignIdx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
 	</insert>
 <!--============== 욕실디자인 등록 END ==============-->
 
@@ -61,7 +139,8 @@
 		UPDATE BathDesign
 		   SET
 		   		Title 		= #{title},
-		   		Content		= #{content}
+		   		Content		= #{content},
+		   		Thumbnail	= #{thumbnail}
 		   		
 		 WHERE BathDesignIdx = #{bathDesignIdx}
 	</update>
@@ -74,4 +153,39 @@
 		 WHERE BathDesignIdx = #{bathDesignIdx}
 	</delete>
 <!--============== 욕실디자인 삭제 END ==============-->
+
+
+<!--============== 욕실디자인 목록 Result Map START ==============-->
+	<resultMap type="bathDesign" id="bathDesignList" autoMapping="true">
+		<id property="bathDesignIdx" column="BathDesignIdx"/>
+		
+		<collection ofType="admin" property="admin" autoMapping="true">
+			<id property="adminIdx" column="AdminIdx"/>
+		</collection>
+	</resultMap>
+<!--============== 욕실디자인 목록 Result Map END ==============-->
+
+
+<!--============== 욕실디자인 상세 Result Map START ==============-->
+	<resultMap type="bathDesign" id="bathDesignDetail" autoMapping="true">
+		<id property="bathDesignIdx" column="BathDesignIdx"/>
+		
+		<collection ofType="admin" property="admin" autoMapping="true">
+			<id property="adminIdx" column="AdminIdx"/>
+		</collection>
+		
+		<collection ofType="tileCode" property="tileCodeList" autoMapping="true">
+			<id property="tileCodeIdx" column="TileCodeIdx"/>
+		</collection>
+	</resultMap>
+<!--============== 욕실디자인 상세 Result Map END ==============-->
+
+
+<!--============== 목록 조회 공통 조건 START ==============-->
+	<sql id="selectOfWhere">
+		FROM BathDesign AS BD
+		
+		LEFT JOIN Admin AS A ON A.AdminIdx = BD.AdminIdx
+	</sql>
+<!--============== 목록 조회 공통 조건 END ==============-->
 </mapper>

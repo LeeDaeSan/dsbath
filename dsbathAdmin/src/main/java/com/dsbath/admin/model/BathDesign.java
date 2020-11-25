@@ -1,6 +1,7 @@
 package com.dsbath.admin.model;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class BathDesign {
 	private Integer adminIdx;
 	private String title;
 	private String content;
+	private String thumbnail;
 	private Integer hit;
 	private String designType;
 	private Date createDate;
@@ -26,4 +28,8 @@ public class BathDesign {
 	private String updateDateStr;
 	
 	private Admin admin;
+	
+	private List<TileCode> tileCodeList;
+	
+	private List<TileCodeMapping> tileCodeMappingList;
 }

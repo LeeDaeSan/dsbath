@@ -22,6 +22,14 @@ public interface BathDesignService {
 	public Map<String, Object> select(PagingDTO<BathDesign> pagingDTO);
 	
 	/**
+	 * 욕실디자인 상세
+	 * 
+	 * @param bathDesign
+	 * @return
+	 */
+	public Map<String, Object> detail(BathDesign bathDesign);
+	
+	/**
 	 * 욕실디자인 등록, 수정, 삭제
 	 * 
 	 * @param bathDesign

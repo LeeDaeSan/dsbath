@@ -90,36 +90,36 @@ function selectCodeFunc (p) {
 			var sRow = eRow - limit + 1;
 				eRow = eRow > totalCount ? totalCount : eRow;
 				
-				// total count
-				$('#totalCount').text(totalCount);
-				// 현재 페이지 건수
-				$('#nowLimit').text(sRow + '-' + eRow);
+			// total count
+			$('#totalCount').text(totalCount);
+			// 현재 페이지 건수
+			$('#nowLimit').text(sRow + '-' + eRow);
+			
+			for (var i = 0; i < listLength; i++) {
+				var thisObj = list[i];
 				
-				for (var i = 0; i < listLength; i++) {
-					var thisObj = list[i];
-					
-					html += '<tr class="code_detail detail-tr" idx="' + thisObj.tileCodeIdx + '">';
-					html += '	<td class="text-right">' + (sRow + i) + '</td>';
-					html += '	<td>' + thisObj.tileName + '</td>';
-					html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>'; 
-					html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.updateDate), '-') + '</td>'; 
-					html += '</tr>';
-				}
-				
-				//데이터가 없는 경우
-				if (listLength == 0) {
-					html += '<tr>';
-					html += '	<td colspan="5" class="text-center">데이터가 없습니다.</td>';
-					html += '</tr>';
-				}
-				
-				// 초기화 후 목록 추가
-				$('#codeTable').find('tbody').empty().append(html);
-				
-				// paging
-				common.paging(page, limit, 10, totalCount, selectCodeFunc);
-				
-				// 상세 팝업
+				html += '<tr class="code_detail detail-tr" idx="' + thisObj.tileCodeIdx + '">';
+				html += '	<td class="text-right">' + (sRow + i) + '</td>';
+				html += '	<td>' + thisObj.tileName + '</td>';
+				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>'; 
+				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.updateDate), '-') + '</td>'; 
+				html += '</tr>';
+			}
+			
+			//데이터가 없는 경우
+			if (listLength == 0) {
+				html += '<tr>';
+				html += '	<td colspan="5" class="text-center">데이터가 없습니다.</td>';
+				html += '</tr>';
+			}
+			
+			// 초기화 후 목록 추가
+			$('#codeTable').find('tbody').empty().append(html);
+			
+			// paging
+			common.paging(page, limit, 10, totalCount, selectCodeFunc);
+			
+			// 상세 팝업
 			
 		// 실패
 		} else {

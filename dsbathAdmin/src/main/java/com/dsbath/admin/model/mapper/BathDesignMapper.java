@@ -25,6 +25,14 @@ public interface BathDesignMapper {
 	public List<BathDesign> select(PagingDTO<BathDesign> pagingDTO);
 	
 	/**
+	 * 욕실디자인 상세
+	 * 
+	 * @param bathDesign
+	 * @return
+	 */
+	public BathDesign detail(BathDesign bathDesign);
+	
+	/**
 	 * 욕실디자인 목록 Total Count
 	 * 
 	 * @param pagingDTO
