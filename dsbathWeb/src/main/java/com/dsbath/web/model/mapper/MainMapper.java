@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.dsbath.web.model.ConstructEpilogue;
 import com.dsbath.web.model.ConstructInstance;
+import com.dsbath.web.model.Notice;
 
 /**
  * 메인 화면 Mapper
@@ -22,4 +24,19 @@ public interface MainMapper {
 	 * @return
 	 */
 	public List<ConstructInstance> selectOfConstructInstance(ConstructInstance constructInstance);
+	
+	/**
+	 * 공지사항 목록 조회
+	 * 
+	 * @param notice
+	 * @return
+	 */
+	public List<Notice> selectOfNotice();
+	
+	/**
+	 * 시공후기 목록 조회
+	 * 
+	 * @return
+	 */
+	public List<ConstructEpilogue> selectOfConstructEpilogue();
 }

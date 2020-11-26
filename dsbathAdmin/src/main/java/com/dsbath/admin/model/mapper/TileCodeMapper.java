@@ -34,6 +34,14 @@ public interface TileCodeMapper {
 	public Long selectOfTotalCount(PagingDTO<TileCode> pagingDTO);
 	
 	/**
+	 * 타일 코드 상세 
+	 * 
+	 * @param tileCode
+	 * @return
+	 */
+	public TileCode detail(TileCode tileCode);
+	
+	/**
 	 * 타일 코드 등록
 	 * 
 	 * @param tileCode

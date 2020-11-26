@@ -27,11 +27,15 @@ public class MainServiceImpl implements MainService {
 		try {
 			resultMap = ResponseUtil.successMap();
 			
-			resultMap.put("instanceList", mainMapper.selectOfConstructInstance(constructInstance));
+			// 시공사례 목록
+			resultMap.put("instanceList"	, mainMapper.selectOfConstructInstance(constructInstance));
+			// 공지사항 목록
+			resultMap.put("noticeList"		, mainMapper.selectOfNotice());
+			// 시공후기 목록
+			resultMap.put("epilogueList"	, mainMapper.selectOfConstructEpilogue());
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
-			e.printStackTrace();
 		}
 		
 		return resultMap;

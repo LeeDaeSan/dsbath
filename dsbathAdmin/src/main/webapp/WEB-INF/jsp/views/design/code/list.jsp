@@ -69,7 +69,7 @@
 <!-- Button form START -->
 <div class="row">
 	<div class="col-md-12 col-sm-12">
-		<button type="button" class="btn btn-sm btn-dark float-right" data-toggle="modal" data-target="#insertCodePopup">코드 등록</button>
+		<button type="button" class="btn btn-sm btn-dark float-right" id="insertPopupBtn">코드 등록</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchResetBtn">검색 초기화</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchBtn">검색</button>
 	</div>
@@ -113,27 +113,14 @@
 			
 			<div class="x_content content-body">
 				<div class="table-responsive">
-					<table class="table table-striped jambo_table bulk_action" id="codeTable">
+					<table class="table" id="codeTable">
 						<colgroup>
-							<col width="5%"/>
-							<col width="auto"/>
-							<col width="15%"/>
-							<col width="15%"/>
+							<col width="20%"/>
+							<col width="20%"/>
+							<col width="20%"/>
+							<col width="20%"/>
+							<col width="20%"/>
 						</colgroup>
-						<thead>
-							<tr class="heading">
-								<th class="column-title text-center">No.</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="tileName">
-									코드 명<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="createDate">
-									등록일<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="updateDate">
-									수정일<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-							</tr>
-						</thead>
 						<tbody>
 						</tbody>
 					</table>
@@ -151,53 +138,33 @@
 <!-- List form END -->
 
 
-<!-- 등록 팝업 START -->
-<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="insertCodePopup">
+<!-- 상세 팝업 START -->
+<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="detailCodePopup">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">코드 등록</h4>
+				<h4 class="modal-title" id="myModalLabel">코드 상세</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">×</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<table class="table">
+				<table class="table" id="detailCodeTable">
 					<colgroup>
 						<col width="15%"/>
 						<col width="30%"/>
 						<col width="auto"/>
-					</colgroup>
-					<tbody>
-						<tr>
-							<th>유형</th>
-							<td colspan="2">
-								<select id="insertCodeType" class="form-control form-control-cust">
-									<option value="til">타일</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th>이름</th>
-							<td colspan="2">
-								<input type="text" id="insertName" class="form-control form-control-cust"/>
-							</td>
-						</tr>
-						<tr>
-							<th>이미지</th>
-							<td colspan="2">
-								<input type="file" id="insertImageFile" class="image_file" fileType="insert"/>
-								<div id="insertImage"></div>
-							</td>
-						</tr>
-					</tbody>
+			 		</colgroup>
+					<tbody></tbody>
 				</table>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-sm btn-primary merge_btn" mergeType="I" id="insertBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
+				<button type="button" class="btn btn-sm btn-primary popup_btn" style="display:none;" id="changeBtn">수정</button>
+				<button type="button" class="btn btn-sm btn-primary popup_btn merge_btn" mergeType="I" id="insertBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-primary popup_btn merge_btn" style="display:none;" mergeType="U" id="updateBtn">저장</button>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- 등록 팝업 END -->
+<!-- 상세 팝업 END -->

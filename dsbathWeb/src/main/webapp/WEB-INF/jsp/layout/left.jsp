@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<div class="left-menu height_full">
+<div class="left-menu">
 	<img src="/images/logo.png" class="left-logo"/>
 	<div class="main-left-menu">
 		<ul>

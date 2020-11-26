@@ -21,31 +21,24 @@
     <!------------------------------------- JS START ------------------------------------->
     	<!-- Bootstrap -->
 	    <script src="/lib/bootstrap/bootstrap.min.js"></script>
+	    <!-- common js -->
+	    <script src="/js/common.js"></script>
     <!------------------------------------- JS END ------------------------------------->
 	</head>
 	
 	<body>
-		<div class="row height_full container-custom">
-			<div class="row height_full">
 			
-				<div class="col-lg-2 no-padding height_full left-container">
-					<tiles:insertAttribute name="left"/>
-				</div>
-				
-				<div class="col-lg-10 no-padding">
-					<tiles:insertAttribute name="header"/>
-				</div>
+		<tiles:insertAttribute name="left"/>
 		
-				<div class="col-lg-8 no-padding">
-					<tiles:insertAttribute name="body"/>
-				</div>
-				
-				<div class="col-lg-2">
-					<tiles:insertAttribute name="right"/>
-				</div>	
-			
-				<tiles:insertAttribute name="footer"/>
-			</div>
+		<tiles:insertAttribute name="header"/>
+		
+		<div class="col-lg-12 layout-body">
+			<tiles:insertAttribute name="body"/>
 		</div>
+		
+		<tiles:insertAttribute name="right"/>
+
+	
+		<tiles:insertAttribute name="footer"/>
 	</body>
 </html>

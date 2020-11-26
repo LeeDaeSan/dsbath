@@ -3,7 +3,7 @@
 <mapper namespace="com.dsbath.web.model.mapper.MainMapper">
 
 <!--============== 시공사례 목록 START ==============-->
-	<select id="selectOfConstructInstance" resultType="constructInstance">
+	<select id="selectOfConstructInstance" parameterType="constructInstance" resultType="constructInstance">
 		SELECT
 			ConstructInstanceIdx,
 			Title,
@@ -19,5 +19,46 @@
 		LIMIT 10
 	</select>
 <!--============== 시공사례 목록 END ==============-->
+
+
+<!--============== 공지사항 목록 START ==============-->
+	<select id="selectOfNotice" resultType="notice">
+		SELECT
+			NoticeIdx,
+			Title,
+			Content,
+			Hit,
+			IsImport,
+			IsPopup,
+			IsComment,
+			PopupStartDate,
+			PopupEndDate,
+			CreateDate,
+			UpdateDate
+			
+		 FROM Notice
+		 
+		ORDER BY CreateDate DESC
+		 
+		LIMIT 8
+	</select>
+<!--============== 공지사항 목록 END ==============-->
+
+
+<!--============== 시공후기 목록 START ==============-->
+	<select id="selectOfConstructEpilogue" resultType="constructEpilogue">
+		SELECT
+			ConstructEpilogueIdx,
+			Title,
+			CreateDate
+			
+		  FROM ConstructEpilogue
+		  
+		 ORDER BY CreateDate DESC
+		  
+		 LIMIT 8
+	</select>
+<!--============== 시공후기 목록 END ==============-->
+
 
 </mapper>

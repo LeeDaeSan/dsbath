@@ -1,6 +1,5 @@
 package com.dsbath.admin.model.service;
 
-import java.util.List;
 import java.util.Map;
 
 import com.dsbath.admin.model.TileCode;
@@ -21,6 +20,14 @@ public interface TileCodeService {
 	 * @return
 	 */
 	public Map<String, Object> select(PagingDTO<TileCode> pagingDTO);
+	
+	/**
+	 * 타일 코드 상세
+	 * 
+	 * @param tileCode
+	 * @return
+	 */
+	public Map<String, Object> detail(TileCode tileCode);
 	
 	/**
 	 * 타일 코드 등록, 수정, 삭제

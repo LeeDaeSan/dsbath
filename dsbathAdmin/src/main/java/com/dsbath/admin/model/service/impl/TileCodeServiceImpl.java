@@ -41,6 +41,26 @@ public class TileCodeServiceImpl implements TileCodeService {
 	}
 	
 	/**
+	 * 타일 코드 상세
+	 * 
+	 */
+	@Override
+	public Map<String, Object> detail(TileCode tileCode) {
+		Map<String, Object> resultMap = null;
+		
+		try {
+			resultMap = ResponseUtil.successMap();
+			
+			resultMap.put("detail", tileCodeMapper.detail(tileCode));
+			
+		} catch (Exception e) {
+			resultMap = ResponseUtil.failureMap();
+		}
+		
+		return resultMap;
+	}
+	
+	/**
 	 * 타일 코드 등록, 수정, 삭제
 	 * 
 	 */

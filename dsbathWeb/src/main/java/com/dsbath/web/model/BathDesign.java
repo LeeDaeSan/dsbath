@@ -6,24 +6,30 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * 시공사례 정보 Table
+ * 욕실디자인 Table
  * 
  * @author idaesan
  *
  */
 @Data
-public class ConstructInstance {
+public class BathDesign {
 
-	private Integer constructInstanceIdx;
+	private Integer bathDesignIdx;
 	private Integer adminIdx;
 	private String title;
 	private String content;
-	private Integer hit;
 	private String thumbnail;
+	private Integer hit;
+	private String designType;
 	private Date createDate;
 	private Date updateDate;
 	
+	private String createDateStr;
+	private String updateDateStr;
+	
 	private Admin admin;
 	
-	private List<CommonFile> commonFileList;
+	private List<TileCode> tileCodeList;
+	
+	private List<TileCodeMapping> tileCodeMappingList;
 }

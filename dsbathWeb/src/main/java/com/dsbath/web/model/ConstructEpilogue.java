@@ -1,29 +1,29 @@
 package com.dsbath.web.model;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
 /**
- * 시공사례 정보 Table
+ * 시공후기 Table
  * 
  * @author idaesan
  *
  */
 @Data
-public class ConstructInstance {
+public class ConstructEpilogue {
 
-	private Integer constructInstanceIdx;
-	private Integer adminIdx;
+	private Integer constructEpilogueIdx;
+	private Integer memberIdx;
 	private String title;
 	private String content;
-	private Integer hit;
 	private String thumbnail;
+	private Integer hit;
 	private Date createDate;
 	private Date updateDate;
 	
-	private Admin admin;
+	private String createDateStr;
+	private String updateDateStr;
 	
-	private List<CommonFile> commonFileList;
+	private Member member;
 }

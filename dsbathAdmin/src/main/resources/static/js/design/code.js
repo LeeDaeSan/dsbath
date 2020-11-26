@@ -3,37 +3,14 @@ $(function () {
 	// 검색 이벤트 시작
 	common.search.start(selectCodeFunc);
 	
-	$('.image_file').change(function (e) {
-		var thisType = $(this).attr('fileType');
+	// 코드 등록 button event
+	$('#insertPopupBtn').unbind('click').click(function (e) {
+		e.preventDefault();
 		
-		var formTag 	= thisType == 'insert' ? $('#insertCodePopup') : $('#detailCodePopup');
-		var files		= e.target.files;
-		var fileLength	= files.length;
-		
-		var thisImage 		= $('#' + thisType + 'Image');
-		var thisImageFile 	= $('#' + thisType + 'ImageFile');
-		
-		for (var i = 0; i < fileLength; i++) {
-			var fileObj = common.file.save(files[i], 'code', thisImage, '50');
-			
-			thisImage.find('img').after('<a class="delete_image image-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
-			formTag.append('<input type="hidden" class="' + thisType + '_file" value="path=' + fileObj.filePath + '&fileName=' + fileObj.fileName + '"/>');
-		}
-		
-		thisImageFile.hide();
-		
-		// 미리보기 이미지 삭제
-		$('.detail_image').unbind('click').click(function (e) {
-			e.preventDefault();
-			
-			// 이미지 영역 비우기
-			thisImage.empty();
-			// input file init
-			thisImageFile.show();
-			thisImageFile.val('');
-			thisImageFile.replaceWith( thisImageFile.clone(true) );
-		});
-		
+		// popup body append
+		addPopupBody('insert');
+		// modal show
+		$('#detailCodePopup').modal('show');
 	});
 	
 	// 등록, 수정, 삭제 button click event
@@ -45,6 +22,12 @@ $(function () {
 	
 });
 
+/**
+ * 코드 목록 조회 Function
+ * 
+ * @param p
+ * @returns
+ */
 function selectCodeFunc (p) {
 	
 	// 페이징 변수
@@ -97,13 +80,34 @@ function selectCodeFunc (p) {
 			
 			for (var i = 0; i < listLength; i++) {
 				var thisObj = list[i];
+				var image	= thisObj.image;
+				var url		= '/file/rest/download?' + image;
 				
-				html += '<tr class="code_detail detail-tr" idx="' + thisObj.tileCodeIdx + '">';
-				html += '	<td class="text-right">' + (sRow + i) + '</td>';
-				html += '	<td>' + thisObj.tileName + '</td>';
-				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>'; 
-				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.updateDate), '-') + '</td>'; 
-				html += '</tr>';
+				// 최초 tr
+				if (i == 0) {
+					html += '<tr>';
+				}
+				// td 5 column 일 때 tr 추가
+				if (i % 5 == 0) {
+					html += '</tr>';
+					html += '<tr>';
+				}
+				
+				html += '<td class="code_detail detail-tr text-center" idx="' + thisObj.tileCodeIdx + '">';
+				html += 	(image ? '<img class="image-lg" src="' + url + '"/>' : '');
+				html += '	<br>';
+				html += '	<div>' + thisObj.tileName + '</div>';
+				html += '</td>';
+				
+				// 마지막 tr
+				if ((i + 1) == listLength) {
+					if (i < 5) {
+						for (var j = 0; j < (listLength - i); j++) {
+							html += '<td></td>';
+						}
+					}
+					html += '</tr>';
+				}
 			}
 			
 			//데이터가 없는 경우
@@ -120,6 +124,16 @@ function selectCodeFunc (p) {
 			common.paging(page, limit, 10, totalCount, selectCodeFunc);
 			
 			// 상세 팝업
+			$('.code_detail').unbind('click').click(function (e) {
+				e.preventDefault();
+				
+				// popup body append
+				addPopupBody('detail');
+				// modal show
+				$('#detailCodePopup').modal('show');
+				// 상세 정보 조회
+				detailCodeFunc('tile', $(this).attr('idx'));
+			});
 			
 		// 실패
 		} else {
@@ -133,7 +147,50 @@ function selectCodeFunc (p) {
 }
 
 /**
- * 코드 등록, 수정, 삭제
+ * 코드 상세 Function
+ * 
+ * @param type
+ * @param idx
+ * @returns
+ */
+function detailCodeFunc (type, idx) {
+	
+	//---> 통신 요청
+	$.ajax({
+		url 		: '/tileCode/rest/detail',
+		method		: 'POST',
+		dataType	: 'JSON',
+		data		: {
+			tileCodeIdx : idx,
+		}
+	
+	//---> 통신 완료
+	}).done(function (result) {
+	
+		// 성공
+		if (result.status) {
+			
+			var detail 	= result.detail;
+			var image 	= detail.image;
+			
+			// 상세 정보 append
+			$('#detailCodeType').text('타일');
+			$('#detailName').text(detail.tileName);
+			$('#detailImage').empty().append((image ? '<img class="image-lg" src="/file/rest/download?' + image + '"/>' : ''));
+				
+		// 실패
+		} else {
+			common.alert('dang', '코드 상세 정보 조회를 실패하였습니다.');
+		}
+		
+	//---> 통신 에러
+	}).fail(function () {
+		common.alert('dang', '코드 상세 정보 조회 요청중 에러가 발생하였습니다.');
+	});
+}
+
+/**
+ * 코드 등록, 수정, 삭제 Function
  * 
  * @param type
  * @param idx
@@ -160,31 +217,170 @@ function mergeCodeFunc (type, idx) {
 		tagType 	= 'delete';
 	}
 	
-	//---> 통신 요청
-	$.ajax({
-		url			: '/tileCode/rest/merge',
-		method		: 'POST',
-		dataType	: 'JSON',
-		data		: {
-			type		: type,
-			tileName	: $('#' + tagType + 'Name').val(),
-			image		: $('.' + tagType + '_file').val(),
+	// confirm
+	if (confirm('해당 코드 정보를 ' + mergeText + '하시겠습니까?')) {
+		
+		// parameter
+		var param = {
+			type : type	
+		};
+		
+		if (type == 'U' || type == 'D') {
+			param['tileCodeIdx'] = idx;
 		}
+		
+		if (type == 'I' || type == 'U') {
+			param['tileName'] 	= $('#' + tagType + 'Name').val();
+			param['image']		= $('.' + tagType + '_file').val();
+		}
+		
+		//---> 통신 요청
+		$.ajax({
+			url			: '/tileCode/rest/merge',
+			method		: 'POST',
+			dataType	: 'JSON',
+			async		: false,
+			data		: param,
+		
+		//---> 통신 완료
+		}).done(function (result) {
+			
+			// 성공
+			if (result.status) {
+				
+				if (result.status) {
+					
+					// alert
+					common.alert('succ', '코드 정보 ' + mergeText + '을(를) 완료하였습니다.');
+					
+					// 팝업 닫기
+					$('#insertCodePopup .close').click();
+					
+					// 목록 재조회
+					selectCodeFunc();
+					
+				}
+				
+			// 실패
+			} else {
+				common.alert('dang', '코드 정보 ' + mergeType + ' 요청중 에러가 발생하였습니다.');
+			}
+			
+		//---> 통신 에러
+		}).fail(function (result) {
+			common.alert('dang', '코드 정보 ' + mergeType + ' 요청중 서버 통신 에러가 발생하였습니다.');
+		});
+	}
 	
-	//---> 통신 완료
-	}).done(function (result) {
+}
+
+/**
+ * modal 팝업 body 생성 Function
+ * 
+ * @param type
+ * @returns
+ */
+function addPopupBody (type) {
+	
+	var html 	= '';
+	var title 	= '';
+	
+	$('.popup_btn').hide();
+	
+	if (type == 'detail') {
+		title = '상세';
+		$('#changeBtn').show();
 		
-		// 성공
-		if (result.status) {
+	} else if (type == 'insert') {
+		title = '등록';
+		$('#insertBtn').show();
+		
+	} else if (type == 'update') {
+		title = '수정';
+		$('#updateBtn').show();
+	}
+	
+	html += '<tr>';
+	html += '	<th>유형</th>';
+	html += '	<td colspan="2">';
+	
+	// 상세
+	if (type == 'detail') {
+		html += '	<span id="detailCodeType"></span>';
+	// 등록
+	} else if (type == 'insert') {
+		html += '	<select id="insertCodeType">';
+		html += '		<option value="tile">타일</option>';
+		html += '	</select>';
+	}
+	
+	html += '	</td>';
+	html += '</tr>';
+	html += '<tr>';
+	html += '	<th>이륨</th>';
+	html += '	<td colspan="2">';
+	
+	// 상세
+	if (type == 'detail') {
+		html += '	<span id="detailName"></span>';
+	// 등록
+	} else if (type == 'insert') {
+		html += '	<input type="text" id="insertName" class="form-control form-control-cust"/>';
+	}
+	
+	html += '	</td>';
+	html += '</tr>';
+	html += '<tr>';
+	html += '	<th>이미지</th>';
+	html += '	<td colspan="2">';
+	
+	// 등록
+	if (type == 'detail') {
+		html += '	<span id="detailImage"></span>';
+	// 수정
+	} else if (type == 'insert') {
+		html += '	<input type="file" id="insertImageFile" class="image_file" fileType="insert"/>';
+		html += '	<div id="insertImage"></div>';
+	}
+	
+	html += '	</td>';
+	html += '</tr>';
+	
+	// title
+	$('#detailCodePopup').find('#myModalLabel').text('코드 ' + title);
+	// 초기화 & 생성
+	$('#detailCodeTable').find('tbody').empty().append(html);
+	
+	// 이미지 변경 event
+	$('.image_file').change(function (e) {
+		var thisType = $(this).attr('fileType');
+		
+		var formTag 	= thisType == 'insert' ? $('#insertCodePopup') : $('#detailCodePopup');
+		var files		= e.target.files;
+		var fileLength	= files.length;
+		
+		var thisImage 		= $('#' + thisType + 'Image');
+		var thisImageFile 	= $('#' + thisType + 'ImageFile');
+		
+		for (var i = 0; i < fileLength; i++) {
+			var fileObj = common.file.save(files[i], 'code', thisImage, '50');
 			
-			console.log(result);
-			
-		// 실패
-		} else {
-			
+			thisImage.find('img').after('<a class="delete_image image-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
+			formTag.append('<input type="hidden" class="' + thisType + '_file" value="path=' + fileObj.filePath + '&fileName=' + fileObj.fileName + '"/>');
 		}
 		
-	//---> 통신 에러
-	}).fail(function (result) {
+		thisImageFile.hide();
+		
+		// 미리보기 이미지 삭제
+		$('.delete_image').unbind('click').click(function (e) {
+			e.preventDefault();
+			
+			// 이미지 영역 비우기
+			thisImage.empty();
+			// input file init
+			thisImageFile.show();
+			thisImageFile.val('');
+			thisImageFile.replaceWith( thisImageFile.clone(true) );
+		});
 	});
 }

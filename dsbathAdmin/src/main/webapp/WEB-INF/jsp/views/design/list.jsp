@@ -1,12 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<style>
-.code_detail {
-}
-.code_detail_selected {
-	background : #eaeaea;
-}
-</style>
 
 <!-- admin main js -->
 <script src="/js/design/design.js" type="text/javascript"></script>

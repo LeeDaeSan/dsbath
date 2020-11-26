@@ -39,6 +39,17 @@ public class TileCodeRestController {
 	}
 	
 	/**
+	 * 타일 코드 상세
+	 * 
+	 * @param tileCode
+	 * @return
+	 */
+	@PostMapping("/detail")
+	public Map<String, Object> detail (TileCode tileCode) {
+		return tileCodeService.detail(tileCode);
+	}
+	
+	/**
 	 * 타일 코드 등록, 수정, 삭제
 	 * 
 	 * @param tileCode
