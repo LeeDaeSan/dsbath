@@ -19,4 +19,10 @@
 <!--============== 타일 코드 맵핑 등록 END ==============-->
 
 
+<!--============== 타일 코드 맵핑 삭제 START ==============-->
+	<delete id="delete" parameterType="tileCodeMapping">
+		DELETE FROM TileCodeMapping
+		 WHERE BathDesignIdx = #{bathDesignIdx}
+	</delete>
+<!--============== 타일 코드 맵핑 삭제 END ==============-->
 </mapper>

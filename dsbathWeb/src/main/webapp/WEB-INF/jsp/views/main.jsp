@@ -44,3 +44,20 @@
 		</div>
 	</div>
 </div>
+
+<div class="row bath-design-row">
+	<div class="bath-design-title">
+		욕실 디자인
+	</div>
+	<div class="bath-design-list">
+		<table class="bath-design-table" id="bathDesignTable">
+			<colgroup>
+				<col width="33%"/>
+				<col width="33%"/>
+				<col width="33%"/>
+			</colgroup>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>

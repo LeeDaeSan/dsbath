@@ -33,6 +33,8 @@ public class MainServiceImpl implements MainService {
 			resultMap.put("noticeList"		, mainMapper.selectOfNotice());
 			// 시공후기 목록
 			resultMap.put("epilogueList"	, mainMapper.selectOfConstructEpilogue());
+			// 욕실 디자인 목록
+			resultMap.put("bathDesignList" 	, mainMapper.selectOfBathDesign());
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();

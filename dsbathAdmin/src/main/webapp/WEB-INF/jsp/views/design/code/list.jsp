@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
 #insertImage, #updateImage {
-	width : 50px;
+	width : 130px;
 }
 .image-close {
 	position	: absolute;
@@ -13,6 +13,9 @@
 }
 .image-close:hover {
 	opacity		: 0.6;
+}
+.table td, .table th {
+	border-top	: 0;
 }
 </style>
 
@@ -105,7 +108,7 @@
 						<option value="10">10</option>
 						<option value="20">20</option>
 						<option value="30">30</option>
-						<option value="50">50</option>
+						<option value="50" selected>50</option>
 						<option value="100">100</option>
 					</select>
 				</div>
@@ -162,6 +165,7 @@
 				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
 				<button type="button" class="btn btn-sm btn-primary popup_btn" style="display:none;" id="changeBtn">수정</button>
 				<button type="button" class="btn btn-sm btn-primary popup_btn merge_btn" mergeType="I" id="insertBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-danger popup_btn merge_btn" style="display:none;" mergeType="D" id="deleteBtn">삭제</button>
 				<button type="button" class="btn btn-sm btn-primary popup_btn merge_btn" style="display:none;" mergeType="U" id="updateBtn">저장</button>
 			</div>
 		</div>

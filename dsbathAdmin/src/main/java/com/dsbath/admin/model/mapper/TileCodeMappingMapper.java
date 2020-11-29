@@ -20,4 +20,12 @@ public interface TileCodeMappingMapper {
 	 * @return
 	 */
 	public Integer insert(TileCodeMapping tileCodeMapping);
+	
+	/**
+	 * 타일 코드 맵핑 삭제
+	 * 
+	 * @param tileCodeMapping
+	 * @return
+	 */
+	public Integer delete(TileCodeMapping tileCodeMapping);
 }

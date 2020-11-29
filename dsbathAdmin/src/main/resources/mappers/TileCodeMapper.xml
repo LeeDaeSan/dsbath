@@ -105,8 +105,7 @@
 		   SET
 		   
 		   	Image 		= #{image},
-		   	tileName	= #{tileName},
-		   	tileCode	= #{tileCode}
+		   	tileName	= #{tileName}
 		   	
 		 WHERE TileCodeIdx = #{tileCodeIdx} 
 	</update>

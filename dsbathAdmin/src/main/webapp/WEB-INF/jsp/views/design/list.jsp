@@ -65,7 +65,7 @@
 <!-- Button form START -->
 <div class="row">
 	<div class="col-md-12 col-sm-12">
-		<button type="button" class="btn btn-sm btn-dark float-right" data-toggle="modal" data-target="#insertBathDesignPopup">디자인 등록</button>
+		<button type="button" class="btn btn-sm btn-dark float-right" id="insertPopupBtn">디자인 등록</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchResetBtn">검색 초기화</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchBtn">검색</button>
 	</div>
@@ -166,7 +166,7 @@
 				</button>
 			</div>
 			<div class="modal-body modal-body-overflow">
-				<table class="table">
+				<table class="table" id="detailBathDesignTable">
 					<colgroup>
 						<col width="10%"/>
 						<col width="40%"/>
@@ -174,41 +174,15 @@
 						<col width="40%"/>
 					</colgroup>
 					<tbody>
-						<tr>
-							<th>제목</th>
-							<td colspan="3">
-								<span id="detailTitle" class="detail_tags"></span>
-								<input type="text" id="updateTitle" class="form-control form-control-cust update_tags" style="display:none;"/>
-							</td>
-						</tr>
-						<tr>
-							<th>작성자</th>
-							<td>
-								<span id="detailAdminName"></span>
-								<span id="detailCreateDate" class="float-right"></span>
-							</td>
-						</tr>
-						<tr>
-							<th>내용</th>
-							<td colspan="3">
-								<span id="detailContent" class="detail_tags"></span>
-								<div id="updateContent" class="update_tags" style="display:none;"></div>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								타일 디자인
-								<br>
-								<button type="button" mergeType="U" style="display:none;" class="btn btn-sm btn-secondary add_tile_code_btn update_tags" data-toggle="modal" data-target="#addCodePopup">추가하기</button>
-							</th>
-							<td id="detailTileCode"></td>
-						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
-				<button type="button" class="btn btn-sm btn-primary" id="updatePopupBtn">수정</button>
+				<button type="button" class="btn btn-sm btn-primary popup_btn" style="display:none;" id="changeBtn">수정</button>
+				<button type="button" class="btn btn-sm btn-primary popup_btn merge_btn" mergeType="I" id="insertBtn">등록</button>
+				<button type="button" class="btn btn-sm btn-danger popup_btn merge_btn" style="display:none;" mergeType="D" id="deleteBtn">삭제</button>
+				<button type="button" class="btn btn-sm btn-primary popup_btn merge_btn" style="display:none;" mergeType="U" id="updateBtn">저장</button>
 			</div>
 		</div>
 	</div>
@@ -303,7 +277,7 @@
 					</tr>
 				</table>
 				
-				<table class="table table-striped" id="codeTable">
+				<table class="table" id="codeTable">
 					<colgroup>
 						<col width="33%"/>
 						<col width="33%"/>

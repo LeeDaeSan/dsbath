@@ -4,7 +4,9 @@
 	<img src="/images/logo.png" class="left-logo"/>
 	<div class="main-left-menu">
 		<ul>
-			<li>브랜드스토리</li>
+			<li>
+				<a href="/views/brandstory/list">브랜드스토리</a>
+			</li>
 			<li>공지사항</li>
 			<li>욕실 디자인</li>
 			<li>사업자용 자재 카탈로그</li>

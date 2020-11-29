@@ -176,8 +176,44 @@ function detailCodeFunc (type, idx) {
 			// 상세 정보 append
 			$('#detailCodeType').text('타일');
 			$('#detailName').text(detail.tileName);
-			$('#detailImage').empty().append((image ? '<img class="image-lg" src="/file/rest/download?' + image + '"/>' : ''));
+			$('#detailImage').empty().append((image ? '<img class="image-200" src="/file/rest/download?' + image + '"/>' : ''));
+			
+			// 상세팝업 -> 수정팝업으로 변경 button event
+			$('#changeBtn').unbind('click').click(function (e) {
+				e.preventDefault();
 				
+				// popup body append
+				addPopupBody('update');
+				
+				$('#updateBtn, #deleteBtn').attr('idx', detail.tileCodeIdx);
+				$('#updateCodeType').val('tile');
+				$('#updateName').val(detail.tileName);
+				
+				var formTag 		= $('#detailCodePopup');
+				var updateImage		= $('#updateImage');
+				var updateImageFile = $('#updateImageFile');
+				
+				updateImage.append('<p><img class="image-lg" src="/file/rest/download?' + image + '"/></p>');
+				
+				updateImage.find('img').after('<a class="delete_image image-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
+				formTag.find('.update_file').remove();
+				formTag.append('<input type="hidden" class="update_file" value="' + image + '"/>')
+				
+				updateImageFile.hide();
+				
+				// 미리보기 이미지 삭제
+				$('.delete_image').unbind('click').click(function (e) {
+					e.preventDefault();
+					
+					// 이미지 영역 비우기
+					updateImage.empty();
+					// input file init
+					updateImageFile.show();
+					updateImageFile.val('');
+					updateImageFile.replaceWith( updateImageFile.clone(true) );
+				});
+			});
+			
 		// 실패
 		} else {
 			common.alert('dang', '코드 상세 정보 조회를 실패하였습니다.');
@@ -254,7 +290,7 @@ function mergeCodeFunc (type, idx) {
 					common.alert('succ', '코드 정보 ' + mergeText + '을(를) 완료하였습니다.');
 					
 					// 팝업 닫기
-					$('#insertCodePopup .close').click();
+					$('#detailCodePopup .close').click();
 					
 					// 목록 재조회
 					selectCodeFunc();
@@ -297,7 +333,7 @@ function addPopupBody (type) {
 		
 	} else if (type == 'update') {
 		title = '수정';
-		$('#updateBtn').show();
+		$('#updateBtn, #deleteBtn').show();
 	}
 	
 	html += '<tr>';
@@ -317,15 +353,15 @@ function addPopupBody (type) {
 	html += '	</td>';
 	html += '</tr>';
 	html += '<tr>';
-	html += '	<th>이륨</th>';
+	html += '	<th>이름</th>';
 	html += '	<td colspan="2">';
 	
 	// 상세
 	if (type == 'detail') {
 		html += '	<span id="detailName"></span>';
-	// 등록
-	} else if (type == 'insert') {
-		html += '	<input type="text" id="insertName" class="form-control form-control-cust"/>';
+	// 등록 or 수정
+	} else if (type == 'insert' || type == 'update') {
+		html += '	<input type="text" id="' + type + 'Name" class="form-control form-control-cust"/>';
 	}
 	
 	html += '	</td>';
@@ -334,13 +370,13 @@ function addPopupBody (type) {
 	html += '	<th>이미지</th>';
 	html += '	<td colspan="2">';
 	
-	// 등록
+	// 상세
 	if (type == 'detail') {
 		html += '	<span id="detailImage"></span>';
-	// 수정
-	} else if (type == 'insert') {
-		html += '	<input type="file" id="insertImageFile" class="image_file" fileType="insert"/>';
-		html += '	<div id="insertImage"></div>';
+	// 등록 or 수정
+	} else if (type == 'insert' || type == 'update') {
+		html += '	<input type="file" id="' + type + 'ImageFile" class="image_file" fileType="' + type + '" isChange="N"/>';
+		html += '	<div id="' + type + 'Image"></div>';
 	}
 	
 	html += '	</td>';
@@ -355,7 +391,7 @@ function addPopupBody (type) {
 	$('.image_file').change(function (e) {
 		var thisType = $(this).attr('fileType');
 		
-		var formTag 	= thisType == 'insert' ? $('#insertCodePopup') : $('#detailCodePopup');
+		var formTag 	= $('#detailCodePopup');
 		var files		= e.target.files;
 		var fileLength	= files.length;
 		
@@ -363,9 +399,10 @@ function addPopupBody (type) {
 		var thisImageFile 	= $('#' + thisType + 'ImageFile');
 		
 		for (var i = 0; i < fileLength; i++) {
-			var fileObj = common.file.save(files[i], 'code', thisImage, '50');
+			var fileObj = common.file.save(files[i], 'code', thisImage, '100');
 			
 			thisImage.find('img').after('<a class="delete_image image-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
+			formTag.find('.update_file').remove();
 			formTag.append('<input type="hidden" class="' + thisType + '_file" value="path=' + fileObj.filePath + '&fileName=' + fileObj.fileName + '"/>');
 		}
 		

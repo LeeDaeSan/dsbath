@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.dsbath.web.model.BathDesign;
 import com.dsbath.web.model.ConstructEpilogue;
 import com.dsbath.web.model.ConstructInstance;
 import com.dsbath.web.model.Notice;
@@ -39,4 +40,11 @@ public interface MainMapper {
 	 * @return
 	 */
 	public List<ConstructEpilogue> selectOfConstructEpilogue();
+	
+	/**
+	 * 욕실디자인 목록 조회
+	 * 
+	 * @return
+	 */
+	public List<BathDesign> selectOfBathDesign();
 }

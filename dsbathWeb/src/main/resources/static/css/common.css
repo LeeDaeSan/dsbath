@@ -1,4 +1,6 @@
-
+a {
+	color			: #232323 !important;
+}
 .text-right {
 	text-align 		: right;
 }
@@ -10,6 +12,15 @@
 	text-overflow	: ellipsis; 
 	white-space		: nowrap;
 }
+.footer-company {
+	float			: left;
+	width			: 100%;
+	text-align		: center;
+    margin-top		: 30px;
+    margin-bottom	: 40px;
+    color			: #adadad;
+    font-size		: 14px;
+}
 /* 
 	남색 : #18283d
 	노랑 : #f2cc3e
@@ -18,7 +29,6 @@
 	padding-left	: 190px; 
 	padding-right	: 290px;
 	padding-top		: 90px;
-	height			: 1500px;
 }
 .left-container {
 	width			: 200px;
@@ -226,4 +236,60 @@
 .no-data {
 	padding-top		: 100px;
 	font-size		: 14px;
+}
+
+.bath-design-row {
+	padding 		: 15px;
+}
+.bath-design-title {
+    width			: 80px;
+    font-size		: 17px;
+    margin			: 0 auto;
+    border-bottom	: 2px solid #f2cc3e;
+}
+.bath-design-img-div {
+	width			: 100%;
+    height			: 700px;
+    border			: 1px solid #f2cc3e;
+    border-radius	: 5px;
+    padding			: 10px;
+}
+.bath-design-list .bath-design-table {
+	width			: 100%;
+    table-layout	: fixed;
+}
+#bathDesignTable td {
+	text-align		: center;	
+}
+#bathDesignTable .bath-design-padding {
+	padding			: 8px;	
+}
+.bath-design-img-div img {
+	width			: 100%;	
+	height			: 90%;
+}
+.bath-design-img-div .bath-design-text {
+	margin-top		: 15px;
+    font-size		: 16px
+}
+.sub-body {
+	border			: 1px solid #f2cc3e;
+    width			: 100%;
+    margin			: 15px;
+    border-radius	: 5px;
+}
+
+.brandstory-body {
+	width			: 75%;
+	margin			: 0 auto;
+	margin-top		: 85px;
+}
+.brandstory-body .brandstory-logo, .brandstory-body .brandstory-picture {
+	width			: 100%;
+}
+.brandstory-body .brandstory-text {
+    font-size		: 16px;
+    font-weight		: bold;
+    margin-top		: 10px;
+    margin-bottom 	: 25px;
 }

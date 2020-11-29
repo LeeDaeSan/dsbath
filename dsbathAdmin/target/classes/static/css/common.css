@@ -192,7 +192,7 @@
 
 .modal-body-overflow {
 	overflow 	: auto;
-	/* height		: 300px; */
+	height		: 400px;
 }
 
 .image-xs {
@@ -210,7 +210,10 @@
 	width			: 100px;
 	height			: 100px;
 }
-
+.image-200 {
+	border-radius 	: 10px;
+	width			: 200px;
+}
 .tile-code-delete img {
 	opacity			: 0.6;
 }
@@ -230,7 +233,7 @@
 }
 .code_detail_selected img {
 	position		: relative;
-	opacity			: 0.5 !important;
+	opacity			: 0.3 !important;
 }
 .code_detail_selected .img-check {
 	position		: relative;
@@ -239,5 +242,5 @@
 }
 .code_detail_selected .img-check .fa-check {
 	font-size		: 60px;
-	color			: #424242;
+	color			: #2d8448;
 }

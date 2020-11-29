@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.dsbath.admin.etc.constant.Constant;
 import com.dsbath.admin.etc.constant.UserConstant;
 import com.dsbath.admin.etc.util.ResponseUtil;
+import com.dsbath.admin.etc.util.StringUtil;
 import com.dsbath.admin.model.BathDesign;
 import com.dsbath.admin.model.TileCodeMapping;
 import com.dsbath.admin.model.dto.PagingDTO;
@@ -92,14 +93,30 @@ public class BathDesignServiceImpl implements BathDesignService {
 				resultCount = bathDesignMapper.insert(bathDesign);
 				
 				// -> 타일 코드 맵핑 등록
-				for (TileCodeMapping mapping : bathDesign.getTileCodeMappingList()) {
-					mapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
-					resultCount = tileCodeMappingMapper.insert(mapping);
+				if (StringUtil.isNotEmpty(bathDesign.getTileCodeMappingList())) {
+					for (TileCodeMapping mapping : bathDesign.getTileCodeMappingList()) {
+						mapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
+						resultCount = tileCodeMappingMapper.insert(mapping);
+					}
 				}
 				
 			// >> 수정
 			} else if (type.equals(Constant.MERGE_TYPE_UPDATE)) {
 				resultCount = bathDesignMapper.update(bathDesign);
+				
+				if (StringUtil.isNotEmpty(bathDesign.getTileCodeMappingList())) {
+					
+					// -> 이전 타일코드 맵핑 삭제
+					TileCodeMapping deleteMapping = new TileCodeMapping();
+					deleteMapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
+					resultCount = tileCodeMappingMapper.delete(deleteMapping);
+					
+					// -> 신규 타일코드 맵핑 추가
+					for (TileCodeMapping mapping : bathDesign.getTileCodeMappingList()) {
+						mapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
+						resultCount = tileCodeMappingMapper.insert(mapping);
+					}
+				}
 				
 			// >> 삭제
 			} else if (type.equals(Constant.MERGE_TYPE_DELETE)) {

@@ -44,7 +44,6 @@ function selectInstanceFunc () {
 			
 			for (var i = 0; i < nListLength; i++) {
 				var thisObj = nList[i];
-				console.log(thisObj.createDate);
 				html += '<tr class="add-data">';
 				html += '	<td class="over-text">▶&nbsp;' + thisObj.title + '</td>';
 				html += '	<td class="text-right">' + common.date.toStringMD(new Date(thisObj.createDate), '.') + '</td>';
@@ -67,7 +66,6 @@ function selectInstanceFunc () {
 			
 			for (var i = 0; i < eListLength; i++) {
 				var thisObj = eList[i];
-				console.log(thisObj.createDate);
 				html += '<tr class="add-data">';
 				html += '	<td class="over-text">▶&nbsp;' + thisObj.title + '</td>';
 				html += '	<td class="text-right">' + common.date.toStringMD(new Date(thisObj.createDate), '.') + '</td>';
@@ -80,7 +78,55 @@ function selectInstanceFunc () {
 				html += '<tr>';
 			}
 			$('.main_epilogue_table').find('tbody').empty().append(html);
-			//========== 시공후기 목록 END ==========//		
+		//========== 시공후기 목록 END ==========//		
+			
+			
+		//========== 욕실디자인 목록 START ==========//		
+				html 		= '';
+			var bList		= result.bathDesignList;
+			var bListLength	= bList.length;
+			
+			for (var i = 0; i < bListLength; i++) {
+				var thisObj = bList[i];
+				
+				var thumbnail = thisObj.thumbnail;
+				var url 		= '/file/rest/download?' + thumbnail;
+
+				// 최초 tr
+				if (i == 0) {
+					html += '<tr>';
+				}
+				// td 3 column 일 때 tr 추가
+				if (i % 3 == 0) {
+					html += '</tr>';
+					html += '<tr>';
+				}
+				
+				html += '<td idx="' + thisObj.bathDesignIdx + '">';
+				html += '	<div class="bath-design-padding">';
+				html += '		<div class="bath-design-img-div">';
+				html += 			(thumbnail ? '<img src="' + url + '"/>' : '');
+				html += '			<br>';
+				html += '			<div class="bath-design-text">' + thisObj.title + '</div>';
+				html += '		</div>';
+				html += '	</div>';
+				html += '</td>';
+				
+				// 마지막 tr
+				if ((i + 1) == bListLength) {
+					if (i < 3) {
+						for (var j = 0; j (bListLength - i); j++) {
+							html += '<td></td>';
+						}
+					}
+					html += '</tr>';
+				}
+			}
+			$('#bathDesignTable').find('tbody').empty().append(html);
+		//========== 욕실디자인 목록 END ==========//		
+			
+			
+				
 		// 실패
 		} else {
 			

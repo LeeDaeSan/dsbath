@@ -397,8 +397,8 @@ var common = {
 				if (result.status) {
 					var fileName = result.fileName;
 					var filePath = result.filePath;
-					console.log(width);
-					tag.append('<p><img style="width:' + width + 'px" src="/file/rest/download?path=' + filePath + '&fileName=' + fileName + '" id="' + fileName + '"/></p>');
+					
+					tag.append('<p><img style="width:' + width + 'px;border-radius:10px;" src="/file/rest/download?path=' + filePath + '&fileName=' + fileName + '" id="' + fileName + '"/></p>');
 					
 					fileObj['fileName'] = fileName;
 					fileObj['filePath'] = filePath;

@@ -61,4 +61,21 @@
 <!--============== 시공후기 목록 END ==============-->
 
 
+<!--============== 욕실디자인 목록 START ==============-->
+	<select id="selectOfBathDesign" resultType="bathDesign">
+		SELECT
+			BathDesignIdx,
+			Title,
+			Thumbnail,
+			CreateDate
+			
+		  FROM BathDesign
+		 
+		 ORDER BY CreateDate DESC
+		 
+		 LIMIT 50
+	</select>
+<!--============== 욕실디자인 목록 END ==============-->
+
+
 </mapper>
