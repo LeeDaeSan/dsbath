@@ -75,20 +75,39 @@ function selectBathDesignFunc (p) {
 				var thumbnail 	= thisObj.thumbnail;
 				var url			= '/file/rest/download?' + thumbnail;
 				
-				html += '<tr class="bath_design_detail detail-tr" idx="' + thisObj.bathDesignIdx + '">';
-				html += '	<td class="text-right">' + (sRow + i) + '</td>';
-				html += '	<td>' + (thumbnail ? '<img class="image-xs" src="' + url + '"/>&nbsp;' : '') + thisObj.title + '</td>';
-				html += '	<td class="text-center">' + thisObj.admin.adminName + '</td>';
-				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.createDate), '-') + '</td>'; 
-				html += '	<td class="text-center">' + common.date.toString(new Date(thisObj.updateDate), '-') + '</td>'; 
-				html += '	<td class="text-right">' + (thisObj.hit ? thisObj.hit : 0) + '</td>';
-				html += '</tr>';
+				// 최초 tr
+				if (i == 0) {
+					html += '<tr>';
+				}
+				
+				// td 5 column 일 때 tr 추가
+				if (i % 5 == 0) {
+					html += '</tr>';
+					html += '<tr>';
+				}
+				
+				html += '<td class="bath_design_detail text-center" idx="' + thisObj.bathDesignIdx + '">';
+				html += 	(thumbnail ? '<img class="image-100-per code-img" src="' + url + '"/>&nbsp;' : '');
+				html += '	<br>';
+				html += '	<div>' + thisObj.title + '</div>';
+				html += '	<br>';
+				html += '</td>';
+				
+				// 마지막 tr
+				if ((i + 1) == listLength) {
+					if (i < 5) {
+						for (var j = 0; j < (5 - i); j++) {
+							html += '<td></td>';
+						}
+					}
+					html += '</tr>';
+				}
 			}
 			
 			// 데이터가 없는 경우
 			if (listLength == 0) {
 				html += '<tr>';
-				html += '	<td colspan="6" class="text-center">데이터가 없습니다.</td>';
+				html += '	<td colspan="5" class="text-center">데이터가 없습니다.</td>';
 				html += '</tr>';
 			}
 			
@@ -155,20 +174,31 @@ function detailBathDesignFunc (idx) {
 			$('#detailAdminName').text(detail.admin.adminName);
 			$('#detailCreateDate').text(common.date.toString(new Date(detail.createDate), '-'));
 			
+			// 타일 디자인
 			var tileCodeHtml = '';
-			$.each(detail.tileCodeList, function () {
-				var thisIdx			= this.tileCodeIdx;
+			// 제품 디자인
+			var prodCodeHtml = '';
+			$.each(detail.bathCodeList, function () {
+				var thisIdx			= this.bathCodeIdx;
 				var thisImage 		= this.image;
 				var thisUrl			= '/file/rest/download?' + thisImage;
-				var thisTileName 	= this.tileName;
+				var thisCodeName 	= this.codeName;
+				var thisCodeType	= this.codeType;
 				
 				if (thisImage) {
-					tileCodeHtml += '<span class="tile_code_image float-left" idx="' + thisIdx + '">';
-					tileCodeHtml += 	(thisImage ? '<img class="image-lg" src="' + thisUrl + '"/>&nbsp;' : '') + '<br>' + thisTileName;
-					tileCodeHtml += '</span>';
+					if (thisCodeType == 'T') {
+						tileCodeHtml += '<span class="tile_code_image float-left" idx="' + thisIdx + '">';
+						tileCodeHtml += 	(thisImage ? '<img class="image-lg" src="' + thisUrl + '"/>&nbsp;' : '') + '<br>' + thisCodeName;
+						tileCodeHtml += '</span>';
+					} else if (thisCodeType == 'P') {
+						prodCodeHtml += '<span class="prod_code_image float-left" idx="' + thisIdx + '">';
+						prodCodeHtml += 	(thisImage ? '<img class="image-lg" src="' + thisUrl + '"/>&nbsp;' : '') + '<br>' + thisCodeName;
+						prodCodeHtml += '</span>';
+					}
 				}
 			});
 			$('#detailTileCode').empty().append(tileCodeHtml);
+			$('#detailProdCode').empty().append(prodCodeHtml);
 		//================== 상세 정보 END ==================//
 			
 			
@@ -184,7 +214,7 @@ function detailBathDesignFunc (idx) {
 				
 				$('#updateContent').summernote('code', detail.content);
 				
-				$('#updateTileCodeBtn').show();
+				$('#updateTileCodeBtn, #updateProdCodeBtn').show();
 
 				// 썸네일 이미지
 				if (thumbnail) {
@@ -201,21 +231,33 @@ function detailBathDesignFunc (idx) {
 					updateImageFile.hide();
 				}
 
-				// 타일디자인
+				// 타일 디자인
 				var tileCodeHtml = '';
-				$.each(detail.tileCodeList, function () {
-					var thisIdx			= this.tileCodeIdx;
+				// 제품 디자인
+				var prodCodeHtml = '';
+				$.each(detail.bathCodeList, function () {
+					var thisIdx			= this.bathCodeIdx;
 					var thisImage 		= this.image;
 					var thisUrl			= '/file/rest/download?' + thisImage;
-					var thisTileName 	= this.tileName;
+					var thisCodeName 	= this.codeName;
+					var thisCodeType	= this.codeType;
 					
 					if (thisImage) {
-						tileCodeHtml += '<span class="tile_code_image float-left" idx="' + thisIdx + '">';
-						tileCodeHtml += 	(thisImage ? '<img class="image-lg" src="' + thisUrl + '"/>&nbsp;' : '') + '<br>' + thisTileName;
-						tileCodeHtml += '</span>';
+						
+						if (thisCodeType == 'T') {
+							tileCodeHtml += '<span class="tile_code_image float-left" idx="' + thisIdx + '">';
+							tileCodeHtml += 	(thisImage ? '<img class="image-lg" src="' + thisUrl + '"/>&nbsp;' : '') + '<br>' + thisCodeName;
+							tileCodeHtml += '</span>';
+							
+						} else if (thisCodeType == 'P') {
+							prodCodeHtml += '<span class="prod_code_image float-left" idx="' + thisIdx + '">';
+							prodCodeHtml += 	(thisImage ? '<img class="image-lg" src="' + thisUrl + '"/>&nbsp;' : '') + '<br>' + thisCodeName;
+							prodCodeHtml += '</span>';
+						}
 					}
 				});
 				$('#updateTileCode').empty().append(tileCodeHtml);
+				$('#updateProdCode').empty().append(prodCodeHtml);
 				
 				// 미리보기 이미지 삭제
 				$('.delete_thumbnail').unbind('click').click(function (e) {
@@ -227,6 +269,26 @@ function detailBathDesignFunc (idx) {
 					updateImageFile.show();
 					updateImageFile.val('');
 					updateImageFile.replaceWith( updateImageFile.clone(true) );
+				});
+				
+				// mouseenter event
+				$('.tile_code_image, .prod_code_image').mouseenter(function () {
+					$(this).addClass('tile-code-delete');
+					$(this).find('.delete_tile_code').remove();
+					$(this).append('<a class="delete_tile_code tile-code-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
+					
+					// 선택한 타일디자인 삭제
+					$('.delete_tile_code').unbind('click').click(function (e) {
+						e.preventDefault();
+						
+						$(this).closest('span').remove();
+					});
+				});
+				
+				// mouseleave event
+				$('.tile_code_image, .prod_code_image').mouseleave(function () {
+					$(this).removeClass('tile-code-delete');
+					$(this).find('.delete_tile_code').remove();
 				});
 			});
 			
@@ -244,6 +306,8 @@ function detailBathDesignFunc (idx) {
 /**
  * 욕실디자인 등록, 수정, 삭제 Function
  * 
+ * @param type
+ * @param idx
  * @returns
  */
 function mergeBathDesignFunc (type, idx) {
@@ -290,7 +354,7 @@ function mergeBathDesignFunc (type, idx) {
 		
 		// parameter
 		var param = {
-				type : type
+			type : type
 		};
 		
 		if (type == 'U' || type == 'D') {
@@ -302,8 +366,14 @@ function mergeBathDesignFunc (type, idx) {
 			param['content']	= content.summernote('code');
 			param['thumbnail']	= thumbnail.val();
 			
+			// 코드 맵핑 add
 			$('#' + tagType + 'TileCode').find('.tile_code_image').each(function (i) {
-				param['tileCodeMappingList[' + i + '].tileCodeIdx'] = $(this).attr('idx');
+				param['tileCodeMappingList[' + i + '].bathCodeIdx'] = $(this).attr('idx');
+			});
+			
+			// 제품 맵핑 add
+			$('#' + tagType + 'ProdCode').find('.prod_code_image').each(function (i) {
+				param['prodCodeMappingList[' + i + '].bathCodeIdx'] = $(this).attr('idx');
 			});
 		}
 		
@@ -330,11 +400,13 @@ function mergeBathDesignFunc (type, idx) {
 					content.summernote('reset');
 					 	
 					// 팝업 닫기
-					$('#insertBathDesignPopup .close').click();
 					$('#detailBathDesignPopup .close').click();
 					
 					// 목록 재조회
 					selectBathDesignFunc();
+					
+				} else {
+					common.alert('dang', '디자인 정보 ' + mergeText + '을(를) 실패하였습니다.');
 				}
 				
 			// 실패
@@ -354,14 +426,30 @@ function mergeBathDesignFunc (type, idx) {
  * 
  * @returns
  */
-function selectCodeFunc (type) {
+function selectCodeFunc (type, codeType) {
+	
+	var tagId 		= 'Tile';
+	var tagClass 	= 'tile';
+	
+	// 타일
+	if (codeType == 'T') {
+		tagId 		= 'Tile';
+		tagClass 	= 'tile';
+		
+	// 제품	
+	} else if (codeType == 'P') {
+		tagId 		= 'Prod';
+		tagClass 	= 'prod';
+	}
 	
 	//---> 통신 요청
 	$.ajax({
-		url 		: '/tileCode/rest/selectOfBathDesign',
+		url 		: '/bathCode/rest/selectOfBathDesign',
 		method		: 'POST',
 		dataType	: 'JSON',
-		data		: {}
+		data		: {
+			codeType	: codeType,
+		}
 	
 	//---> 통신 완료
 	}).done(function (result) {
@@ -386,8 +474,8 @@ function selectCodeFunc (type) {
 				}
 				
 				var isChoice = false;
-				$('#' + type + 'TileCode .tile_code_image').each(function () {
-					if ($(this).attr('idx') == thisObj.tileCodeIdx) {
+				$('#' + type + tagId + 'Code .' + tagClass + '_code_image').each(function () {
+					if ($(this).attr('idx') == thisObj.bathCodeIdx) {
 						isChoice = true;
 						return false;
 					}
@@ -396,10 +484,10 @@ function selectCodeFunc (type) {
 				var image 	= thisObj.image;
 				var url		= '/file/rest/download?' + image;
 				
-				html += '<td class="code_detail detail-tr text-center ' + (isChoice ? 'code_detail_selected' : '') + '" idx="' + thisObj.tileCodeIdx + '" image="' + image + '" tileName="' + thisObj.tileName + '">';
+				html += '<td class="code_detail detail-tr text-center ' + (isChoice ? 'code_detail_selected' : '') + '" idx="' + thisObj.bathCodeIdx + '" image="' + image + '" codeName="' + thisObj.codeName + '">';
 				html += 	(image ? '<img class="image-lg" src="' + url + '"/>&nbsp;' : '');
 				html += '	<br>';
-				html += 	thisObj.tileName;
+				html += 	thisObj.codeName;
 				html += 	(isChoice ? '<div class="img-check"><i class="fa fa-check"></i></div>' : '');
 				html += '</td>';
 				
@@ -452,45 +540,45 @@ function selectCodeFunc (type) {
 				e.preventDefault();
 				
 				// 이전 타일 디자인 전체 삭제
-				$('#' + type + 'TileCode').find('.tile_code_image').each(function () {
+				$('#' + type + tagId + 'Code').find('.' + tagClass + '_code_image').each(function () {
 					$(this).remove();
 				});
+				
 				// 신규 타일 디자인 추가
 				$('#codeTable').find('.code_detail_selected').each(function () {
-					
 					var thisIdx 		= $(this).attr('idx');
 					var thisImage 		= $(this).attr('image');
 					var thisUrl			= '/file/rest/download?' + thisImage;
-					var thisTileName 	= $(this).attr('tileName');
+					var thisCodeName 	= $(this).attr('codeName');
 					
-					var html  = '<span class="text-center tile_code_image float-left" idx="' + thisIdx + '">';
+					var html  = '<span class="text-center ' + tagClass + '_code_image float-left" idx="' + thisIdx + '">';
 						html += 	(thisImage ? '<img class="image-lg" src="' + thisUrl + '"/>' : '');
 						html += '	<br>';
-						html += '	<div>' + thisTileName + '</div>';
+						html += '	<div>' + thisCodeName + '</div>';
 						html += '</span>';
 						
-					$('#' + type + 'TileCode').append(html);
+					$('#' + type + tagId + 'Code').append(html);
 					
 					$('#addCodePopup').find('.close').click();
 					
 					// mouseenter event
-					$('.tile_code_image').mouseenter(function () {
+					$('.' + tagClass + '_code_image').mouseenter(function () {
 						$(this).addClass('tile-code-delete');
-						$(this).find('.delete_tile_code').remove();
-						$(this).append('<a class="delete_tile_code tile-code-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
+						$(this).find('.delete_' + tagClass + '_code').remove();
+						$(this).append('<a class="delete_' + tagClass + '_code tile-code-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
 						
 						// 선택한 타일디자인 삭제
-						$('.delete_tile_code').unbind('click').click(function (e) {
+						$('.delete_' + tagClass + '_code').unbind('click').click(function (e) {
 							e.preventDefault();
 							
-							$(this).closest('.tile_code_image').remove();
+							$(this).closest('.' + tagClass + '_code_image').remove();
 						});
 					});
 					
 					// mouseleave event
-					$('.tile_code_image').mouseleave(function () {
+					$('.' + tagClass + '_code_image').mouseleave(function () {
 						$(this).removeClass('tile-code-delete');
-						$(this).find('.delete_tile_code').remove();
+						$(this).find('.delete_' + tagClass + '_code').remove();
 					});
 					
 				});
@@ -507,6 +595,12 @@ function selectCodeFunc (type) {
 	});
 }
 
+/**
+ * 상세 모달 팝업 body 생성 Function
+ *
+ * @param type
+ * @returns
+ */
 function addPopupBody (type) {
 	
 	var html 	= '';
@@ -600,16 +694,37 @@ function addPopupBody (type) {
 	
 	// 등록
 	if (type == 'insert') {
-		html += '	<button type="button" mergeType="I" class="btn btn-sm btn-secondary add_tile_code_btn" data-toggle="modal" data-target="#addCodePopup">추가하기</button>';
+		html += '	<button type="button" mergeType="I" class="btn btn-sm btn-secondary add_code_btn" codeType="T" data-toggle="modal" data-target="#addCodePopup">추가하기</button>';
 	// 수정
 	} else if (type == 'update') {
-		html += '	<button type="button" mergeType="U" style="display:none;" class="btn btn-sm btn-secondary add_tile_code_btn update_tags" id="updateTileCodeBtn" data-toggle="modal" data-target="#addCodePopup">추가하기</button>';
+		html += '	<button type="button" mergeType="U" style="display:none;" class="btn btn-sm btn-secondary add_code_btn" codeType="T" id="updateTileCodeBtn" data-toggle="modal" data-target="#addCodePopup">추가하기</button>';
 	}
 	
 	html += '	</th>';
 	html += '	<td id="' + type + 'TileCode"></td>';
 	html += '</tr>';
 //============== 타일 디자인 END =================//
+	
+	
+//============== 제품 디자인 START =================//
+	html += '<tr>';
+	html += '	<th>';
+	html += '		제품 디자인';
+	html += '		<br>';
+	
+	// 등록
+	if (type == 'insert') {
+		html += '	<button type="button" mergeType="I" class="btn btn-sm btn-secondary add_code_btn" codeType="P" data-toggle="modal" data-target="#addCodePopup">추가하기</button>';
+	// 수정
+	} else if (type == 'update') {
+		html += '	<button type="button" mergeType="U" style="display:none;" class="btn btn-sm btn-secondary add_code_btn" codeType="P" id="updateProdCodeBtn" data-toggle="modal" data-target="#addCodePopup">추가하기</button>';
+	}
+	
+	html += '	</th>';
+	html += '	<td id="' + type + 'ProdCode"></td>';
+	html += '</tr>';
+//============== 제품 디자인 END =================//
+	
 	
 	// title
 	$('#detailBathDesignPopup').find('#myModalLabel').text('욕실 디자인 ' + title);
@@ -620,7 +735,7 @@ function addPopupBody (type) {
 	$('.thumbnail_file').change(function (e) {
 		var thisType 	= $(this).attr('fileType');
 		
-		var formTag 	= thisType == 'insert' ? $('#insertBathDesignPopup') : $('#detailBathDesignPopup');
+		var formTag 	= $('#detailBathDesignPopup');
 		var files 		= e.target.files;
 		var fileLength 	= files.length;
 		
@@ -675,9 +790,9 @@ function addPopupBody (type) {
 	}
 	
 	// 타일 코드 추가하기 button event
-	$('.add_tile_code_btn').unbind('click').click(function (e) {
+	$('.add_code_btn').unbind('click').click(function (e) {
 		e.preventDefault();
 		
-		selectCodeFunc(type);
+		selectCodeFunc(type, $(this).attr('codeType'));
 	});
 }

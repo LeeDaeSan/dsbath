@@ -7,6 +7,12 @@ a {
 .text-center {
 	text-align		: center;
 }
+.float-left {
+	float			: left;
+}
+.float-right {
+	float 			: right;
+}
 .over-text {
 	overflow		: hidden; 
 	text-overflow	: ellipsis; 
@@ -21,10 +27,33 @@ a {
     color			: #adadad;
     font-size		: 14px;
 }
+.custom-checkbox {
+	position		: relative;
+	top				: 2px;
+}
+
 /* 
 	남색 : #18283d
 	노랑 : #f2cc3e
  */
+.title-layout {
+    margin-left		: 25px;
+    margin-right	: 25px;
+    padding-bottom	: 5px;
+    padding-top		: 15px;
+    border-bottom	: 2px solid #f2cc3e;
+}
+.title-layout .title-div {
+    font-weight		: bold;
+    font-size		: 20px;
+    float			: left;
+}
+.title-layout .title-path-div {
+    float			: right;
+    color			: #9c9c9c;
+    font-size		: 14px;
+    padding-top		: 10px;
+}
 .layout-body {
 	padding-left	: 190px; 
 	padding-right	: 290px;
@@ -65,6 +94,7 @@ a {
 .main-left-menu ul li {
 	margin-bottom	: 20px;
 	font-size		: 12px;
+	font-weight		: bold;
 }
 .main-left-bottom {
 	width			: 135px;
@@ -118,6 +148,7 @@ a {
     border			: 0;
     display			: block;
     margin-left		: 45px;
+    width			: 150px;
 }
 .right-login-btn {
     width			: 100%;
@@ -242,7 +273,7 @@ a {
 	padding 		: 15px;
 }
 .bath-design-title {
-    width			: 80px;
+    width			: 81px;
     font-size		: 17px;
     margin			: 0 auto;
     border-bottom	: 2px solid #f2cc3e;
@@ -292,4 +323,203 @@ a {
     font-weight		: bold;
     margin-top		: 10px;
     margin-bottom 	: 25px;
+}
+
+.right-check a {
+	cursor 			: pointer;
+}
+.right-check a:hover {
+	font-weight		: bold;
+}
+
+.sub-page-body {
+	padding			: 25px 20px 25px 20px;
+}
+
+.join-terms, .join-policy, .join-info-01, .join-info-02 {
+    border			: 1px solid #ddd;
+    border-radius	: 5px;
+    margin-top		: 25px;
+}
+.join-terms .join-terms-head,
+.join-policy .join-policy-head,
+.join-info-01 .join-info-01-head,
+.join-info-02 .join-info-02-head {
+	padding			: 13px;
+    background		: #ddd;
+    color			: #16283c;
+    font-size		: 15px;
+    font-weight		: bold;
+}
+.join-terms .join-terms-body {
+	height			: 400px;
+    overflow		: auto;
+    padding-left	: 20px;
+    padding-right	: 20px;
+}
+.join-terms .join-terms-foot {
+	border-top		: 1px solid #ddd;
+	padding			: 10px;
+	background		: #ddd;
+}
+
+.join-policy .join-policy-head {
+	padding			: 13px;
+    background		: #ddd;
+    color			: #16283c;
+    font-size		: 15px;
+    font-weight		: bold;
+}
+.join-policy .join-policy-body {
+	height			: 400px;
+    overflow		: auto;
+    padding-left	: 20px;
+    padding-right	: 20px;
+    display			: none;
+    border-bottom 	: 1px solid #ddd;
+}
+.join-policy .join-policy-foot {
+	border-top		: 1px solid #ddd;
+	padding			: 10px;
+	background		: #ddd;
+}
+.join-policy .add-policy-btn {
+	float			: right;
+	font-size		: 14px;
+}
+.join-policy .join-policy-body2 {
+    padding-left	: 15px;
+    padding-right	: 15px;
+}
+.join-policy .join-policy-body2 table {
+	margin			: 0 !important;
+}
+.join-btn-area {
+	margin			: 0 auto;
+    width			: 75px;
+    margin-top		: 30px;
+    font-size		: 16px;
+}
+.join-btn-area .btn {
+    background		: #16283c;
+    color			: #fff;
+}	
+
+/* alert modal css START */
+#alertModal {
+	opacity 		: 1;
+}
+#alertModal .modal-dialog {
+	top				: 15%;
+}
+#alertModal .modal-content {
+	background		: rgb(255, 255, 255);
+	border-color	: rgba(214, 214, 214, 0.88);
+	box-shadow		: 0 6px 28px 0 rgba(0, 0, 0, .1);
+	color			: #000000;
+}
+/* success */
+#alertModal .modal-content.success .success-title {
+	color			: green;
+}
+/* warning */
+#alertModal .modal-content.warning .warning-title {
+	color			: rgba(243, 156, 18, 0.88);
+}
+/* danger */
+#alertModal .modal-content.danger .danger-title {
+	color			: rgba(224, 24, 3, 0.88);
+}
+/* info */
+#alertModal .modal-content.info .info-title {
+	color			: rgba(4, 100, 164, 0.88);
+}
+#alertModal .alert-footer, #confirmModal .confirm-footer {
+	padding-left	: 7px;
+	padding-right	: 7px;
+	padding-bottom	: 7px;
+	height			: 40px;
+}
+#alertModal .alert-footer .btn, #confirmModal .confirm-footer .btn {
+	float			: right;
+	font-size		: 12px;
+}
+#alert-icon {
+	font-size		: 15px;
+	bottom			: 5px;
+	position		: relative;
+	margin-right	: 5px;
+}
+.alert-close {
+	float			: right;
+	position		: absolute;
+	right			: 13px;
+	font-size		: 15px;
+	top				: 13px;
+	color			: #aaaaaa;
+	cursor			: pointer;
+}
+.alert-close:hover {
+	color			: #5e5e5e;
+}
+/* alert modal css END */
+
+
+/* table css START */
+.list-col {
+	padding-left 	: 40px;
+	padding-right 	: 40px;
+	height			: 450px;
+}
+table {
+	table-layout	: fixed;
+	border-bottom 	: 1px solid #f2cc3e !important;
+}
+.detail-tr {
+	cursor 			: pointer;	
+}
+.detail-tr:hover {
+	background		: #efefef;
+	font-weight		: bold;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: #f2cc3e !important;
+    border-color	: #f2cc3e !important;
+}
+.detail-title {
+	border-bottom	: 1px solid #f2cc3e;
+    margin-top		: 20px;
+    font-size		: 20px;
+}
+.detail-content {
+    margin-top		: 15px;
+    margin-bottom	: 15px;
+    min-height		: 500px;
+}
+.detail-head {
+	width			: 100%;
+	height			: 35px;
+	background		: #f2cc3e;
+	font-size		: 15px;
+    color			: #333333a6;
+}
+.detail-head .admin-name-div {
+	padding			: 5px 0px 0px 15px;
+}
+.detail-head .hit-div {
+	padding			: 5px 0px 0px 15px;
+}
+.detail-head .create-date-div {
+	padding			: 5px 15px 0px 0px;
+}
+.detail-foot {
+	text-align		: center;
+    border-top		: 1px solid #f2cc3e;
+    padding-top		: 15px;
+    padding-bottom	: 15px;
+}    
+/* table css END */
+
+.image-lg {
+	width			: 300px;
 }

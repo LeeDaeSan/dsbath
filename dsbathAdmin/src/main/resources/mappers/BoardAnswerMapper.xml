@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.BoardAnswerMapper">
+
+<!--============== 게시판 답변 등록 START ==============-->
+	<insert id="insert" parameterType="boardAnswer">
+		INSERT INTO BoardAnswer
+		(
+			BoardIdx,
+			AdminIdx,
+			AnswerTitle,
+			AnswerContent
+		)
+		VALUES
+		(
+			#{boardIdx},
+			#{adminIdx},
+			#{answerTitle},
+			#{answerContent}
+		)
+	</insert>
+<!--============== 게시판 답변 등록 END ==============-->
+
+
+<!--============== 게시판 답변 수정 START ==============-->
+	<update id="update" parameterType="boardAnswer">
+		UPDATE BoardAnswer
+		
+			<set>
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(answerTitle)'>
+			   		AnswerTitle = #{answerTitle},
+				</if>
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(answerContent)'>
+			   		AnswerContent = #{answerContent}
+				</if>
+			</set>
+			
+		 WHERE BoardAnswerIdx = #{boardAnswerIdx}
+	</update>
+<!--============== 게시판 답변 수정 END ==============-->
+
+
+<!--============== 게시판 답변 삭제 START ==============-->
+	<delete id="delete" parameterType="boardAnswer">
+		DELETE FROM BoardAnswer
+		 WHERE BoardAnswerIdx = #{boardAnswerIdx}
+	</delete>
+<!--============== 게시판 답변 삭제 END ==============-->
+
+
+<!--============== 게시판 답변 삭제 (게시판 삭제시) START ==============-->
+	<delete id="deleteOfBoard" parameterType="board">
+		DELETE FROM BoardAnswer
+		 WHERE BoardIdx = #{boardIdx}
+	</delete>
+<!--============== 게시판 답변 삭제 (게시판 삭제시) END ==============-->
+
+</mapper>

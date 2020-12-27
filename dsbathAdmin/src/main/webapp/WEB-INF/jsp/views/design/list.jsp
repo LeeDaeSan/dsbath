@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<style>
+.table td, .table th {
+	border-top	: 0;
+}
+.code-img:hover {
+	opacity 	: 0.6;
+}
+</style>
 
 <!-- admin main js -->
 <script src="/js/design/design.js" type="text/javascript"></script>
@@ -100,7 +108,7 @@
 					<select id="rowLimit" class="form-control limit-form float-left">
 						<option value="10">10</option>
 						<option value="20">20</option>
-						<option value="30">30</option>
+						<option value="30" selected>30</option>
 						<option value="50">50</option>
 						<option value="100">100</option>
 					</select>
@@ -109,35 +117,14 @@
 			
 			<div class="x_content content-body">
 				<div class="table-responsive">
-					<table class="table table-striped jambo_table bulk_action" id="bathDesignTable">
+					<table class="table" id="bathDesignTable">
 						<colgroup>
-							<col width="5%"/>
-							<col width="auto"/>
-							<col width="15%"/>
-							<col width="15%"/>
-							<col width="15%"/>
-							<col width="15%"/>
+							<col width="20%"/>
+							<col width="20%"/>
+							<col width="20%"/>
+							<col width="20%"/>
+							<col width="20%"/>
 						</colgroup>
-						<thead>
-							<tr class="heading">
-								<th class="column-title text-center">No.</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="title">
-									제목<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="adminName">
-									작성자<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="createDate">
-									등록일<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="updateDate">
-									수정일<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-								<th class="column-title text-center sort_th" sort="asc" sortType="hit">
-									조회수<i class="fa fa-exchange sort-image sort_img"></i>
-								</th>
-							</tr>
-						</thead>
 						<tbody>
 						</tbody>
 					</table>
@@ -157,7 +144,7 @@
 
 <!-- 상세 팝업 START -->
 <div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="detailBathDesignPopup">
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-1200">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="myModalLabel">디자인 상세 정보</h4>
@@ -168,10 +155,8 @@
 			<div class="modal-body modal-body-overflow">
 				<table class="table" id="detailBathDesignTable">
 					<colgroup>
-						<col width="10%"/>
-						<col width="40%"/>
-						<col width="10%"/>
-						<col width="40%"/>
+						<col width="15%"/>
+						<col width="85%"/>
 					</colgroup>
 					<tbody>
 					</tbody>
@@ -188,65 +173,6 @@
 	</div>
 </div>
 <!-- 상세 팝업 END -->
-
-
-<!-- 등록 팝업 START -->
-<div class="modal fade" tabindex="-1" role="dialog" aria-modal="true" id="insertBathDesignPopup">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">디자인 등록</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-			</div>
-			<div class="modal-body modal-body-overflow">
-				<table class="table">
-					<colgroup>
-						<col width="10%"/>
-						<col width="40%"/>
-						<col width="10%"/>
-						<col width="40%"/>
-					</colgroup>
-					<tbody>
-						<tr>
-							<th>제목</th>
-							<td colspan="3">
-								<input type="text" id="insertTitle" class="form-control form-control-cust"/>
-							</td>
-						</tr>
-						<tr>
-							<th>썸네일</th>
-							<td>
-								<input type="file" id="insertThumbnailFile" class="thumbnail_file" fileType="insert"/>
-								<div id="insertThumbnail"></div>
-							</td>
-						</tr>
-						<tr>
-							<th>내용</th>
-							<td colspan="3">
-								<div id="insertContent"></div>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								타일 디자인
-								<br>
-								<button type="button" mergeType="I" class="btn btn-sm btn-secondary add_tile_code_btn" data-toggle="modal" data-target="#addCodePopup">추가하기</button>
-							</th>
-							<td id="insertTileCode"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-sm btn-primary merge_btn" mergeType="I">등록</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- 등록 팝업 END -->
 
 
 <!-- 코드 검색 팝업 START -->
@@ -296,3 +222,4 @@
 	</div>
 </div>
 <!-- 코드 검색 팝업 END -->
+

@@ -9,11 +9,11 @@ import com.dsbath.admin.etc.constant.Constant;
 import com.dsbath.admin.etc.constant.UserConstant;
 import com.dsbath.admin.etc.util.ResponseUtil;
 import com.dsbath.admin.etc.util.StringUtil;
+import com.dsbath.admin.model.BathCodeMapping;
 import com.dsbath.admin.model.BathDesign;
-import com.dsbath.admin.model.TileCodeMapping;
 import com.dsbath.admin.model.dto.PagingDTO;
+import com.dsbath.admin.model.mapper.BathCodeMappingMapper;
 import com.dsbath.admin.model.mapper.BathDesignMapper;
-import com.dsbath.admin.model.mapper.TileCodeMappingMapper;
 import com.dsbath.admin.model.service.BathDesignService;
 
 @Service
@@ -23,7 +23,7 @@ public class BathDesignServiceImpl implements BathDesignService {
 	private BathDesignMapper bathDesignMapper;
 	
 	@Autowired
-	private TileCodeMappingMapper tileCodeMappingMapper;
+	private BathCodeMappingMapper bathCodeMappingMapper;
 	
 	/**
 	 * 욕실디자인 목록
@@ -94,9 +94,17 @@ public class BathDesignServiceImpl implements BathDesignService {
 				
 				// -> 타일 코드 맵핑 등록
 				if (StringUtil.isNotEmpty(bathDesign.getTileCodeMappingList())) {
-					for (TileCodeMapping mapping : bathDesign.getTileCodeMappingList()) {
+					for (BathCodeMapping mapping : bathDesign.getTileCodeMappingList()) {
 						mapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
-						resultCount = tileCodeMappingMapper.insert(mapping);
+						resultCount = bathCodeMappingMapper.insert(mapping);
+					}
+				}
+				
+				// -> 제품 코드 맵핑 등록
+				if (StringUtil.isNotEmpty(bathDesign.getProdCodeMappingList())) {
+					for (BathCodeMapping mapping : bathDesign.getProdCodeMappingList()) {
+						mapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
+						resultCount = bathCodeMappingMapper.insert(mapping);
 					}
 				}
 				
@@ -106,16 +114,23 @@ public class BathDesignServiceImpl implements BathDesignService {
 				
 				if (StringUtil.isNotEmpty(bathDesign.getTileCodeMappingList())) {
 					
-					// -> 이전 타일코드 맵핑 삭제
-					TileCodeMapping deleteMapping = new TileCodeMapping();
+					// -> 이전 코드 맵핑 전체 삭제
+					BathCodeMapping deleteMapping = new BathCodeMapping();
 					deleteMapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
-					resultCount = tileCodeMappingMapper.delete(deleteMapping);
+					resultCount = bathCodeMappingMapper.delete(deleteMapping);
 					
-					// -> 신규 타일코드 맵핑 추가
-					for (TileCodeMapping mapping : bathDesign.getTileCodeMappingList()) {
+					// -> 신규 타일 코드 맵핑 추가
+					for (BathCodeMapping mapping : bathDesign.getTileCodeMappingList()) {
 						mapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
-						resultCount = tileCodeMappingMapper.insert(mapping);
+						resultCount = bathCodeMappingMapper.insert(mapping);
 					}
+					
+					// -> 신규 제품 코드 맵핑 추가
+					for (BathCodeMapping mapping : bathDesign.getProdCodeMappingList()) {
+						mapping.setBathDesignIdx(bathDesign.getBathDesignIdx());
+						resultCount = bathCodeMappingMapper.insert(mapping);
+					}
+					
 				}
 				
 			// >> 삭제

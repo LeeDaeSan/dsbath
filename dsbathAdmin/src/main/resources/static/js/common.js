@@ -10,7 +10,27 @@ var common = {
 				d = d < 10 ? '0' + d : d;
 			
 			return [y, m, d].join(pattern);
-		} 
+		},
+	
+		formatDateTime : function (dateStr) {
+			
+			var date = new Date(dateStr);
+			
+			var y = date.getFullYear();
+			var m = (date.getMonth() + 1);
+				m = m < 10 ? '0' + m : m;
+			var d = date.getDate();
+				d = d < 10 ? '0' + d : d;
+			
+			var hh = date.getHours();
+				hh = hh < 10 ? '0' + hh : hh;
+			var mm = date.getMinutes();
+				mm = mm < 10 ? '0' + mm : mm;
+			var ss = date.getSeconds();
+				ss = ss < 10 ? '0' + ss : ss;
+				
+			return [y, m, d].join('-') + ' ' + [hh, mm, ss].join(':');
+		}
 	},
 
 	string : {
@@ -127,6 +147,9 @@ var common = {
 				if (e.keyCode == '13') {
 					$('#searchBtn').click();
 				}
+			});
+			$('.change_tag').change(function (e) {
+				$('#searchBtn').click();
 			});
 		//------------------------- 검색 : enter keyup event END -------------------------
 			
@@ -388,7 +411,6 @@ var common = {
 				if (result.status) {
 					var fileName = result.fileName;
 					var filePath = result.filePath;
-					console.log(width);
 					tag.append('<p><img style="width:' + width + 'px" src="/file/rest/download?path=' + filePath + '&fileName=' + fileName + '" id="' + fileName + '"/></p>');
 					
 					fileObj['fileName'] = fileName;
@@ -462,5 +484,95 @@ var common = {
 				reader.readAsDataURL(f);
 			});
 		}
+	},
+	
+	// ajax
+	ajax : function (obj) {
+		
+		//---> 통신 요청
+		$.ajax({
+			url 		: obj.url,
+			method		: obj.method,
+			dataType	: 'JSON',
+			data		: obj.data,
+			async		: obj.async,
+					
+		//---> 통신 완료
+		}).done(function (result) {
+		
+			// 성공
+			if (result.status) {
+				
+				// callback 호출
+				obj.callback(result);
+				
+			// 실패
+			} else {
+				common.alert('dang', obj.title + ' 요청중 에러가 발생하였습니다.');
+			}
+			
+		//---> 통신 에러
+		}).fail(function () {
+			common.alert('dang', obj.title + ' 요청중 서버 통신 장애가 발생하였습니다.');
+		});
+	},
+	
+	getParameter : function () {
+	    var params = {};
+	    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
+	    return params;
+	},
+	
+	getBoardParameter : function () {
+		var boardType 	= '';
+		var boardTitle 	= '';
+		
+		var url = location.href;
+		
+		// 견적 및 시공 문의
+		if (url.indexOf('inquiry') != -1) {
+			boardType 	= '001';
+			boardTitle 	= '견적 및 시공 문의';
+			
+		// 시공 사례
+		} else if (url.indexOf('instance') != -1) {
+			boardType 	= '002';
+			boardTitle	= '시공 사례';
+			
+		// 시공 후기
+		} else if (url.indexOf('epilogue') != -1) {
+			boardType 	= '003';
+			boardTitle	= '시공 후기';
+			
+		// 자주하는 질문
+		} else if (url.indexOf('faq') != -1) {
+			boardType 	= '004';
+			boardTitle	= '자주하는 질문';
+			
+		// 고객센터
+		} else if (url.indexOf('center') != -1) {
+			boardType 	= '005';
+			boardTitle	= '고객센터';
+			
+		// 디에스 키친 & 바스 살림 팁
+		} else if (url.indexOf('living') != -1) {
+			boardType 	= '006';
+			boardTitle	= '디에스 키친 & 바스 살림 팁';
+			
+		// 디에스 인테리어 팁
+		} else if (url.indexOf('interior') != -1) {
+			boardType 	= '007';
+			boardTitle	= '디에스 인테리어 팁';
+			
+		// 디에스 이벤트
+		} else if (url.indexOf('event') != -1) {
+			boardType 	= '008';
+			boardTitle	= '디에스 이벤트';
+		}
+		
+		return {
+			boardType 	: boardType,
+			boardTitle	: boardTitle,
+		}; ; 
 	}
 };

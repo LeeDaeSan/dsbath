@@ -29,7 +29,8 @@ public class BathDesign {
 	
 	private Admin admin;
 	
-	private List<TileCode> tileCodeList;
+	private List<BathCode> bathCodeList;
 	
-	private List<TileCodeMapping> tileCodeMappingList;
+	private List<BathCodeMapping> tileCodeMappingList;
+	private List<BathCodeMapping> prodCodeMappingList;
 }

@@ -14,11 +14,13 @@ public class Member {
 	
 	private Integer memberIdx;
 	private String memberName;
+	private String nickName;
 	private String memberId;
 	private String password;
 	private String zipCode;
 	private String address;
 	private String addressDetail;
+	private String email;
 	private String isDelete;
 	private Date createDate;
 	private Date updateDate;

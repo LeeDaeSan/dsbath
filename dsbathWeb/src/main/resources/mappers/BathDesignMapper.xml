@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.web.model.mapper.BathDesignMapper">
+
+<!--============== 욕실디자인 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.web.model.dto.PagingDTO" resultMap="bathDesignList">
+		SELECT
+			BD.BathDesignIdx,
+			BD.Title,
+			BD.Content,
+			BD.Thumbnail,
+			BD.Hit,
+			BD.DesignType,
+			BD.CreateDate,
+			BD.UpdateDate,
+			
+			A.AdminIdx,
+			A.AdminName
+			
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>	
+		
+		<!-- order -->
+		<choose>
+			<when test='@com.dsbath.web.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.web.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY
+				
+				<choose>
+					<when test='"title".equals(sortType)'>
+						BD.Title
+					</when>
+					<when test='"adminName".equals(sortType)'>
+						A.AdminName
+					</when>
+					<when test='"createDate".equals(sortType)'>
+						BD.CreateDate
+					</when>
+					<when test='"updateDate".equals(sortType)'>
+						BD.UpdateDate
+					</when>
+					<when test='"hit".equals(sortType)'>
+						BD.Hit
+					</when>
+				</choose>
+				
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY CreateDate DESC
+			</otherwise>
+		</choose>
+		
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
+	</select>
+<!--============== 욕실디자인 목록 END ==============-->
+
+
+<!--============== 욕실디자인 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.web.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(BD.BathDesignIdx)
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>	
+	</select>
+<!--============== 욕실디자인 목록 Total Count END ==============-->
+
+
+<!--============== 욕실디자인 상세 START ==============-->
+	<select id="detail" parameterType="bathDesign" resultMap="bathDesignDetail">
+		SELECT
+			BD.BathDesignIdx,
+			BD.Title,
+			BD.Content,
+			BD.Thumbnail,
+			BD.Hit,
+			BD.DesignType,
+			BD.CreateDate,
+			BD.UpdateDate,
+			
+			A.AdminIdx,
+			A.AdminName,
+			
+			BC.BathCodeIdx,
+			BC.CodeName,
+			BC.CodeType,
+			BC.Image
+			
+		  FROM BathDesign AS BD
+		  
+		  LEFT JOIN Admin AS A 
+		    ON A.AdminIdx = BD.AdminIdx
+		  
+		  LEFT JOIN BathCodeMapping AS BCM 
+		    ON BCM.BathDesignIdx = BD.BathDesignIdx
+		  
+		  LEFT JOIN BathCode AS BC 
+		    ON BC.BathCodeIdx = BCM.BathCodeIdx
+		  
+		 WHERE BD.BathDesignIdx = #{bathDesignIdx}
+	</select>
+<!--============== 욕실디자인 상세 END ==============-->
+
+
+<!--============== 욕실디자인 등록 START ==============-->
+	<insert id="insert" parameterType="bathDesign">
+		INSERT INTO BathDesign
+		(
+			AdminIdx,
+			Title,
+			Content,
+			Thumbnail,
+			Hit
+		)
+		VALUES
+		(
+			#{adminIdx},
+			#{title},
+			#{content},
+			#{thumbnail},
+			0
+		)
+		
+		<selectKey resultType="Integer" keyProperty="bathDesignIdx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+<!--============== 욕실디자인 등록 END ==============-->
+
+
+<!--============== 욕실디자인 수정 START ==============-->
+	<update id="update" parameterType="bathDesign">
+		UPDATE BathDesign
+		   SET
+		   		Title 		= #{title},
+		   		Content		= #{content},
+		   		Thumbnail	= #{thumbnail}
+		   		
+		 WHERE BathDesignIdx = #{bathDesignIdx}
+	</update>
+<!--============== 욕실디자인 수정 END ==============-->
+
+
+<!--============== 욕실디자인 삭제 START ==============-->
+	<delete id="delete" parameterType="bathDesign">
+		DELETE FROM BathDesign
+		 WHERE BathDesignIdx = #{bathDesignIdx}
+	</delete>
+<!--============== 욕실디자인 삭제 END ==============-->
+
+
+<!--============== 욕실디자인 조회수 증가 START ==============-->
+	<update id="updateOfHit" parameterType="bathDesign">
+		UPDATE BathDesign
+		   SET
+		   	Hit = IFNULL(Hit, 0) + 1
+		 WHERE BathDesignIdx = #{bathDesignIdx}
+	</update>
+<!--============== 욕실디자인 조회수 증가 END ==============-->
+
+
+<!--============== 욕실디자인 목록 Result Map START ==============-->
+	<resultMap type="bathDesign" id="bathDesignList" autoMapping="true">
+		<id property="bathDesignIdx" column="BathDesignIdx"/>
+		
+		<collection ofType="admin" property="admin" autoMapping="true">
+			<id property="adminIdx" column="AdminIdx"/>
+		</collection>
+	</resultMap>
+<!--============== 욕실디자인 목록 Result Map END ==============-->
+
+
+<!--============== 욕실디자인 상세 Result Map START ==============-->
+	<resultMap type="bathDesign" id="bathDesignDetail" autoMapping="true">
+		<id property="bathDesignIdx" column="BathDesignIdx"/>
+		
+		<collection ofType="admin" property="admin" autoMapping="true">
+			<id property="adminIdx" column="AdminIdx"/>
+		</collection>
+		
+		<collection ofType="bathCode" property="bathCodeList" autoMapping="true">
+			<id property="bathCodeIdx" column="BathCodeIdx"/>
+		</collection>
+	</resultMap>
+<!--============== 욕실디자인 상세 Result Map END ==============-->
+
+
+<!--============== 목록 조회 공통 조건 START ==============-->
+	<sql id="selectOfWhere">
+		FROM BathDesign AS BD
+		
+		LEFT JOIN Admin AS A ON A.AdminIdx = BD.AdminIdx
+	</sql>
+<!--============== 목록 조회 공통 조건 END ==============-->
+</mapper>

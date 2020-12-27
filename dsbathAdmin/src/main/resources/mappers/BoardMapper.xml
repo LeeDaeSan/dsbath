@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.BoardMapper">
+
+<!--============== 게시판 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultMap="boardList">
+		SELECT
+			<!-- 게시판 -->
+			B.BoardIdx				AS B_BoardIdx,
+			B.Thumbnail				AS B_Thumbnail,
+			B.Title					AS B_Title,
+			B.Content				AS B_Content,
+			B.Hit					AS B_Hit,
+			B.IsImport				AS B_IsImport,
+			B.CreateDate			AS B_CreateDate,
+			B.UpdateDate			AS B_UpdateDate,
+			<!-- 게시판 관리자 -->
+			B_A.AdminIdx			AS B_A_AdminIdx,
+			B_A.AdminName			AS B_A_AdminName,
+			<!-- 게시판 사용자 -->
+			B_M.MemberIdx			AS B_M_MemberIdx,
+			B_M.MemberName			AS B_M_MemberName
+			
+		<!-- 공통 query -->
+		<include refid="selectOfWhere"></include>
+		
+		<!-- order -->
+		<choose>
+			<when test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY
+				
+				<choose>
+					<when test='"title".equals(sortType)'>
+						B.Title
+					</when>
+					<when test='"createDate".equals(sortType)'>
+						B.CreateDate
+					</when>
+					<when test='"updateDate".equals(sortType)'>
+						B.UpdateDate
+					</when>
+					<when test='"hit".equals(sortType)'>
+						B.Hit
+					</when>
+					<when test='"adminName".equals(sortType)'>
+						B.AdminName
+					</when>
+				</choose>
+				
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY B.CreateDate DESC
+			</otherwise>
+		</choose>
+		
+		<!-- pagin -->
+		LIMIT #{page}, #{limit}
+	</select>
+<!--============== 게시판 목록 END ==============-->
+
+
+<!--============== 게시판 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT
+			COUNT(B.BoardIdx)
+		<!-- 공통 query -->
+		<include refid="selectOfWhere"></include>	
+	</select>
+<!--============== 게시판 목록 Total Count END ==============-->
+
+
+<!--============== 게시판 상세 START ==============-->
+	<select id="detail" parameterType="board" resultMap="boardDetail">
+		
+		SELECT
+			<!-- 게시판 -->
+			B.BoardIdx				AS B_BoardIdx,
+			B.Thumbnail				AS B_Thumbnail,
+			B.Title					AS B_Title,
+			B.Content				AS B_Content,
+			B.Hit					AS B_Hit,
+			B.IsImport				AS B_IsImport,
+			B.CreateDate			AS B_CreateDate,
+			B.UpdateDate			AS B_UpdateDate,
+			<!-- 게시판 관리자 -->
+			B_A.AdminIdx			AS B_A_AdminIdx,
+			B_A.AdminName			AS B_A_AdminName,
+			<!-- 게시판 사용자 -->
+			B_M.MemberIdx			AS B_M_MemberIdx,
+			B_M.MemberName			AS B_M_MemberName,
+			
+			<!-- 게시판 답변 -->
+			BA.BoardAnswerIdx		AS BA_BoardAnswerIdx,
+			BA.AnswerTitle			AS BA_AnswerTitle,
+			BA.AnswerContent		AS BA_AnswerContent,
+			BA.CreateDate			AS BA_CreateDate,
+			BA.UpdateDate			AS BA_UpdateDate,
+			<!-- 게시판 답변 관리자 -->
+			BA_A.AdminIdx			AS BA_A_AdminIdx,
+			BA_A.AdminName 			AS BA_A_AdminName,
+			
+			<!-- 게시판 댓글 -->
+			BC.BoardCommentIdx		AS BC_BoardCommentIdx,
+			BC.ParentIdx			AS BC_ParentIdx,
+			BC.Comment				AS BC_Comment,
+			BC.CreateDate			AS BC_CreateDate,
+			BC.UpdateDate			AS BC_UpdateDate,
+			<!-- 게시판 댓글 관리자 -->
+			BC_A.AdminIdx			AS BC_A_AdminIdx,
+			BC_A.AdminName			AS BC_A_AdminName,
+			<!-- 게시판 댓글 사용자 -->
+			BC_M.MemberIdx			AS BC_M_MemberIdx,
+			BC_M.MemberName			AS BC_M_MemberName
+			
+		  FROM Board AS B
+		  
+		  <!-- 게시판 관리자 join -->
+		  LEFT JOIN Admin AS B_A
+		    ON B_A.AdminIdx = B.AdminIdx
+		    
+		  <!-- 게시판 사용자 join -->
+		  LEFT JOIN Member AS B_M
+		    ON B_M.MemberIdx = B.MemberIdx
+		    
+		  <!-- 게시판 답변 join -->
+		  LEFT JOIN BoardAnswer AS BA
+		    ON BA.BoardIdx = B.BoardIdx
+		    
+		  <!-- 게시판 답변 관리자 join -->
+		  LEFT JOIN Admin AS BA_A
+		    ON BA_A.AdminIdx = BA.AdminIdx
+		    
+		  <!-- 게시판 댓글 join -->
+		  LEFT JOIN BoardComment AS BC
+		    ON BC.BoardIdx = B.BoardIdx
+		  
+		  <!-- 게시판 댓글 관리자 join -->
+		  LEFT JOIN Admin AS BC_A
+		    ON BC_A.AdminIdx = BC.AdminIdx
+		    
+		  <!-- 게시판 댓글 사용자 join -->
+		  LEFT JOIN Member AS BC_M
+		    ON BC_M.MemberIdx = BC.MemberIdx
+		 
+		 WHERE B.BoardIdx = #{boardIdx}
+		 
+		 <!-- order -->
+		 ORDER BY BC.CreateDate DESC
+		    
+	</select>
+<!--============== 게시판 상세 END ==============-->
+
+
+<!--============== 게시판 등록 START ==============-->
+	<insert id="insert" parameterType="board">
+		INSERT INTO Board
+		(
+			BoardManagerIdx,
+			AdminIdx,
+			MemberIdx,
+			Thumbnail,
+			Title,
+			Content,
+			Hit,
+			IsImport
+		)
+		VALUES
+		(
+			#{boardManagerIdx},
+			#{adminIdx},
+			#{memberIdx},
+			#{thumbnail},
+			#{title},
+			#{content},
+			0,
+			#{isImport}
+		)
+	</insert>
+<!--============== 게시판 등록 END ==============-->
+
+
+<!--============== 게시판 수정 START ==============-->
+	<update id="update" parameterType="board">
+		UPDATE Board
+		
+			<trim prefix="SET" suffixOverrides=",">
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(thumbnail)'>
+			   		Thumbnail = #{thumbnail},
+				</if>
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(title)'>
+			   		Title = #{title},
+				</if>
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(content)'>
+			   		Content = #{content},
+				</if>
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(hit)'>
+			   		Hit = IFNULL(Hit, 0) + 1,
+				</if>
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(isImport)'>
+					IsImport = #{isImport}
+				</if>
+			</trim>
+		   	
+		 WHERE BoardIdx = #{boardIdx}
+	</update>
+<!--============== 게시판 수정 END ==============-->
+
+
+<!--============== 게시판 삭제 START ==============-->
+	<delete id="delete" parameterType="board">
+		DELETE FROM Board
+		 WHERE BoardIdx = #{boardIdx}
+	</delete>
+<!--============== 게시판 삭제 END ==============-->
+	
+	
+<!--============== 게시판 목록 공통 Query START ==============-->
+	<sql id="selectOfWhere">
+		FROM Board AS B 
+		
+		<!-- 게시판 관리자 join -->
+		LEFT JOIN Admin AS B_A
+		  ON B_A.AdminIdx = B.AdminIdx
+		    
+		<!-- 게시판 사용자 join -->
+		LEFT JOIN Member AS B_M
+		  ON B_M.MemberIdx = B.MemberIdx
+		  
+	   <where>
+	   		B.BoardManagerIdx = #{model.boardManagerIdx}
+	   		
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.admin) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.admin.adminName)'>
+				<!-- 관리자 이름 -->
+				AND B_A.AdminName LIKE CONCAT ('%', TRIM(#{model.admin.adminName}), '%')
+			</if>
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.member) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.member.memberName)'>
+				<!-- 사용자 이름 -->
+				AND B_M.MemberName LIKE CONCAT ('%', TRIM(#{model.member.memberName}), '%')
+			</if>
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.title)'>
+				<!-- 제목 -->
+				AND B.Title LIKE CONCAT ('%', TRIM(#{model.title}), '%')
+			</if>
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>
+		 		<!-- 등록일 -->
+		 		AND DATE_FORMAT(B.CreateDate, '%Y%m%d') BETWEEN #{startDateStr} AND #{endDateStr}
+		 	</if>
+		</where>
+	</sql>	
+<!--============== 게시판 목록 공통 Query END ==============-->
+	
+		
+<!--============== 게시판 목록 Result Map START ==============-->
+	<resultMap type="board" id="boardList">
+		<id 	property="boardIdx" 		column="B_BoardIdx"/>
+		<result property="thumbnail"		column="B_Thumbnail"/>
+		<result property="title"			column="B_Title"/>
+		<result property="content"			column="B_Content"/>
+		<result property="hit"				column="B_Hit"/>
+		<result property="isImport"			column="B_IsImport"/>
+		<result property="createDate"		column="B_CreateDate"/>
+		<result property="updateDate"		column="B_UpdateDate"/>
+		
+		<!-- 게시판 관리자 -->
+		<collection ofType="admin" property="admin">
+			<id 	property="adminIdx" 	column="B_A_AdminIdx"/>
+			<result property="adminName" 	column="B_A_AdminName"/>
+		</collection>
+		<!-- 게시판 사용자 -->
+		<collection ofType="member" property="member">
+			<id 	property="memberIdx" 	column="B_M_MemberIdx"/>
+			<result property="memberName" 	column="B_M_MemberName"/>
+		</collection>
+	</resultMap>
+<!--============== 게시판 목록 Result Map END ==============-->
+
+
+<!--============== 게시판 상세 Result Map START ==============-->
+	<resultMap type="board" id="boardDetail">
+		<id 	property="boardIdx" 			column="B_BoardIdx"/>
+		<result property="thumbnail"			column="B_Thumbnail"/>
+		<result property="title"				column="B_Title"/>
+		<result property="content"				column="B_Content"/>
+		<result property="hit"					column="B_Hit"/>
+		<result property="isImport"				column="B_IsImport"/>
+		<result property="createDate"			column="B_CreateDate"/>
+		<result property="updateDate"			column="B_UpdateDate"/>
+		
+		<!-- 게시판 관리자 -->
+		<collection ofType="admin" property="admin">
+			<id 	property="adminIdx" 		column="B_A_AdminIdx"/>
+			<result property="adminName" 		column="B_A_AdminName"/>
+		</collection>
+		<!-- 게시판 사용자 -->
+		<collection ofType="member" property="member">
+			<id 	property="memberIdx" 		column="B_M_MemberIdx"/>
+			<result property="memberName" 		column="B_M_MemberName"/>
+		</collection>
+		
+		<!-- 게시판 답변 -->
+		<collection ofType="boardAnswer" property="boardAnswer">
+			<id 	property="boardAnswerIdx" 	column="BA_BoardAnswerIdx"/>
+			<result property="answerTitle" 		column="BA_AnswerTitle"/>
+			<result property="answerContent"	column="BA_AnswerContent"/>
+			<result property="createDate"		column="BA_CreateDate"/>
+			<result property="updateDate"		column="BA_UpdateDate"/>
+			
+			<!-- 게시판 답변 관리자 -->
+			<collection ofType="admin" property="admin">
+				<id 	property="adminIdx" 	column="BA_A_AdminIdx"/>
+				<result property="adminName" 	column="BA_A_AdminName"/>
+			</collection>
+		</collection>
+		
+		<!-- 게시판 댓글 -->
+		<collection ofType="boardComment"  property="boardCommentList">
+			<id 	property="boardCommentIdx" 	column="BC_BoardCommentIdx"/>
+			<result property="comment"			column="BC_Comment"/>
+			<result property="parentIdx"		column="BC_ParentIdx"/>
+			<result property="createDate"		column="BC_CreateDate"/>
+			<result property="updateDate"		column="BC_UpdateDate"/>
+			
+			<!-- 게시판 댓글 관리자 -->
+			<collection ofType="admin" property="admin">
+				<id 	property="adminIdx" 	column="BC_A_AdminIdx"/>
+				<result property="adminName" 	column="BC_A_AdminName"/>
+			</collection>
+			
+			<!-- 게시판 댓글 사용자 -->
+			<collection ofType="member" property="member">
+				<id 	property="memberIdx" 	column="BC_M_MemberIdx"/>
+				<result property="memberName" 	column="BC_M_MemberName"/>
+			</collection>
+		</collection>
+	</resultMap>
+<!--============== 게시판 상세 Result Map END ==============-->
+	
+</mapper>

@@ -10,6 +10,11 @@
 .text-center {
 	text-align 		: center;
 }
+.over-text {
+	overflow		: hidden; 
+	text-overflow	: ellipsis; 
+	white-space		: nowrap;
+}
 
 .main-logo {
 	width 			: 145px;
@@ -79,6 +84,10 @@
 }
 .content-body {
 	height			: 470px;
+	overflow-y		: auto;
+}
+.content-body-min {
+	min-height		: 470px;
 	overflow-y		: auto;
 }
 
@@ -192,7 +201,6 @@
 
 .modal-body-overflow {
 	overflow 	: auto;
-	height		: 400px;
 }
 
 .image-xs {
@@ -213,6 +221,10 @@
 .image-200 {
 	border-radius 	: 10px;
 	width			: 200px;
+}
+.image-100-per {
+	border-radius 	: 10px;
+	width			: 100%;
 }
 .tile-code-delete img {
 	opacity			: 0.6;
@@ -243,4 +255,107 @@
 .code_detail_selected .img-check .fa-check {
 	font-size		: 60px;
 	color			: #2d8448;
+}
+
+.modal-1200 {
+	max-width 		: 1200px;
+}
+
+.table-border th, .table-border td {
+	border-top 		: 1px solid #dee2e6 !important;
+}
+
+.table th.head-board {
+	background		: rgba(52,73,94,0.94);
+	color			: #fff;
+}
+.detail-td-img {
+	cursor			: pointer;
+}
+.detail-td-img:hover {
+	opacity			: 0.4;
+}
+.board-comment-textarea {
+	width			: 100%;
+	resize			: none;
+	font-size		: 14px;
+	border-radius	: 3px;
+}
+.comment-total-count {
+	float			: left;
+	padding-top		: 16px;
+}
+.comment-name-area {
+    width			: 100%;
+    float			: left;
+}
+.comment-name-area .comment-icon {
+	float			: left;
+    font-size		: 13px;
+    padding-top		: 3px;
+    padding-right	: 3px;
+    color			: #585858;
+}
+.comment-name-area .comment-name {
+	float			: left;
+	font-weight		: bold;
+}
+.comment-name-area .comment-date {
+	float			: left;
+	color			: #a0a0a0;
+	padding-left	: 15px;
+}
+.comment-name-area .comment-count {
+	float			: left;
+	padding-left	: 4px;
+    color			: red;
+    font-weight		: bold;
+    cursor			: pointer;
+}
+.comment-name-area .comment-count:hover {
+	opacity			: 0.4;
+}
+.comment-name-area .comment-button-area {
+	float			: right;
+    margin-bottom	: -8px;
+}
+.comment-name-area button, .comment-of-comment-button-area button {
+	font-size		: 10px;
+}
+.comment-content {
+	float			: left;
+	width			: 100%;
+	color			: #71717B;
+	padding-left 	: 13px;
+	padding-top		: 6px;
+}
+.comment-of-comment {
+	width			: 100%;
+	padding-left	: 13px;
+	float			: left;
+    margin-top		: 7px;
+}
+.comment-of-comment .fa-mail-reply, .comment-of-comment-text .fa-mail-reply {
+	transform 		: rotate(-180deg);
+	padding-left	: 3px;
+}
+.comment_of_comment_div {
+    width			: 100%;
+    margin-top		: 12px;
+    float			: left;
+    border			: 1px solid #ddd;
+    padding			: 8px;
+    border-radius	: 4px;
+    margin-left		: 8px;
+}
+.comment_of_comment_div .comment-of-comment-text {
+	float			: left;
+}
+.comment_of_comment_div .comment_of_comment_textarea {
+	float			: right;
+	width			: 100%;
+	border-radius	: 3px;
+}
+#detailBoardCommentTable .comment_body {
+	border-bottom	: 1px solid #dee2e6;
 }

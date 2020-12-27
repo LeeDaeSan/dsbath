@@ -17,6 +17,9 @@
 .table td, .table th {
 	border-top	: 0;
 }
+.code-img:hover {
+	opacity 	: 0.6;
+}
 </style>
 
 <!-- design code js -->
@@ -44,21 +47,29 @@
 						<col width="10%"/>
 						<col width="20%"/>
 						<col width="20%"/>
+						<col width="10%"/>
+						<col width="40%"/>
 					</colgroup>
 					<tbody>
 						<tr>
-							<th>코드명</th>
+							<th>코드 유형</th>
 							<td>
-								<input type="text" class="form-control form-control-cust keyup_enter" id="searchTileName"/>
+								<select class="form-control form-control-cust change_tag" id="searchCodeType">
+									<option value="T">타일</option>
+									<option value="P">제품</option>
+								</select>
 							</td>
-							<td></td>
+							<td colspan="3"></td>
 						</tr>
 						<tr>
+							<th>코드명</th>
+							<td colspan="2">
+								<input type="text" class="form-control form-control-cust keyup_enter" id="searchCodeName"/>
+							</td>
 							<th>등록일</th>
 							<td>
 								<input class="form-control form-control-cust" id="periodDate" readOnly/>
 							</td>
-							<td></td>
 						</tr>
 					</tbody>
 				</table>
@@ -72,7 +83,7 @@
 <!-- Button form START -->
 <div class="row">
 	<div class="col-md-12 col-sm-12">
-		<button type="button" class="btn btn-sm btn-dark float-right" id="insertPopupBtn">코드 등록</button>
+		<button type="button" class="btn btn-sm btn-dark float-right" id="insertPopupBtn">등록</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchResetBtn">검색 초기화</button>
 		<button type="button" class="btn btn-sm btn-dark float-right" id="searchBtn">검색</button>
 	</div>

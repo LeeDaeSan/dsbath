@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.BoardCommentMapper">
+
+<!--============== 게시판 댓글 목록  START ==============-->
+	<select id="select" parameterType="boardComment" resultMap="boardCommentList">
+		SELECT
+			BC.BoardCommentIdx,
+			BC.BoardIdx,
+			BC.ParentIdx,
+			BC.Comment,
+			BC.CreateDate,
+			BC.UpdateDate,
+			
+			A.AdminIdx		AS A_AdminIdx,
+			A.AdminName		AS A_AdminName,
+			
+			M.MemberIdx		AS M_MemberIdx,
+			M.MemberName	AS M_MemberName,
+			
+			(SELECT COUNT(BCC.BoardCommentIdx) 
+			   FROM BoardComment AS BCC
+			  WHERE BCC.ParentIdx = BC.BoardCommentIdx
+			) AS CommentCount
+			
+		<!-- 공통 Query -->
+	  	<include refid="selectOfWhere"></include>
+		  
+		<where>
+			BC.BoardIdx = #{boardIdx}
+			
+			<choose>
+				<when test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(parentIdx)'>
+					AND BC.ParentIdx = #{parentIdx}
+				</when>
+				<otherwise>
+					AND BC.ParentIdx IS NULL
+				</otherwise>
+			</choose>  
+		</where> 
+		
+	  <!-- order -->
+	  ORDER BY BC.CreateDate DESC
+	</select>
+<!--============== 게시판 댓글 목록  END ==============-->
+
+
+<!--============== 게시판 댓글 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="boardComment" resultType="long">
+		SELECT COUNT(BC.BoardCommentIdx) 
+		
+		<!-- 공통 Query -->
+	  	<include refid="selectOfWhere"></include>
+	  	
+		WHERE BC.BoardIdx = #{boardIdx}
+	</select>
+<!--============== 게시판 댓글 목록 Total Count END ==============-->
+
+	
+<!--============== 게시판 댓글 등록 START ==============-->
+	<insert id="insert" parameterType="boardComment">
+		INSERT INTO BoardComment
+		(
+			BoardIdx,
+			AdminIdx,
+			MemberIdx,
+			ParentIdx,
+			Comment
+		)
+		VALUES
+		(
+			#{boardIdx},
+			#{adminIdx},
+			#{memberIdx},
+			#{parentIdx},
+			#{comment}
+		)
+	</insert>
+<!--============== 게시판 댓글 등록 END ==============-->
+
+
+<!--============== 게시판 댓글 수정 START ==============-->
+	<update id="update" parameterType="boardComment">
+		UPDATE BoardComment
+			
+			<set>
+				<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(comment)'>
+			   		Comment = #{comment}
+				</if>
+			</set>
+			
+		 WHERE BoardCommentIdx = #{boardCommentIdx}
+	</update>
+<!--============== 게시판 댓글 수정 END ==============-->
+
+
+<!--============== 게시판 댓글 삭제 START ==============-->
+	<delete id="delete" parameterType="boardComment">
+		DELETE FROM BoardComment
+		 WHERE BoardCommentIdx = #{boardCommentIdx} 
+	</delete>
+<!--============== 게시판 댓글 삭제 END ==============-->
+
+
+<!--============== 게시판 삭제 (게시판 삭제시) START ==============-->
+	<delete id="deleteOfBoard" parameterType="board">
+		DELETE FROM BoardComment
+		 WHERE BoardIdx = #{boardIdx}
+	</delete>
+<!--============== 게시판 삭제 (게시판 삭제시) END ==============-->
+
+
+<!--============== 게시판 댓글 목록 공통 Query START ==============-->
+	<sql id="selectOfWhere">
+		FROM BoardComment AS BC
+		  
+		LEFT JOIN Admin AS A
+		  ON A.AdminIdx = BC.AdminIdx
+		  
+		LEFT JOIN Member AS M
+		  ON M.MemberIdx = BC.MemberIdx
+	</sql>
+<!--============== 게시판 댓글 목록 공통 Query END ==============-->
+
+
+<!--============== 게시판 댓글 목록 Result Map START ==============-->
+	<resultMap type="boardComment" id="boardCommentList" autoMapping="true">
+		<id property="boardCommentIdx" column="boardCommentIdx"/>
+		
+		<!-- 관리자 -->
+		<collection ofType="admin" property="admin">
+			<id 	property="adminIdx" 	column="A_AdminIdx"/>
+			<result property="adminName" 	column="A_AdminName"/>
+		</collection>
+		<!-- 사용자 -->
+		<collection ofType="member" property="member">
+			<id 	property="memberIdx" 	column="M_MemberIdx"/>
+			<result property="memberName" 	column="M_MemberName"/>
+		</collection>
+		
+	</resultMap>
+<!--============== 게시판 댓글 목록 Result Map END ==============-->
+
+</mapper>

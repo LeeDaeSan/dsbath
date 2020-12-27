@@ -10,7 +10,7 @@ public class Constant {
 	public static final String LOGIN_PAGE 	= "login";
 	public static final String LOGOUT_PAGE 	= "logout";
 	
-	public static final String MERGE_TYPE_INSERT = "I"; 	// 등록
-	public static final String MERGE_TYPE_UPDATE = "U";		// 수정
-	public static final String MERGE_TYPE_DELETE = "D";		// 삭제
+	public static final String MERGE_TYPE_INSERT 	= "I"; 		// 등록
+	public static final String MERGE_TYPE_UPDATE 	= "U";		// 수정
+	public static final String MERGE_TYPE_DELETE 	= "D";		// 삭제
 }

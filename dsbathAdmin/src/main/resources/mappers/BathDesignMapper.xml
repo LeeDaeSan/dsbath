@@ -88,20 +88,21 @@
 			A.AdminIdx,
 			A.AdminName,
 			
-			TC.TileCodeIdx,
-			TC.TileName,
-			TC.Image
+			BC.BathCodeIdx,
+			BC.CodeName,
+			BC.CodeType,
+			BC.Image
 			
 		  FROM BathDesign AS BD
 		  
 		  LEFT JOIN Admin AS A 
 		    ON A.AdminIdx = BD.AdminIdx
 		  
-		  LEFT JOIN TileCodeMapping AS TCM 
-		    ON TCM.BathDesignIdx = BD.BathDesignIdx
+		  LEFT JOIN BathCodeMapping AS BCM 
+		    ON BCM.BathDesignIdx = BD.BathDesignIdx
 		  
-		  LEFT JOIN TileCode AS TC 
-		    ON TC.TileCodeIdx = TCM.TileCodeIdx
+		  LEFT JOIN BathCode AS BC 
+		    ON BC.BathCodeIdx = BCM.BathCodeIdx
 		  
 		 WHERE BD.BathDesignIdx = #{bathDesignIdx}
 	</select>
@@ -174,8 +175,8 @@
 			<id property="adminIdx" column="AdminIdx"/>
 		</collection>
 		
-		<collection ofType="tileCode" property="tileCodeList" autoMapping="true">
-			<id property="tileCodeIdx" column="TileCodeIdx"/>
+		<collection ofType="bathCode" property="bathCodeList" autoMapping="true">
+			<id property="bathCodeIdx" column="BathCodeIdx"/>
 		</collection>
 	</resultMap>
 <!--============== 욕실디자인 상세 Result Map END ==============-->

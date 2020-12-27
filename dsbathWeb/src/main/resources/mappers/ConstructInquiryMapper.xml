@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.web.model.mapper.ConstructInquiryMapper">
+
+<!--============== 견적 및 시공문의 목록 조회 START ==============-->
+	<select id="select" parameterType="com.dsbath.web.model.dto.PagingDTO" resultMap="constructInquiryList">
+		SELECT
+			CI.InquiryIdx,
+			CI.Title,
+			CI.Content,
+			CI.Hit,
+			CI.CreateDate,
+			
+			M.MemberIdx,
+			M.MemberName
+			
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+		
+		  <!-- order -->
+		  ORDER BY CI.CreateDate DESC
+		  
+		  <!-- paging -->
+		  LIMIT #{page}, #{limit}
+	</select>
+<!--============== 견적 및 시공문의 목록 조회 END ==============-->
+
+
+<!--============== 견적 및 시공문의 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.web.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(CI.InquiryIdx)
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+	</select>
+<!--============== 견적 및 시공문의 목록 Total Count END ==============-->
+
+
+<!--============== 견적 및 시공문의 상세 START ==============-->
+	<select id="detail" parameterType="constructInquiry" resultMap="constructInquiryList">
+		SELECT
+			CI.InquiryIdx,
+			CI.Title,
+			CI.Content,
+			CI.Hit,
+			CI.CreateDate,
+			
+			CI.AnswerTitle,
+			CI.AnswerContent,
+			CI.AnswerDate,
+			
+			A.AdminIdx,
+			A.AdminName,
+			
+			M.MemberIdx,
+			M.MemberName
+		
+		FROM ConstructInquiry AS CI
+		  
+		<!-- Admin join -->
+		LEFT JOIN Admin AS A ON A.AdminIdx = CI.AdminIdx
+		
+		<!-- Member join -->
+		LEFT JOIN Member AS M ON M.MemberIdx = CI.MemberIdx
+		
+	   WHERE InquiryIdx = #{inquiryIdx} 
+	</select>
+<!--============== 견적 및 시공문의 상세 END ==============-->
+
+
+<!--============== 견적 및 시공문의 등록 START ==============-->
+	<insert id="insert" parameterType="constructInquiry">
+		INSERT INTO ConstructInquiry
+		(
+			MemberIdx,
+			Title,
+			Content,
+			Hit
+		)
+		VALUES
+		(
+			#{memberIdx},
+			#{title},
+			#{content},
+			0
+		)
+	</insert>
+<!--============== 견적 및 시공문의 등록 END ==============-->
+	
+	
+<!--============== 견적 및 시공문의 목록 공통 조건 START ==============-->
+	<sql id="selectOfWhere">
+		FROM ConstructInquiry AS CI
+		  
+		<!-- join -->
+		LEFT JOIN Member AS M ON M.MemberIdx = CI.MemberIdx
+	</sql>
+<!--============== 견적 및 시공문의 목록 공통 조건 END ==============-->
+
+
+<!--============== 견적 및 시공문의 조회수 증가 START ==============-->
+	<update id="updateOfHit" parameterType="constructInquiry">
+		UPDATE ConstructInquiry
+		   SET
+		   		Hit = IFNULL(Hit, 0) + 1
+		 WHERE InquiryIdx = #{inquiryIdx}
+	</update>
+<!--============== 견적 및 시공문의 조회수 증가 END ==============-->
+
+
+<!--============== 견적 및 시공문의 목록 Result Map START ==============-->
+	<resultMap type="constructInquiry" id="constructInquiryList" autoMapping="true">
+		<id property="inquiryIdx" column="InquiryIdx"/>
+		
+		<collection ofType="admin" property="admin" autoMapping="true">
+			<id property="adminIdx" column="AdminIdx"/>
+		</collection>
+		
+		<collection ofType="member" property="member" autoMapping="true">
+			<id property="memberIdx" column="MemberIdx"/>
+		</collection>
+	</resultMap>
+<!--============== 견적 및 시공문의 목록 Result Map END ==============-->
+
+</mapper>

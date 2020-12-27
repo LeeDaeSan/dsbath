@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.web.model.mapper.FaqMapper">
+
+
+<!--============== FAQ 목록 조회 START ==============-->
+	<select id="select" parameterType="com.dsbath.web.model.dto.PagingDTO" resultMap="faqList">
+		SELECT
+			F.FaqIdx,
+			F.Question,
+			F.Comment,
+			F.CreateDate,
+			F.UpdateDate,
+			
+			A.AdminIdx,
+			A.AdminName
+			
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+		
+		<!-- order -->
+		<choose>
+			<when test='@com.dsbath.web.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.web.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY
+				
+				<choose>
+					<when test='"question".equals(sortType)'>
+						F.Question
+					</when>
+					<when test='"createDate".equals(sortType)'>
+						F.CreateDate
+					</when>
+					<when test='"updateDate".equals(sortType)'>
+						F.UpdateDate
+					</when>
+					<when test='"adminName".equals(sortType)'>
+						A.AdminName
+					</when>
+				</choose>
+				
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY F.CreateDate DESC
+			</otherwise>
+		</choose>
+		
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
+	</select>
+<!--============== FAQ 목록 조회 END ==============-->
+
+
+<!--============== FAQ 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.web.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(F.FaqIdx)
+
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+	</select>
+<!--============== FAQ 목록 Total Count END ==============-->
+
+
+<!--============== FAQ 상세 START ==============-->
+	<select id="detail" parameterType="faq" resultType="faq">
+		SELECT 
+			F.FaqIdx,
+			F.Question,
+			F.Comment,
+			F.CreateDate,
+			F.UpdateDate,
+			
+			A.AdminIdx,
+			A.AdminName
+			
+		FROM Faq AS F
+		
+		LEFT JOIN Admin AS A 
+		  ON A.AdminIdx = F.AdminIdx
+		  
+	   WHERE FaqIdx = #{faqIdx}
+	</select>
+<!--============== FAQ 상세 END ==============-->
+
+
+<!--============== FAQ 등록 START ==============-->
+	<insert id="insert" parameterType="faq">
+		INSERT INTO Faq
+		(
+			AdminIdx,
+			Question,
+			Comment
+		)
+		VALUES
+		(
+			#{adminIdx},
+			#{question},
+			#{comment}
+		)
+	</insert>
+<!--============== FAQ 등록 END ==============-->
+
+
+<!--============== FAQ 수정 START ==============-->
+	<update id="update" parameterType="faq">
+		UPDATE Faq
+		   SET
+		   		Question 	= #{question},
+		   		Comment		= #{comment}
+		   		
+		 WHERE FaqIdx = #{faqIdx}
+	</update>
+<!--============== FAQ 수정 END ==============-->
+
+
+<!--============== FAQ 삭제 START ==============-->
+	<delete id="delete" parameterType="faq">
+		DELETE FROM Faq
+		 WHERE FaqIdx = #{faqIdx}
+	</delete>
+<!--============== FAQ 삭제 END ==============-->
+
+
+<!--============== FAQ 목록 Result Map START ==============-->
+	<resultMap type="faq" id="faqList" autoMapping="true">
+		<id property="faqIdx" column="FaqIdx"/>
+		
+		<collection ofType="admin" property="admin" autoMapping="true">
+			<id property="adminIdx" column="AdminIdx"/>
+		</collection>
+	</resultMap>
+<!--============== FAQ 목록 Result Map END ==============-->
+
+
+<!--============== 목록 조회 공통 조건 START ==============-->
+	<sql id="selectOfWhere">
+		FROM Faq AS F
+		
+		LEFT JOIN Admin AS A 
+		  ON A.AdminIdx = F.AdminIdx
+		  
+		<where>
+			<if test='@com.dsbath.web.etc.util.StringUtil@isNotEmpty(model.question)'>
+				AND 
+					(
+						<!-- 제목 -->
+						F.Question LIKE CONCAT ('%', TRIM(#{model.question}), '%')
+						
+						OR
+						
+				 		<!-- 질문 -->
+						F.Comment LIKE CONCAT ('%', TRIM(#{model.question}), '%')
+					)
+			</if>
+		</where>
+	</sql>
+<!--============== 목록 조회 공통 조건 END ==============-->
+
+</mapper>

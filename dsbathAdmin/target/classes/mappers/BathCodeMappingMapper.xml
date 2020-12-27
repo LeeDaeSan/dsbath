@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.BathCodeMappingMapper">
+
+<!--============== 욕실 코드 맵핑 등록 START ==============-->
+	<insert id="insert" parameterType="bathCodeMapping">
+		INSERT INTO BathCodeMapping
+		(
+			BathDesignIdx,
+			BathCodeIdx
+		)
+		VALUES
+		(
+			#{bathDesignIdx},
+			#{bathCodeIdx}
+		)
+	</insert>
+<!--============== 욕실 코드 맵핑 등록 END ==============-->
+
+
+<!--============== 욕실 코드 맵핑 삭제 START ==============-->
+	<delete id="delete" parameterType="bathCodeMapping">
+		DELETE FROM BathCodeMapping
+		 WHERE BathDesignIdx = #{bathDesignIdx}
+	</delete>
+<!--============== 욕실 코드 맵핑 삭제 END ==============-->
+
+</mapper>

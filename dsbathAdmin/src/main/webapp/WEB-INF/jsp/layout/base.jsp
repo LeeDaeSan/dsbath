@@ -136,7 +136,7 @@
 				subTitle2 = '자주하는 질문';
 			
 			// 고객센터
-			} else if (url.indexOf('/etc/custom') != -1) {
+			} else if (url.indexOf('/etc/centerBoard') != -1) {
 				mainTitle = '고객센터';
 				subTitle1 = '기타';
 				subTitle2 = '고객센터';
@@ -147,12 +147,23 @@
 				subTitle1 = '기타';
 				subTitle2 = '오시는길';
 				
-			// 커뮤니티
-			} else if (url.indexOf('/etc/community') != -1) {
-				mainTitle = '커뮤니티';
-				subTitle1 = '기타';
-				subTitle2 = '커뮤니티';
+			// 커뮤니티 : 디에스 키친&바스 살림 팁
+			} else if (url.indexOf('/etc/community/living') != -1) {
+				mainTitle = '디에스 키친&바스 살림 팁';
+				subTitle1 = '기타<i class="fa fa-caret-right"></i> 커뮤니티';
+				subTitle2 = '디에스 키친&바스 살림 팁';
+		
+			// 커뮤니티 : 디에스 인테리어 팁
+			} else if (url.indexOf('/etc/community/interior') != -1) {
+				mainTitle = '디에스 인테리어 팁';
+				subTitle1 = '기타<i class="fa fa-caret-right"></i> 커뮤니티';
+				subTitle2 = '디에스 인테리어 팁';
 				
+			// 커뮤니티 : 디에스 이벤트
+			} else if (url.indexOf('/etc/community/event') != -1) {
+				mainTitle = '디에스 이벤트';
+				subTitle1 = '기타<i class="fa fa-caret-right"></i> 커뮤니티';
+				subTitle2 = '디에스 이벤트';
 			}
 			
 			$('#mainTitle').empty().append(mainTitle);
@@ -164,14 +175,13 @@
 	</head>
 	
 	<body class="nav-md">
-		
 		<div class="container body">
 			<div class="main_container">
 				<tiles:insertAttribute name="leftMenu"/>
 				
 				<tiles:insertAttribute name="header"/>
 
-				<div class="right_col" role="main">
+				<div class="right_col" style="min-height:1000px;" role="main">
 				
 					<!-- Title START -->
 					<div class="row title-row">

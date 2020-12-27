@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.web.model.mapper.CommunityMapper">
+
+<!--============== 커뮤니티 목록 조회 START ==============-->
+	<select id="select" parameterType="com.dsbath.web.model.dto.PagingDTO" resultMap="communityList">
+		SELECT
+			C.CommunityIdx,
+			C.Title,
+			C.Content,
+			C.Thumbnail,
+			C.Hit,
+			C.CommunityType,
+			C.CreateDate,
+			C.UpdateDate,
+			
+			A.AdminIdx,
+			A.AdminName
+			
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+		
+		<!-- order -->
+		<choose>
+			<when test='@com.dsbath.web.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.web.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY
+				
+				<choose>
+					<when test='"title".equals(sortType)'>
+						C.Title
+					</when>
+					<when test='"createDate".equals(sortType)'>
+						C.CreateDate
+					</when>
+					<when test='"updateDate".equals(sortType)'>
+						C.UpdateDate
+					</when>
+					<when test='"hit".equals(sortType)'>
+						C.Hit
+					</when>
+					<when test='"adminName".equals(sortType)'>
+						A.AdminName
+					</when>
+				</choose>
+				
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY C.CreateDate DESC
+			</otherwise>
+		</choose>
+		
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
+	</select>
+<!--============== 커뮤니티 목록 조회 END ==============-->
+
+
+<!--============== 커뮤니티 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.web.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(C.CommunityIdx)
+
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+	</select>
+<!--============== 커뮤니티 목록 Total Count END ==============-->
+
+
+<!--============== 커뮤니티 상세 START ==============-->
+	<select id="detail" parameterType="community" resultMap="communityList">
+		SELECT
+			C.CommunityIdx,
+			C.Title,
+			C.Content,
+			C.Thumbnail,
+			C.Hit,
+			C.CommunityType,
+			C.CreateDate,
+			C.UpdateDate,
+			
+			A.AdminIdx,
+			A.AdminName
+			
+		FROM Community AS C
+		  
+		LEFT JOIN Admin AS A
+		  ON A.AdminIdx = C.AdminIdx
+		
+		<!-- 커뮤니티 유형 -->  
+		WHERE C.CommunityType = #{communityType}
+		<!-- 커뮤니티 PK -->
+		  AND C.CommunityIdx = #{communityIdx}
+	</select>
+<!--============== 커뮤니티 상세 END ==============-->
+
+	
+<!--============== 커뮤니티 조회수 증가 START ==============-->
+	<update id="updateOfHit" parameterType="community">
+		UPDATE Community
+		   SET
+		   		Hit = IFNULL(Hit, 0) + 1
+		 WHERE CommunityIdx = #{communityIdx}
+	</update>
+<!--============== 커뮤니티 수정 END ==============-->
+
+	
+<!--============== 커뮤니티 목록 Result Map START ==============-->
+	<resultMap type="community" id="communityList" autoMapping="true">
+		<id property="communityIdx" column="CommunityIdx"/>
+		
+		<collection ofType="admin" property="admin" autoMapping="true">
+			<id property="adminIdx" column="AdminIdx"/>
+		</collection>
+	</resultMap>
+<!--============== 커뮤니티 목록 Result Map END ==============-->
+
+
+<!--============== 목록 조회 공통 조건 START ==============-->
+	<sql id="selectOfWhere">
+		FROM Community AS C
+		  
+		LEFT JOIN Admin AS A
+		  ON A.AdminIdx = C.AdminIdx
+		
+		<!-- 커뮤니티 유형 -->  
+		WHERE C.CommunityType = #{model.communityType}
+		
+	</sql>
+<!--============== 목록 조회 공통 조건 END ==============-->
+
+
+</mapper>

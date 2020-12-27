@@ -37,7 +37,6 @@ public class NoticeServiceImpl implements NoticeService {
 			
 		} catch (Exception e) {
 			resultMap = ResponseUtil.failureMap();
-			e.printStackTrace();
 		}
 		
 		return resultMap;

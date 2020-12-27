@@ -69,12 +69,23 @@
 					<li>
 						<a><i class="fa fa-gear"></i> 기타 <span class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
-							<li><a href="/views/etc/brandstory">브랜드스토리</a></li>
 							<li><a href="/views/etc/notice">공지사항</a></li>
 							<li><a href="/views/etc/faq">자주하는 질문</a></li>
-							<li><a href="/views/etc/custom">고객센터</a></li>
-							<li><a href="/views/etc/loadview">오시는길</a></li>
-							<li><a href="/views/etc/community">커뮤니티</a></li>
+							<li><a href="/views/etc/centerBoard">고객센터</a></li>
+							<li>
+								<a>커뮤니티<span class="fa fa-chevron-down"></span></a>
+								<ul class="nav child_menu" style="display: block;">
+									<li class="sub_menu">
+										<a href="/views/etc/community/living">디에스 키친&바스 살림 팁</a>
+									</li>
+									<li>
+										<a href="/views/etc/community/interior">디에스 인테리어 팁</a>
+									</li>
+									<li>
+										<a href="/views/etc/community/event">디에스 이벤트</a>
+									</li>
+								</ul>
+							</li>
 						</ul>
 					</li>
                	</ul>

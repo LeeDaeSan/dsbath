@@ -44,7 +44,7 @@ function selectCodeFunc (p) {
 	
 	//---> 통신 요청
 	$.ajax({
-		url			: '/tileCode/rest/select',
+		url			: '/bathCode/rest/select',
 		method		: 'POST',
 		dataType	: 'JSON',
 		data		: {
@@ -55,7 +55,8 @@ function selectCodeFunc (p) {
 			
 			startDateStr	: startDate,
 			endDateStr		: endDate,
-			tileName		: $('#searchTileName').val(),
+			codeType		: $('#searchCodeType').val(),
+			codeName		: $('#searchCodeName').val(),
 		}
 		
 	//---> 통신 완료
@@ -76,7 +77,7 @@ function selectCodeFunc (p) {
 			// total count
 			$('#totalCount').text(totalCount);
 			// 현재 페이지 건수
-			$('#nowLimit').text(sRow + '-' + eRow);
+			$('#nowLimit').text((eRow > 0 ? sRow : 0) + '-' + eRow);
 			
 			for (var i = 0; i < listLength; i++) {
 				var thisObj = list[i];
@@ -93,16 +94,16 @@ function selectCodeFunc (p) {
 					html += '<tr>';
 				}
 				
-				html += '<td class="code_detail detail-tr text-center" idx="' + thisObj.tileCodeIdx + '">';
-				html += 	(image ? '<img class="image-lg" src="' + url + '"/>' : '');
+				html += '<td class="code_detail detail-tr text-center" idx="' + thisObj.bathCodeIdx + '">';
+				html += 	(image ? '<img class="image-lg code-img" src="' + url + '"/>' : '');
 				html += '	<br>';
-				html += '	<div>' + thisObj.tileName + '</div>';
+				html += '	<div>' + thisObj.codeName + '</div>';
 				html += '</td>';
 				
 				// 마지막 tr
 				if ((i + 1) == listLength) {
 					if (i < 5) {
-						for (var j = 0; j < (listLength - i); j++) {
+						for (var j = 0; j < (5 - i); j++) {
 							html += '<td></td>';
 						}
 					}
@@ -110,7 +111,7 @@ function selectCodeFunc (p) {
 				}
 			}
 			
-			//데이터가 없는 경우
+			// 데이터가 없는 경우
 			if (listLength == 0) {
 				html += '<tr>';
 				html += '	<td colspan="5" class="text-center">데이터가 없습니다.</td>';
@@ -157,11 +158,11 @@ function detailCodeFunc (type, idx) {
 	
 	//---> 통신 요청
 	$.ajax({
-		url 		: '/tileCode/rest/detail',
+		url 		: '/bathCode/rest/detail',
 		method		: 'POST',
 		dataType	: 'JSON',
 		data		: {
-			tileCodeIdx : idx,
+			bathCodeIdx : idx,
 		}
 	
 	//---> 통신 완료
@@ -174,8 +175,8 @@ function detailCodeFunc (type, idx) {
 			var image 	= detail.image;
 			
 			// 상세 정보 append
-			$('#detailCodeType').text('타일');
-			$('#detailName').text(detail.tileName);
+			$('#detailCodeType').text(detail.codeType == 'T' ? '타일' : '제품');
+			$('#detailCodeName').text(detail.codeName);
 			$('#detailImage').empty().append((image ? '<img class="image-200" src="/file/rest/download?' + image + '"/>' : ''));
 			
 			// 상세팝업 -> 수정팝업으로 변경 button event
@@ -185,9 +186,9 @@ function detailCodeFunc (type, idx) {
 				// popup body append
 				addPopupBody('update');
 				
-				$('#updateBtn, #deleteBtn').attr('idx', detail.tileCodeIdx);
-				$('#updateCodeType').val('tile');
-				$('#updateName').val(detail.tileName);
+				$('#updateBtn, #deleteBtn').attr('idx', detail.bathCodeIdx);
+				$('#updateCodeType').val(detail.codeType);
+				$('#updateCodeName').val(detail.codeName);
 				
 				var formTag 		= $('#detailCodePopup');
 				var updateImage		= $('#updateImage');
@@ -262,17 +263,18 @@ function mergeCodeFunc (type, idx) {
 		};
 		
 		if (type == 'U' || type == 'D') {
-			param['tileCodeIdx'] = idx;
+			param['bathCodeIdx'] = idx;
 		}
 		
 		if (type == 'I' || type == 'U') {
-			param['tileName'] 	= $('#' + tagType + 'Name').val();
+			param['codeType'] 	= $('#' + tagType + 'CodeType').val();
+			param['codeName'] 	= $('#' + tagType + 'CodeName').val();
 			param['image']		= $('.' + tagType + '_file').val();
 		}
 		
 		//---> 통신 요청
 		$.ajax({
-			url			: '/tileCode/rest/merge',
+			url			: '/bathCode/rest/merge',
 			method		: 'POST',
 			dataType	: 'JSON',
 			async		: false,
@@ -336,6 +338,7 @@ function addPopupBody (type) {
 		$('#updateBtn, #deleteBtn').show();
 	}
 	
+//============== 유형 START =================//
 	html += '<tr>';
 	html += '	<th>유형</th>';
 	html += '	<td colspan="2">';
@@ -343,29 +346,38 @@ function addPopupBody (type) {
 	// 상세
 	if (type == 'detail') {
 		html += '	<span id="detailCodeType"></span>';
-	// 등록
-	} else if (type == 'insert') {
-		html += '	<select id="insertCodeType">';
-		html += '		<option value="tile">타일</option>';
+	// 등록 or 수정
+	} else if (type == 'insert' || type == 'update') {
+		html += '	<select id="' + type + 'CodeType" class="form-control form-control-cust">';
+		html += '		<option value="T" ' + ($('#searchCodeType').val() == 'T' ? 'selected' : '') + '>타일</option>';
+		html += '		<option value="P" ' + ($('#searchCodeType').val() == 'P' ? 'selected' : '') + '>제품</option>';
 		html += '	</select>';
 	}
 	
 	html += '	</td>';
 	html += '</tr>';
+//============== 유형 END =================//
+	
+	
+//============== 이름 START =================//
 	html += '<tr>';
 	html += '	<th>이름</th>';
 	html += '	<td colspan="2">';
 	
 	// 상세
 	if (type == 'detail') {
-		html += '	<span id="detailName"></span>';
+		html += '	<span id="detailCodeName"></span>';
 	// 등록 or 수정
 	} else if (type == 'insert' || type == 'update') {
-		html += '	<input type="text" id="' + type + 'Name" class="form-control form-control-cust"/>';
+		html += '	<input type="text" id="' + type + 'CodeName" class="form-control form-control-cust"/>';
 	}
 	
 	html += '	</td>';
 	html += '</tr>';
+//============== 유형 END =================//
+	
+	
+//============== 이미지 START =================//
 	html += '<tr>';
 	html += '	<th>이미지</th>';
 	html += '	<td colspan="2">';
@@ -381,6 +393,7 @@ function addPopupBody (type) {
 	
 	html += '	</td>';
 	html += '</tr>';
+//============== 이미지 END =================//
 	
 	// title
 	$('#detailCodePopup').find('#myModalLabel').text('코드 ' + title);
@@ -402,7 +415,7 @@ function addPopupBody (type) {
 			var fileObj = common.file.save(files[i], 'code', thisImage, '100');
 			
 			thisImage.find('img').after('<a class="delete_image image-close" href="javascript:void(0);"><i class="fa fa-close"></i></a>');
-			formTag.find('.update_file').remove();
+			formTag.find('.' + type + '_file').remove();
 			formTag.append('<input type="hidden" class="' + thisType + '_file" value="path=' + fileObj.filePath + '&fileName=' + fileObj.fileName + '"/>');
 		}
 		

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dsbath.admin.model.mapper.BathCodeMapper">
+
+<!--============== 디자인 코드 목록 START ==============-->
+	<select id="select" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="bathCode">
+		SELECT
+			BathCodeIdx,
+			CodeName,
+			CodeType,
+			Image,
+			CreateDate,
+			UpdateDate
+			
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+		
+		<!-- order -->
+		<choose>
+			<when test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sort) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(sortType)'>
+				ORDER BY 
+		 	
+				<choose>
+				 	<when test='"codeName".equals(sortType)'>
+				 		CodeName
+					</when>
+				 	<when test='"createDate".equals(sortType)'>
+				 		CreateDate
+					</when>
+				 	<when test='"updateDate".equals(sortType)'>
+				 		UpdateDate
+					</when>
+				</choose>
+				 
+				<choose>
+					<when test='"asc".equals(sort)'>
+						ASC
+					</when>
+					<when test='"desc".equals(sort)'>
+						DESC
+					</when>
+				</choose>
+			</when>
+			
+			<otherwise>
+				ORDER BY CreateDate DESC
+			</otherwise>
+		</choose>
+		
+		<!-- paging -->
+		LIMIT #{page}, #{limit}
+	</select>
+<!--============== 디자인 코드 목록 END ==============-->
+
+
+<!--============== 디자인 코드 목록 Total Count START ==============-->
+	<select id="selectOfTotalCount" parameterType="com.dsbath.admin.model.dto.PagingDTO" resultType="long">
+		SELECT COUNT(BathCodeIdx)
+		  
+		<!-- 공통 조건 -->
+		<include refid="selectOfWhere"></include>
+	</select>
+<!--============== 디자인 코드 목록 Total Count END ==============-->
+
+
+<!--============== 디자인 코드 상세 START ==============-->
+	<select id="detail" parameterType="bathCode" resultType="bathCode">
+		SELECT
+			BathCodeIdx,
+			CodeName,
+			CodeType,
+			Image,
+			CreateDate,
+			UpdateDate
+			
+		  FROM BathCode
+		 WHERE BathCodeIdx = #{bathCodeIdx}
+	</select>
+<!--============== 디자인 코드 상세 END ==============-->
+
+
+<!--============== 디자인 코드 등록 START ==============-->
+	<insert id="insert" parameterType="bathCode">
+		INSERT INTO BathCode
+		(
+			CodeName,
+			CodeType,
+			Image
+		)
+		VALUES
+		(
+			#{codeName},
+			#{codeType},
+			#{image}
+		)
+	</insert>
+<!--============== 디자인 코드 등록 END ==============-->
+
+
+<!--============== 디자인 코드 수정 START ==============-->
+	<update id="update" parameterType="bathCode">
+		UPDATE BathCode
+		   SET
+				CodeName 	= #{codeName},
+				CodeType	= #{codeType},
+				Image		= #{image}	  
+				
+		 WHERE BathCodeIdx = #{bathCodeIdx} 
+	</update>
+<!--============== 디자인 코드 수정 END ==============-->
+
+
+<!--============== 디자인 코드 삭제 START ==============-->
+	<delete id="delete" parameterType="bathCode">
+		DELETE FROM BathCode
+		 WHERE BathCodeIdx = #{bathCodeIdx}
+	</delete>
+<!--============== 디자인 코드 삭제 END ==============-->
+
+
+<!--============== 디자인 코드 검색 (욕실디자인 코드 검색) START ==============-->
+	<select id="selectOfBathDesign" parameterType="bathCode" resultType="bathCode">
+		SELECT
+			BathCodeIdx,
+			CodeName,
+			CodeType,
+			Image,
+			CreateDate,
+			UpdateDate
+			
+		  FROM BathCode
+		  
+		 WHERE CodeType = #{codeType}
+		 
+		 ORDER BY CodeName ASC
+	</select>
+<!--============== 디자인 코드 검색 (욕실디자인 코드 검색) END ==============-->
+
+
+<!--============== 목록 조회 공통 조건 START ==============-->
+	<sql id="selectOfWhere">
+	
+		 FROM BathCode
+		  
+		<where>
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.codeName)'>
+		 		<!-- 코드 명 -->
+		 		AND CodeName LIKE CONCAT('%', TRIM(#{model.codeName}), '%')
+		 	</if>
+		 	
+			<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(model.codeType)'>
+		 		<!-- 코드 유형 -->
+		 		AND CodeType = #{model.codeType}
+		 	</if>
+		 	
+		 	<if test='@com.dsbath.admin.etc.util.StringUtil@isNotEmpty(startDateStr) and @com.dsbath.admin.etc.util.StringUtil@isNotEmpty(endDateStr)'>
+		 		<!-- 등록일 -->
+		 		AND DATE_FORMAT(CreateDate, '%Y%m%d') BETWEEN #{startDateStr} AND #{endDateStr}
+		 	</if>
+		</where>
+	</sql>
+<!--============== 목록 조회 공통 조건 END ==============-->
+</mapper>
